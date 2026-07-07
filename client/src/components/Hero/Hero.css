@@ -1,0 +1,277 @@
+/* --- CSS Variables for Theme Consistency --- */
+:root {
+  --primary: #2563eb;          /* Trusting SaaS Blue */
+  --secondary: #10b981;        /* Impact Green */
+  --text-main: #0f172a;        /* Deep Slate Neutral */
+  --text-muted: #475569;       /* Soft Gray Reading Text */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* --- Layout Structure & Gradient Background --- */
+.hero-section {
+  font-family: var(--font-family);
+  min-height: calc(100vh - 80px); /* Centers layout in remaining viewport space */
+  display: flex;
+  align-items: center;
+  background: 
+    radial-gradient(circle at 90% 10%, rgba(37, 99, 235, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 10% 80%, rgba(16, 185, 129, 0.03) 0%, transparent 40%),
+    #ffffff;
+  overflow: hidden;
+  padding: 40px 0;
+}
+
+.hero-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr; /* Asymmetric crisp design spacing */
+  gap: 60px;
+  align-items: center;
+}
+
+/* --- Left Side: Content Elements --- */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Premium Badge styling */
+.hero-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(37, 99, 235, 0.08);
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 24px;
+  letter-spacing: 0.3px;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--secondary);
+  border-radius: 50%;
+}
+
+/* Heading Typography */
+.hero-heading {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--text-main);
+  letter-spacing: -1px;
+  margin-bottom: 20px;
+}
+
+.hero-heading span {
+  color: var(--primary);
+  background: linear-gradient(to right, var(--primary), #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Paragraph Typography */
+.hero-description {
+  font-size: 1.125rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  margin-bottom: 36px;
+  max-width: 560px;
+}
+
+/* Action Buttons */
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hero-btn {
+  display: inline-block;
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: box-shadow 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-main);
+  border: 1px solid #cbd5e1;
+}
+
+.btn-secondary:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+}
+
+/* --- Right Side: Abstract Modular Grid Design --- */
+.hero-graphics-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 420px;
+}
+
+.hero-illustration-grid {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+}
+
+/* Base Card architecture */
+.grid-card {
+  position: absolute;
+  background: #ffffff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Center Stack Core Branding */
+.core-card {
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  width: 160px;
+  height: 160px;
+  top: 32%;
+  left: 30%;
+  z-index: 10;
+  border-color: rgba(37, 99, 235, 0.15);
+  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
+}
+
+.core-icon {
+  font-size: 2rem;
+  background: rgba(37, 99, 235, 0.08);
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.core-card h3 {
+  font-size: 1rem;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.core-card p {
+  font-size: 0.75rem;
+  color: var(--secondary);
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Pill Placement Positioning (Surrounding the core anchor) */
+.Feature-pill span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.Feature-pill svg {
+  font-size: 1.2rem;
+}
+
+.cp-1 { top: 10%; left: 5%; }
+.cp-2 { top: 15%; right: -5%; }
+.cp-3 { bottom: 15%; left: -10%; }
+.cp-4 { bottom: 12%; right: 0%; }
+.cp-5 { top: 52%; right: -20%; }
+
+/* Icon Semantic Coloring spectrum */
+.icon-blue { color: #3b82f6; }
+.icon-green { color: #10b981; }
+.icon-pink { color: #ec4899; }
+.icon-emerald { color: #059669; }
+.icon-amber { color: #f59e0b; }
+
+/* --- Responsive Adaptations --- */
+
+/* Tablet Viewports */
+@media (max-width: 1024px) {
+  .hero-heading {
+    font-size: 2.8rem;
+  }
+  .hero-container {
+    gap: 30px;
+  }
+  .cp-5 { display: none; } /* Shrink side profile overlap */
+}
+
+/* Mobile Viewports */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 60px 0;
+    text-align: center;
+  }
+
+  .hero-container {
+    grid-template-columns: 1fr; /* Collapse down to single column stack */
+    gap: 60px;
+  }
+
+  .hero-content {
+    align-items: center;
+  }
+
+  .hero-heading {
+    font-size: 2.4rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  .hero-actions {
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .hero-actions > div, 
+  .hero-btn {
+    width: 100%; /* Uniform modern block buttons on phone screen sizes */
+  }
+
+  /* Structural scaling of interactive grid for minor breakpoints */
+  .hero-graphics-container {
+    height: 340px;
+  }
+  
+  .hero-illustration-grid {
+    transform: scale(0.85);
+  }
+}

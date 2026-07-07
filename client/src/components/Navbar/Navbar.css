@@ -1,0 +1,189 @@
+/* --- CSS Reset & Variables for Color Palette --- */
+:root {
+  --primary-color: #2563eb;       /* Vibrant Community Blue */
+  --primary-hover: #1d4ed8;       /* Darker Blue for hover */
+  --text-dark: #1e293b;           /* Slate Dark for primary text */
+  --text-light: #64748b;          /* Soft Gray for secondary links */
+  --bg-white: #ffffff;            /* Pure White for Navbar background */
+  --bg-hover: #f1f5f9;            /* Very light gray for mobile item hover */
+  --transition-speed: 0.3s;       /* Smooth transition timing */
+}
+
+/* --- Navbar Container Styles --- */
+.navbar {
+  background-color: var(--bg-white);
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.05rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 24px;
+}
+
+/* --- Brand Logo Styling --- */
+.navbar-logo {
+  color: var(--text-dark);
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.navbar-logo span {
+  color: var(--primary-color);
+}
+
+/* --- Hamburger Menu Icon (Hidden on Desktop) --- */
+.menu-icon {
+  display: none;
+}
+
+/* --- Desktop Navigation Menu --- */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  text-align: center;
+  gap: 16px;
+}
+
+.nav-item {
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links {
+  color: var(--text-light);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  transition: color var(--transition-speed) ease;
+}
+
+.nav-links:hover, 
+.active-link {
+  color: var(--primary-color);
+}
+
+/* --- Button Styling (Desktop View) --- */
+.nav-btn-item {
+  display: flex;
+  align-items: center;
+}
+
+.btn-link {
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all var(--transition-speed) ease;
+  font-size: 0.95rem;
+}
+
+.primary-btn {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: 1px solid var(--primary-color);
+}
+
+.primary-btn:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.secondary-btn {
+  background-color: transparent;
+  color: var(--text-dark);
+  border: 1px solid #cbd5e1;
+  margin-right: -4px; /* Tightens space between login and register */
+}
+
+.secondary-btn:hover {
+  background-color: var(--bg-hover);
+  border-color: #94a3b8;
+}
+
+/* --- Responsive Media Query (Mobile View) --- */
+@media screen and (max-width: 768px) {
+  .menu-icon {
+    display: block;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+  }
+
+  /* Converts the horizontal menu into a full-width dropdown overlay */
+  .nav-menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100vh - 80px); /* Fill remaining viewport height */
+    position: absolute;
+    top: 80px;
+    left: -100%;             /* Off-screen by default */
+    opacity: 0;
+    transition: all var(--transition-speed) ease;
+    background-color: var(--bg-white);
+    padding-top: 2rem;
+    gap: 0;                  /* Reset layout structure for stack */
+  }
+
+  /* Slide-in class when hamburger menu is toggled active */
+  .nav-menu.active {
+    left: 0;
+    opacity: 1;
+  }
+
+  .nav-item {
+    width: 100%;
+    height: 60px;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    padding: 2rem 0;
+  }
+
+  .nav-links:hover {
+    background-color: var(--bg-hover);
+  }
+
+  /* Adjusting buttons to stretch gracefully on mobile screens */
+  .nav-btn-item {
+    width: 80%;
+    margin: 10px auto;
+  }
+
+  .btn-link {
+    width: 100%;
+    text-align: center;
+    padding: 12px 0;
+  }
+  
+  .secondary-btn {
+    margin-right: 0;
+  }
+}
