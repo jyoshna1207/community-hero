@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 // Importing react-icons/fi (Feather icons) for a clean modern aesthetic
 import { FiUser, FiMail, FiLock, FiCheckCircle } from 'react-icons/fi';
+import { useAuth } from '../../context/AuthContext';
 import './Register.css';
 
 const Register = () => {
+  const { register } = useAuth();
+  const navigate = useNavigate();
+
   // 1. Form state management
   const [formData, setFormData] = useState({
     fullName: '',
@@ -14,6 +19,8 @@ const Register = () => {
 
   // State to track validation errors for each field
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 2. Handle input change and clear specific errors on user input
   const handleChange = (e) => {
@@ -30,6 +37,7 @@ const Register = () => {
         [name]: '',
       }));
     }
+    setSubmitError('');
   };
 
   // 3. Form validation logic
@@ -50,15 +58,10 @@ const Register = () => {
     }
 
     // Password Validation
-    // Requires: >=8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special character
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!formData.password) {
       newErrors.password = 'Password is required.';
-    } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters long.';
-    } else if (!passwordRegex.test(formData.password)) {
-      newErrors.password =
-        'Password must contain an uppercase letter, lowercase letter, number, and special character.';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters long.';
     }
 
     // Confirm Password Validation
@@ -75,19 +78,20 @@ const Register = () => {
   };
 
   // 4. Form submit handler
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError('');
 
     if (validateForm()) {
-      alert('Registration Successful!');
-      // Reset form after successful submission
-      setFormData({
-        fullName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      });
-      setErrors({});
+      setIsSubmitting(true);
+      const result = await register(formData.fullName, formData.email, formData.password);
+      setIsSubmitting(false);
+
+      if (result.success) {
+        navigate('/profile');
+      } else {
+        setSubmitError(result.error);
+      }
     }
   };
 
@@ -106,6 +110,22 @@ const Register = () => {
           </p>
         </div>
 
+        {/* API Error Notification */}
+        {submitError && (
+          <div className="submit-error-banner" role="alert" style={{
+            background: 'rgba(255, 77, 79, 0.15)',
+            border: '1px solid #ff4d4f',
+            color: '#ff4d4f',
+            padding: '12px',
+            borderRadius: '8px',
+            marginBottom: '20px',
+            fontSize: '14px',
+            textAlign: 'left'
+          }}>
+            {submitError}
+          </div>
+        )}
+
         {/* Registration Form */}
         <form className="register-form" onSubmit={handleSubmit} noValidate>
           {/* Full Name Field */}
@@ -120,6 +140,7 @@ const Register = () => {
                 placeholder="John Doe"
                 value={formData.fullName}
                 onChange={handleChange}
+                disabled={isSubmitting}
                 aria-invalid={errors.fullName ? 'true' : 'false'}
               />
             </div>
@@ -142,6 +163,7 @@ const Register = () => {
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
+                disabled={isSubmitting}
                 aria-invalid={errors.email ? 'true' : 'false'}
               />
             </div>
@@ -164,6 +186,7 @@ const Register = () => {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
+                disabled={isSubmitting}
                 aria-invalid={errors.password ? 'true' : 'false'}
               />
             </div>
@@ -186,6 +209,7 @@ const Register = () => {
                 placeholder="••••••••"
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                disabled={isSubmitting}
                 aria-invalid={errors.confirmPassword ? 'true' : 'false'}
               />
             </div>
@@ -197,8 +221,8 @@ const Register = () => {
           </div>
 
           {/* Submit Button */}
-          <button type="submit" className="submit-btn">
-            Register
+          <button type="submit" className="submit-btn" disabled={isSubmitting}>
+            {isSubmitting ? 'Registering...' : 'Register'}
           </button>
         </form>
 
@@ -206,9 +230,9 @@ const Register = () => {
         <div className="register-footer">
           <p>
             Already have an account?{' '}
-            <a href="#login" className="login-link">
+            <Link to="/login" className="login-link">
               Login
-            </a>
+            </Link>
           </p>
         </div>
       </div>
