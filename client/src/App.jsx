@@ -1,13 +1,17 @@
 import "./App.css";
-import Navbar from "./components/Navbar/Navbar.jsx";
-import Hero from "./components/Hero/Hero.jsx";
+import { Routes, Route } from "react-router-dom";
+
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <Hero />
-    </>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
   );
 }
 
