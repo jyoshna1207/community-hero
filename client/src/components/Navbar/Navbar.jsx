@@ -43,15 +43,14 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/about" className={`nav-links ${isActive('/about')}`} onClick={closeMobileMenu}>
-              About
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/features" className={`nav-links ${isActive('/features')}`} onClick={closeMobileMenu}>
-              Features
-            </Link>
-          </li>
+  <Link
+    to="/events"
+    className={`nav-links ${isActive('/events')}`}
+    onClick={closeMobileMenu}
+  >
+    Events
+  </Link>
+</li>
           
           {/* Authentication Buttons */}
           {user ? (
