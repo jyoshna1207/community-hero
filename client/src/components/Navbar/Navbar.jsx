@@ -42,15 +42,6 @@ const Navbar = () => {
               Home
             </Link>
           </li>
-          <li className="nav-item">
-  <Link
-    to="/events"
-    className={`nav-links ${isActive('/events')}`}
-    onClick={closeMobileMenu}
-  >
-    Events
-  </Link>
-</li>
           
           {/* Authentication Buttons */}
           {user ? (
