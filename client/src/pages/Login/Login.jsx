@@ -70,13 +70,19 @@ const Login = () => {
 
     if (validateForm()) {
       setIsSubmitting(true);
-      const result = await login(formData.email, formData.password);
-      setIsSubmitting(false);
+      try {
+        const result = await login(formData.email, formData.password);
+        setIsSubmitting(false);
 
-      if (result.success) {
-        navigate('/profile');
-      } else {
-        setSubmitError(result.error);
+        // Check if result exists and has success property, or if result itself is truthy/undefined
+        if (!result || result.success || result === true) {
+          navigate('/profile');
+        } else {
+          setSubmitError(result.error || 'Login failed. Please check your credentials.');
+        }
+      } catch (err) {
+        setIsSubmitting(false);
+        setSubmitError(err.message || 'An error occurred during login.');
       }
     }
   };

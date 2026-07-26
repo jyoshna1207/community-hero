@@ -250,3 +250,102 @@
     font-size: 1.2rem;
   }
 }
+/* Container or wrapper for the input field with an icon */
+.input-group, .form-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Ensure input text has enough left space so it doesn't collide with the icon */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 16px 12px 42px; /* 👈 42px left padding leaves a clear gap for the icon */
+  font-size: 0.95rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Position the icon absolutely inside the left side of the input box */
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: #64748b;
+  font-size: 1.1rem;
+  pointer-events: none; /* Allows clicking straight through the icon into the input */
+}
+/* Container holding the icon and input together */
+.input-field-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Position the icon neatly inside the left side */
+.input-field-wrapper .input-icon {
+  position: absolute;
+  left: 14px;
+  color: #64748b;
+  font-size: 1.1rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Force the input text to start AFTER the icon with proper padding */
+.input-field-wrapper input {
+  width: 100%;
+  padding: 12px 16px 12px 45px !important;
+  font-size: 0.95rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  background-color: #f8fafc;
+}
+/* Container holding the icon and input */
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Position the icon cleanly on the left */
+.input-wrapper .input-icon {
+  position: absolute;
+  left: 14px;
+  color: #64748b;
+  font-size: 1.1rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Force the input text and autofill drop-downs to clear the icon */
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 16px 12px 45px !important;
+  font-size: 0.95rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  background-color: #f8fafc;
+}
+/* Responsive Mobile Adjustments */
+@media screen and (max-width: 768px) {
+  /* Make cards and containers take up most of the mobile screen width with safe padding */
+  .register-card,
+  .report-issue-card {
+    width: 90% !important;
+    margin: 20px auto !important;
+    padding: 20px !important;
+  }
+
+  /* Stack inputs or full-width buttons gracefully on small screens */
+  .submit-btn {
+    width: 100% !important;
+  }
+}

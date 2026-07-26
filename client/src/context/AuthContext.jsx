@@ -1,78 +1,46 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import React, { createContext, useContext, useState } from 'react';
 
-const AuthContext = createContext(null);
-
-export const useAuth = () => useContext(AuthContext);
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('community_hero_user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch {
+      return null;
+    }
+  });
 
-  const API_URL = 'http://localhost:5000/api/auth';
-
-  useEffect(() => {
-    const loadUser = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const res = await axios.get(`${API_URL}/profile`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setUser({ ...res.data, token });
-        } catch (err) {
-          console.error('Failed to load user profile, token might have expired:', err);
-          localStorage.removeItem('token');
-          setUser(null);
-        }
-      }
-      setLoading(false);
+  const login = async (email, password) => {
+    // Pure frontend mock user
+    const dummyUser = {
+      name: email ? email.split('@')[0] : 'Jyoshna',
+      email: email || 'jyoshna@example.com',
+      role: 'Community Member',
+      createdAt: '2026-07-01',
+      phone: '+91 9876543210',
+      location: 'Visakhapatnam, Andhra Pradesh',
+      occupation: 'Student',
     };
 
-    loadUser();
-  }, []);
+    setUser(dummyUser);
+    localStorage.setItem('community_hero_user', JSON.stringify(dummyUser));
 
-  // Register User
-  const register = async (name, email, password) => {
-    try {
-      const res = await axios.post(`${API_URL}/register`, { name, email, password });
-      localStorage.setItem('token', res.data.token);
-      setUser(res.data);
-      return { success: true };
-    } catch (err) {
-      const errorMsg = err.response?.data?.message || 'Registration failed';
-      return { success: false, error: errorMsg };
-    }
+    // Always returns success so Login.jsx redirects immediately
+    return { success: true, user: dummyUser };
   };
 
-  // Login User
-  const login = async (email, password) => {
-    try {
-      const res = await axios.post(`${API_URL}/login`, { email, password });
-      localStorage.setItem('token', res.data.token);
-      setUser(res.data);
-      return { success: true };
-    } catch (err) {
-      const errorMsg = err.response?.data?.message || 'Login failed';
-      return { success: false, error: errorMsg };
-    }
-  };
-
-  // Logout User
   const logout = () => {
-    localStorage.removeItem('token');
     setUser(null);
+    localStorage.removeItem('community_hero_user');
   };
 
-  const value = {
-    user,
-    loading,
-    login,
-    register,
-    logout,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
+
+export const useAuth = () => useContext(AuthContext);

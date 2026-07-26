@@ -1,0 +1,322 @@
+/* Container & Base Styles */
+.about-page {
+  background-color: #f4f6f9;
+  min-height: 100vh;
+  padding: 40px 20px 80px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2c3e50;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Page Header */
+.about-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.about-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a365d;
+  margin-bottom: 12px;
+}
+
+.about-subtitle {
+  font-size: 1.15rem;
+  color: #4a5568;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Section Spacing */
+.about-section {
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 28px;
+}
+
+/* Common Card Styling */
+.overview-card,
+.info-card,
+.tech-card,
+.team-card,
+.vision-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card:hover,
+.tech-card:hover,
+.team-card:hover,
+.overview-card:hover,
+.vision-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.12);
+}
+
+/* Overview Section */
+.overview-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px;
+  gap: 30px;
+}
+
+.overview-content {
+  flex: 1;
+}
+
+.overview-text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #475569;
+  margin-bottom: 16px;
+}
+
+.overview-text:last-child {
+  margin-bottom: 0;
+}
+
+.overview-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.overview-icon {
+  font-size: 8rem;
+  color: #2563eb;
+}
+
+/* Grid Layouts */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* Info Cards (Objectives & Features) */
+.info-card {
+  padding: 30px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.icon-wrapper {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background-color: #eff6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.icon-style,
+.feature-icon {
+  font-size: 1.5rem;
+  color: #2563eb;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.card-description {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+/* Technologies Section */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.tech-card {
+  padding: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tech-icon-wrapper {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.tech-icon.react { color: #61dafb; }
+.tech-icon.node { color: #68a063; }
+.tech-icon.express { color: #333333; }
+.tech-icon.mongo { color: #47a248; }
+.tech-icon.html { color: #e34f26; }
+.tech-icon.css { color: #1572b6; }
+.tech-icon.js { color: #f7df1e; }
+.tech-icon.router { color: #ca4245; }
+.tech-icon.github { color: #181717; }
+
+.tech-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.tech-description {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* Team Members Section */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.team-card {
+  padding: 32px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+
+.member-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.member-role {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #2563eb;
+  background-color: #eff6ff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.member-description {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* Vision Section */
+.vision-card {
+  padding: 40px;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+  border-top: 4px solid #2563eb;
+}
+
+.vision-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #334155;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .overview-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .overview-illustration {
+    order: -1;
+    padding: 0;
+  }
+
+  .overview-icon {
+    font-size: 6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-title {
+    font-size: 2rem;
+  }
+
+  .about-subtitle {
+    font-size: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .grid-responsive,
+  .tech-grid,
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vision-card {
+    padding: 24px;
+  }
+}
+/* Responsive Mobile Adjustments */
+@media screen and (max-width: 768px) {
+  /* Make cards and containers take up most of the mobile screen width with safe padding */
+  .register-card,
+  .report-issue-card {
+    width: 90% !important;
+    margin: 20px auto !important;
+    padding: 20px !important;
+  }
+
+  /* Stack inputs or full-width buttons gracefully on small screens */
+  .submit-btn {
+    width: 100% !important;
+  }
+}

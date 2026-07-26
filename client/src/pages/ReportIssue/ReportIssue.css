@@ -1,0 +1,314 @@
+/* Color Palette Variables */
+:root {
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #cbd5e1;
+  --focus-ring: rgba(37, 99, 235, 0.25);
+  --error-color: #dc2626;
+  --error-bg: #fef2f2;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --transition: all 0.2s ease-in-out;
+}
+
+/* Page Layout */
+.report-issue-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  padding: 2.5rem 1rem;
+  box-sizing: border-box;
+}
+
+/* Main Card Container */
+.report-issue-card {
+  background-color: var(--card-bg);
+  width: 100%;
+  max-width: 680px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 2.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+/* Header Elements */
+.report-issue-header {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.report-issue-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.report-issue-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Form Styles */
+.report-issue-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.required-star {
+  color: var(--error-color);
+  margin-left: 2px;
+}
+
+/* Form Inputs Common */
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--text-main);
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+  box-sizing: border-box;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* Input Focus States */
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+/* Error States */
+.input-error {
+  border-color: var(--error-color) !important;
+  background-color: var(--error-bg);
+}
+
+.error-text {
+  font-size: 0.825rem;
+  color: var(--error-color);
+  margin-top: 0.2rem;
+  font-weight: 500;
+}
+
+.hint-text {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+}
+
+/* Textarea Footer */
+.textarea-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.2rem;
+}
+
+.char-count {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+
+/* File Upload Area */
+.file-upload-box {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  background-color: #f8fafc;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.file-upload-box:hover {
+  border-color: var(--primary-color);
+  background-color: #f1f5f9;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.file-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.upload-icon {
+  width: 32px;
+  height: 32px;
+  stroke: var(--text-muted);
+}
+
+/* Image Preview */
+.image-preview-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  background-color: #f8fafc;
+}
+
+.image-preview {
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+.image-info-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.image-filename {
+  font-size: 0.85rem;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 75%;
+}
+
+.remove-image-btn {
+  background: none;
+  border: none;
+  color: var(--error-color);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.remove-image-btn:hover {
+  background-color: var(--error-bg);
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.submit-btn:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+  transform: translateY(-1px);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .report-issue-card {
+    padding: 1.75rem;
+  }
+
+  .report-issue-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .report-issue-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .report-issue-card {
+    padding: 1.25rem;
+  }
+
+  .report-issue-title {
+    font-size: 1.35rem;
+  }
+
+  .report-issue-subtitle {
+    font-size: 0.875rem;
+  }
+}
+/* Responsive Mobile Adjustments */
+@media screen and (max-width: 768px) {
+  /* Make cards and containers take up most of the mobile screen width with safe padding */
+  .register-card,
+  .report-issue-card {
+    width: 90% !important;
+    margin: 20px auto !important;
+    padding: 20px !important;
+  }
+
+  /* Stack inputs or full-width buttons gracefully on small screens */
+  .submit-btn {
+    width: 100% !important;
+  }
+}

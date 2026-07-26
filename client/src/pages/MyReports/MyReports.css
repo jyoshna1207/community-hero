@@ -1,0 +1,340 @@
+/* Color Palette Variables */
+:root {
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 12px 20px -3px rgba(0, 0, 0, 0.12), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --transition: all 0.25s ease-in-out;
+
+  /* Status Colors */
+  --status-reported-bg: #fee2e2;
+  --status-reported-text: #991b1b;
+  --status-progress-bg: #ffedd5;
+  --status-progress-text: #9a3412;
+  --status-resolved-bg: #dcfce7;
+  --status-resolved-text: #166534;
+
+  /* Action Button Colors */
+  --edit-bg: #f1f5f9;
+  --edit-text: #334155;
+  --edit-hover: #e2e8f0;
+  --delete-bg: #fef2f2;
+  --delete-text: #dc2626;
+  --delete-hover: #fee2e2;
+}
+
+/* Page Container */
+.my-reports-container {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  padding: 2.5rem 1.5rem;
+  box-sizing: border-box;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.my-reports-header {
+  margin-bottom: 2.5rem;
+  text-align: left;
+}
+
+.my-reports-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.025em;
+}
+
+.my-reports-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Grid Layout (3 desktop, 2 tablet, 1 mobile) */
+.my-reports-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+}
+
+/* Card Outer Shell */
+.my-report-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+}
+
+.my-report-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: #cbd5e1;
+}
+
+/* Image Frame & Hover Zoom */
+.my-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background-color: #e2e8f0;
+  overflow: hidden;
+}
+
+.my-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.my-report-card:hover .my-card-image {
+  transform: scale(1.05);
+}
+
+/* Colored Status Badges */
+.my-status-badge {
+  position: absolute;
+  top: 0.875rem;
+  right: 0.875rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.775rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.badge-reported {
+  background-color: var(--status-reported-bg);
+  color: var(--status-reported-text);
+}
+
+.badge-in-progress {
+  background-color: var(--status-progress-bg);
+  color: var(--status-progress-text);
+}
+
+.badge-resolved {
+  background-color: var(--status-resolved-bg);
+  color: var(--status-resolved-text);
+}
+
+/* Card Body Content */
+.my-card-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.my-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.825rem;
+}
+
+.my-card-category {
+  font-weight: 700;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.my-card-date {
+  color: var(--text-muted);
+}
+
+.my-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.35;
+  
+  /* Text Truncation */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  overflow: hidden;
+}
+
+.my-card-location {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.my-location-icon {
+  width: 16px;
+  height: 16px;
+  stroke: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.my-card-description {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.5;
+  margin: 0 0 1.25rem 0;
+  flex: 1;
+
+  /* Text Truncation */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Edit & Delete Action Buttons */
+.my-card-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.btn-action {
+  flex: 1;
+  padding: 0.65rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-edit {
+  background-color: var(--edit-bg);
+  color: var(--edit-text);
+  border: 1px solid var(--border-color);
+}
+
+.btn-edit:hover {
+  background-color: var(--edit-hover);
+}
+
+.btn-delete {
+  background-color: var(--delete-bg);
+  color: var(--delete-text);
+}
+
+.btn-delete:hover {
+  background-color: var(--delete-hover);
+}
+
+/* Empty State Box */
+.my-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 1.5rem;
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border-color);
+  margin-top: 1rem;
+}
+
+.my-empty-icon {
+  width: 60px;
+  height: 60px;
+  stroke: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.my-empty-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 0.5rem 0;
+}
+
+.my-empty-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin: 0 0 1.5rem 0;
+}
+
+.btn-report-issue {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.btn-report-issue:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Media Queries */
+
+/* Tablet View (2 cards per row) */
+@media (max-width: 1024px) {
+  .my-reports-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Mobile View (1 card per row) */
+@media (max-width: 640px) {
+  .my-reports-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .my-reports-title {
+    font-size: 1.75rem;
+  }
+
+  .my-reports-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+/* Responsive Mobile Adjustments */
+@media screen and (max-width: 768px) {
+  /* Make cards and containers take up most of the mobile screen width with safe padding */
+  .register-card,
+  .report-issue-card {
+    width: 90% !important;
+    margin: 20px auto !important;
+    padding: 20px !important;
+  }
+
+  /* Stack inputs or full-width buttons gracefully on small screens */
+  .submit-btn {
+    width: 100% !important;
+  }
+}
