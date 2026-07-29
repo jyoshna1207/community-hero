@@ -1,35 +1,34 @@
 /* Color Palette Variables */
 :root {
-  --profile-bg: #f8fafc;
-  --profile-card-bg: #ffffff;
-  --profile-text-main: #0f172a;
-  --profile-text-muted: #64748b;
-  --profile-border: #e2e8f0;
-  --profile-radius: 16px;
-  --profile-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  --profile-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.08);
-  --profile-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --profile-bg: #0f172a;
+  --profile-card-bg: rgba(30, 41, 59, 0.75);
+  --profile-text-main: #f8fafc;
+  --profile-text-muted: #94a3b8;
+  --profile-border: rgba(255, 255, 255, 0.1);
+  --profile-radius: 20px;
+  --profile-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  --profile-shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.35);
+  --profile-transition: all 0.3s ease;
 
   /* Primary Theme Colors */
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-success: #16a34a;
-  --color-warning: #ea580c;
-  --color-purple: #9333ea;
-  --color-danger: #dc2626;
-  --color-danger-hover: #b91c1c;
+  --color-primary: #38bdf8;
+  --color-primary-hover: #0284c7;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-purple: #a855f7;
+  --color-danger: #ef4444;
 }
 
 /* Page Container */
 .profile-page-container {
   min-height: 100vh;
   background-color: var(--profile-bg);
-  padding: 2.5rem 1.5rem;
+  padding: 2.5rem 1.5rem 5rem;
   box-sizing: border-box;
 }
 
 .profile-content {
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -38,12 +37,12 @@
 
 /* Page Header */
 .profile-header {
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto 1.5rem auto;
 }
 
 .profile-title {
-  font-size: 2.25rem;
+  font-size: 2.4rem;
   font-weight: 800;
   color: var(--profile-text-main);
   margin: 0 0 0.5rem 0;
@@ -51,7 +50,7 @@
 }
 
 .profile-subtitle {
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: var(--profile-text-muted);
   margin: 0;
 }
@@ -64,6 +63,7 @@
   box-shadow: var(--profile-shadow);
   border: 1px solid var(--profile-border);
   transition: var(--profile-transition);
+  backdrop-filter: blur(12px);
 }
 
 .profile-card:hover {
@@ -79,16 +79,16 @@
 }
 
 .profile-avatar-wrapper {
-  width: 140px;
-  height: 140px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f1f5f9;
-  border: 4px solid #ffffff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
   overflow: hidden;
 }
 
@@ -102,9 +102,8 @@
 .profile-avatar-initial {
   width: 100%;
   height: 100%;
-  background-color: var(--color-primary);
   color: #ffffff;
-  font-size: 3.25rem;
+  font-size: 3rem;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -113,7 +112,7 @@
 }
 
 .profile-user-name {
-  font-size: 1.75rem;
+  font-size: 1.85rem;
   font-weight: 800;
   color: var(--profile-text-main);
   margin: 0 0 0.25rem 0;
@@ -121,12 +120,13 @@
 
 .profile-user-role {
   font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--color-primary);
+  font-weight: 700;
+  color: #38bdf8;
   margin: 0 0 1rem 0;
-  background-color: #eff6ff;
+  background-color: rgba(56, 189, 248, 0.15);
   padding: 0.25rem 0.85rem;
   border-radius: 9999px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
 }
 
 .profile-hero-meta {
@@ -150,7 +150,7 @@
 }
 
 .hero-meta-divider {
-  color: #cbd5e1;
+  color: #64748b;
 }
 
 /* Statistics Grid */
@@ -164,12 +164,13 @@
   background-color: var(--profile-card-bg);
   border-radius: var(--profile-radius);
   padding: 1.25rem 1.5rem;
-  box-shadow: var(--profile-shadow);
+  box-shadow: var(--profile-stats-shadow);
   border: 1px solid var(--profile-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   transition: var(--profile-transition);
+  backdrop-filter: blur(12px);
 }
 
 .stat-card:hover {
@@ -190,7 +191,7 @@
 }
 
 .stat-card-value {
-  font-size: 1.75rem;
+  font-size: 1.85rem;
   font-weight: 800;
   color: var(--profile-text-main);
   line-height: 1;
@@ -212,23 +213,23 @@
 
 /* Stat Themes */
 .stat-blue .stat-icon-wrapper {
-  background-color: #eff6ff;
-  color: var(--color-primary);
+  background-color: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
 }
 
 .stat-green .stat-icon-wrapper {
-  background-color: #f0fdf4;
-  color: var(--color-success);
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #10b981;
 }
 
 .stat-orange .stat-icon-wrapper {
-  background-color: #fff7ed;
-  color: var(--color-warning);
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
 }
 
 .stat-purple .stat-icon-wrapper {
-  background-color: #faf5ff;
-  color: var(--color-purple);
+  background-color: rgba(168, 85, 247, 0.15);
+  color: #a855f7;
 }
 
 /* Information Cards Two-Column Grid */
@@ -245,7 +246,7 @@
 
 .card-heading {
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--profile-text-main);
   margin: 0 0 1.25rem 0;
   padding-bottom: 0.75rem;
@@ -272,7 +273,7 @@
 
 .info-value {
   color: var(--profile-text-main);
-  font-weight: 600;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -285,12 +286,13 @@
 }
 
 .highlight-value {
-  font-weight: 700;
+  color: #38bdf8;
+  font-weight: 800;
 }
 
 .rating-value {
-  color: #d97706;
-  font-weight: 700;
+  color: #fbbf24;
+  font-weight: 800;
 }
 
 /* Badges Chips */
@@ -308,13 +310,13 @@
 }
 
 .badge-chip {
-  background-color: #f1f5f9;
-  color: #334155;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   padding: 0.35rem 0.75rem;
   border-radius: 8px;
-  border: 1px solid var(--profile-border);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 /* Action Buttons */
@@ -332,8 +334,8 @@
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   font-size: 0.95rem;
-  font-weight: 600;
-  border-radius: 10px;
+  font-weight: 700;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
   transition: var(--profile-transition);
@@ -344,89 +346,33 @@
 }
 
 .btn-edit-profile {
-  background-color: var(--color-primary);
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
   color: #ffffff;
-  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
 }
 
 .btn-edit-profile:hover {
-  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
 }
 
 .btn-logout {
-  background-color: #fef2f2;
-  color: var(--color-danger);
-  border: 1px solid #fecaca;
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid #ef4444;
 }
 
 .btn-logout:hover {
-  background-color: var(--color-danger);
+  background-color: #ef4444;
   color: #ffffff;
 }
 
-/* Responsive Media Queries */
 @media (max-width: 1024px) {
   .profile-stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-@media (max-width: 640px) {
-  .profile-page-container {
-    padding: 1.5rem 1rem;
-  }
-
-  .profile-title {
-    font-size: 1.75rem;
-  }
-
-  .profile-stats-grid {
-    grid-template-columns: 1fr;
-  }
 
   .profile-details-grid {
     grid-template-columns: 1fr;
-  }
-
-  .profile-hero-meta {
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .hero-meta-divider {
-    display: none;
-  }
-
-  .info-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.2rem;
-  }
-
-  .info-value {
-    text-align: left;
-  }
-
-  .profile-actions {
-    flex-direction: column;
-  }
-
-  .btn-profile {
-    width: 100%;
-  }
-}
-/* Responsive Mobile Adjustments */
-@media screen and (max-width: 768px) {
-  /* Make cards and containers take up most of the mobile screen width with safe padding */
-  .register-card,
-  .report-issue-card {
-    width: 90% !important;
-    margin: 20px auto !important;
-    padding: 20px !important;
-  }
-
-  /* Stack inputs or full-width buttons gracefully on small screens */
-  .submit-btn {
-    width: 100% !important;
   }
 }

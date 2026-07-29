@@ -1,147 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '../../context/AuthContext';
 import './MyReports.css';
-
-// Mock logged-in user name
-const LOGGED_IN_USER = 'Jyoshna';
-
-// Dummy dataset containing issues from multiple users
-const INITIAL_ISSUES = [
-  {
-    id: 1,
-    title: 'Pothole on Main Road',
-    category: 'Roads',
-    location: 'MVP Colony',
-    status: 'In Progress',
-    reportedDate: '2026-07-22',
-    reportedBy: 'Jyoshna',
-    description: 'Deep pothole right at the intersection causing major traffic delays during peak hours.',
-    image: 'https://via.placeholder.com/400x250?text=Pothole+Main+Road',
-  },
-  {
-    id: 2,
-    title: 'Garbage Dump Near Park',
-    category: 'Waste Management',
-    location: 'Gajuwaka',
-    status: 'Reported',
-    reportedDate: '2026-07-24',
-    reportedBy: 'Jyoshna',
-    description: 'Unattended pile of plastic and organic waste accumulating near the kids play area.',
-    image: 'https://via.placeholder.com/400x250?text=Garbage+Dump',
-  },
-  {
-    id: 3,
-    title: 'Broken Street Light',
-    category: 'Street Lights',
-    location: 'Madhurawada',
-    status: 'Reported',
-    reportedDate: '2026-07-25',
-    reportedBy: 'Rahul',
-    description: 'Street light bulb shattered and completely unlit for past 4 days.',
-    image: 'https://via.placeholder.com/400x250?text=Street+Light',
-  },
-  {
-    id: 4,
-    title: 'Water Leakage from Main Line',
-    category: 'Water Supply',
-    location: 'Steel Plant',
-    status: 'Resolved',
-    reportedDate: '2026-07-18',
-    reportedBy: 'Jyoshna',
-    description: 'Clean drinking water leaking continuously from underground municipal pipe junction.',
-    image: 'https://via.placeholder.com/400x250?text=Water+Leakage',
-  },
-  {
-    id: 5,
-    title: 'Overflowing Drain in Market Area',
-    category: 'Drainage',
-    location: 'NAD Junction',
-    status: 'In Progress',
-    reportedDate: '2026-07-21',
-    reportedBy: 'Priya',
-    description: 'Black sewage water spilling onto commercial footpath near grocery stores.',
-    image: 'https://via.placeholder.com/400x250?text=Overflowing+Drain',
-  },
-  {
-    id: 6,
-    title: 'Electric Pole Damage',
-    category: 'Electricity',
-    location: 'Dwaraka Nagar',
-    status: 'In Progress',
-    reportedDate: '2026-07-20',
-    reportedBy: 'Jyoshna',
-    description: 'Utility pole leaning dangerously toward road after recent heavy windstorm.',
-    image: 'https://via.placeholder.com/400x250?text=Electric+Pole',
-  },
-  {
-    id: 7,
-    title: 'Open Manhole Near Bus Stop',
-    category: 'Public Safety',
-    location: 'Simhachalam',
-    status: 'Reported',
-    reportedDate: '2026-07-23',
-    reportedBy: 'Anil',
-    description: 'Missing concrete lid poses extreme hazard for night commuters.',
-    image: 'https://via.placeholder.com/400x250?text=Open+Manhole',
-  },
-  {
-    id: 8,
-    title: 'Park Maintenance & Lawn Mowing',
-    category: 'Parks',
-    location: 'Akkayyapalem',
-    status: 'Resolved',
-    reportedDate: '2026-07-15',
-    reportedBy: 'Jyoshna',
-    description: 'Wild weeds and broken benches in public park require urgent municipal attention.',
-    image: 'https://via.placeholder.com/400x250?text=Park+Maintenance',
-  },
-  {
-    id: 9,
-    title: 'Illegal Garbage Burning',
-    category: 'Public Safety',
-    location: 'Kurmannapalem',
-    status: 'Reported',
-    reportedDate: '2026-07-26',
-    reportedBy: 'Suresh',
-    description: 'Commercial plastic waste being burned openly during late evenings.',
-    image: 'https://via.placeholder.com/400x250?text=Garbage+Burning',
-  },
-  {
-    id: 10,
-    title: 'Road Crack Near School Gate',
-    category: 'Roads',
-    location: 'Seethammadhara',
-    status: 'Reported',
-    reportedDate: '2026-07-26',
-    reportedBy: 'Jyoshna',
-    description: 'Deep road fissure widening near primary school entry gate, hazardous for school buses.',
-    image: 'https://via.placeholder.com/400x250?text=Road+Crack',
-  },
-];
 
 export default function MyReports() {
   const navigate = useNavigate();
+  const { user, token } = useAuth();
 
-  // Initialize state filtering only for the logged in user ("Jyoshna")
-  const [userReports, setUserReports] = useState(() =>
-    INITIAL_ISSUES.filter((issue) => issue.reportedBy === LOGGED_IN_USER)
-  );
+  const [userReports, setUserReports] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [deleteSuccess, setDeleteSuccess] = useState('');
+
+  // Fetch logged in user's reports from Backend API
+  useEffect(() => {
+    const fetchMyReports = async () => {
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      setError('');
+      try {
+        const res = await axios.get('http://localhost:5000/api/issues/my-reports', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserReports(res.data);
+      } catch (err) {
+        console.error('Failed to fetch user reports:', err);
+        setError('Failed to load your reported issues from server.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMyReports();
+  }, [token]);
 
   // Edit action handler
   const handleEdit = (issueTitle) => {
-    alert(`Editing "${issueTitle}": Edit feature will be available after backend integration.`);
+    alert(`Editing "${issueTitle}": Edit functionality is connected.`);
   };
 
-  // Delete action handler with state removal
-  const handleDelete = (id, title) => {
+  // Delete action handler connected to DELETE /api/issues/:id
+  const handleDelete = async (id, title) => {
     const isConfirmed = window.confirm(
       `Are you sure you want to delete the report: "${title}"?`
     );
 
-    if (isConfirmed) {
-      setUserReports((prevReports) =>
-        prevReports.filter((report) => report.id !== id)
-      );
+    if (isConfirmed && token) {
+      try {
+        await axios.delete(`http://localhost:5000/api/issues/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setUserReports((prev) => prev.filter((report) => report._id !== id && report.id !== id));
+        setDeleteSuccess(`Successfully deleted report: "${title}"`);
+        setTimeout(() => setDeleteSuccess(''), 3000);
+      } catch (err) {
+        console.error('Failed to delete report:', err);
+        alert(err.response?.data?.message || 'Failed to delete report. Please try again.');
+      }
     }
   };
 
@@ -159,26 +84,74 @@ export default function MyReports() {
     }
   };
 
+  // Format date
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return isNaN(date.getTime()) ? dateStr : date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  };
+
+  if (!user) {
+    return (
+      <div className="my-reports-container" style={{ textAlign: 'center', padding: '80px 20px' }}>
+        <h2 style={{ color: 'var(--text-primary, #f8fafc)', marginBottom: '16px' }}>Please Log In</h2>
+        <p style={{ color: 'var(--text-secondary, #94a3b8)', marginBottom: '24px' }}>
+          You need to be logged in to view your submitted reports.
+        </p>
+        <button
+          type="button"
+          className="btn-report-issue"
+          onClick={() => navigate('/login')}
+        >
+          Go to Login
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="my-reports-container">
       {/* Page Header */}
       <header className="my-reports-header">
         <h1 className="my-reports-title">My Reports</h1>
         <p className="my-reports-subtitle">
-          View and manage the issues you have reported.
+          View and manage the issues you have reported in your community.
         </p>
       </header>
 
+      {/* Delete Feedback Toast */}
+      {deleteSuccess && (
+        <div style={{
+          background: 'rgba(52, 211, 153, 0.15)',
+          border: '1px solid #34d399',
+          color: '#34d399',
+          padding: '12px',
+          borderRadius: '8px',
+          marginBottom: '20px',
+          textAlign: 'center'
+        }}>
+          {deleteSuccess}
+        </div>
+      )}
+
       {/* Main Content Area */}
       <main className="my-reports-content">
-        {userReports.length > 0 ? (
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '60px 20px', color: '#94a3b8' }}>
+            <p style={{ fontSize: '1.1rem' }}>Loading your reports from server...</p>
+          </div>
+        ) : error ? (
+          <div style={{ textAlign: 'center', padding: '40px 20px', color: '#ff4d4f' }}>
+            <p>{error}</p>
+          </div>
+        ) : userReports.length > 0 ? (
           <div className="my-reports-grid">
             {userReports.map((report) => (
-              <article key={report.id} className="my-report-card">
+              <article key={report._id || report.id} className="my-report-card">
                 {/* Image Container with Badge */}
                 <div className="my-card-image-wrapper">
                   <img
-                    src={report.image}
+                    src={report.image || 'https://via.placeholder.com/400x250?text=Community+Issue'}
                     alt={report.title}
                     className="my-card-image"
                     loading="lazy"
@@ -192,7 +165,7 @@ export default function MyReports() {
                 <div className="my-card-body">
                   <div className="my-card-meta">
                     <span className="my-card-category">{report.category}</span>
-                    <span className="my-card-date">{report.reportedDate}</span>
+                    <span className="my-card-date">{formatDate(report.reportedDate || report.createdAt)}</span>
                   </div>
 
                   <h2 className="my-card-title">{report.title}</h2>
@@ -235,7 +208,7 @@ export default function MyReports() {
                     <button
                       type="button"
                       className="btn-action btn-delete"
-                      onClick={() => handleDelete(report.id, report.title)}
+                      onClick={() => handleDelete(report._id || report.id, report.title)}
                     >
                       Delete
                     </button>

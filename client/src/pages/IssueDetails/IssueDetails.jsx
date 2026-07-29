@@ -1,152 +1,127 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '../../context/AuthContext';
+import { FaShieldAlt, FaThumbsUp, FaRobot, FaBuilding, FaClock, FaCheckCircle, FaMapMarkerAlt, FaVideo, FaBolt } from 'react-icons/fa';
 import './IssueDetails.css';
-
-// Realistic dummy data array matching the listing page
-const ISSUES_DATA = [
-  {
-    id: 1,
-    title: 'Garbage Dump Near Community Center',
-    category: 'Waste Management',
-    location: 'Gajuwaka',
-    status: 'Reported',
-    reportedDate: '2026-07-24',
-    description: 'Unattended heap of household waste accumulating near the entrance of the community center, causing severe foul odor and health risks to visitors and residents.',
-    image: 'https://via.placeholder.com/900x500?text=Waste+Management',
-  },
-  {
-    id: 2,
-    title: 'Severe Pothole on Main Arterial Road',
-    category: 'Roads',
-    location: 'MVP Colony',
-    status: 'In Progress',
-    reportedDate: '2026-07-22',
-    description: 'Deep pothole caused by recent heavy rains right at the central intersection. Poses high risk to two-wheelers during peak traffic hours.',
-    image: 'https://via.placeholder.com/900x500?text=Road+Damage',
-  },
-  {
-    id: 3,
-    title: 'Pipeline Water Leakage on Street 4',
-    category: 'Water Supply',
-    location: 'Madhurawada',
-    status: 'Resolved',
-    reportedDate: '2026-07-18',
-    description: 'Underground supply line burst leading to thousands of liters of clean water wastage daily. Repaired by municipal civic authorities.',
-    image: 'https://via.placeholder.com/900x500?text=Water+Leakage',
-  },
-  {
-    id: 4,
-    title: 'Non-Functional Street Lights along Highway',
-    category: 'Street Lights',
-    location: 'Steel Plant',
-    status: 'Reported',
-    reportedDate: '2026-07-25',
-    description: 'A stretch of 6 consecutive street lights are completely dark, causing night safety concerns for pedestrians and commuters along the highway.',
-    image: 'https://via.placeholder.com/900x500?text=Street+Lights',
-  },
-  {
-    id: 5,
-    title: 'Overflowing Sewage Drain Near Market',
-    category: 'Drainage',
-    location: 'NAD Junction',
-    status: 'In Progress',
-    reportedDate: '2026-07-21',
-    description: 'Blocked underground drain causing waste water to spill onto the main commercial footpath, affecting local shopkeepers and passersby.',
-    image: 'https://via.placeholder.com/900x500?text=Overflowing+Drain',
-  },
-  {
-    id: 6,
-    title: 'Illegal Plastic Waste Burning',
-    category: 'Public Safety',
-    location: 'Kurmannapalem',
-    status: 'Reported',
-    reportedDate: '2026-07-26',
-    description: 'Open burning of commercial plastic waste happening every evening in vacant plots, releasing toxic fumes into nearby residential homes.',
-    image: 'https://via.placeholder.com/900x500?text=Waste+Burning',
-  },
-  {
-    id: 7,
-    title: 'Uncovered Open Manhole on School Lane',
-    category: 'Public Safety',
-    location: 'Simhachalam',
-    status: 'In Progress',
-    reportedDate: '2026-07-23',
-    description: 'Heavy concrete cover broken and removed. Open hole right along the primary route used daily by primary school children.',
-    image: 'https://via.placeholder.com/900x500?text=Open+Manhole',
-  },
-  {
-    id: 8,
-    title: 'Broken Play Equipment & Overgrown Grass',
-    category: 'Parks',
-    location: 'Akkayyapalem',
-    status: 'Resolved',
-    reportedDate: '2026-07-15',
-    description: 'Childrens park was neglected with broken swings and tall wild weeds. Maintenance work has been completed successfully.',
-    image: 'https://via.placeholder.com/900x500?text=Park+Maintenance',
-  },
-  {
-    id: 9,
-    title: 'Tilting Electric Pole Near Bus Stop',
-    category: 'Electricity',
-    location: 'Dwaraka Nagar',
-    status: 'In Progress',
-    reportedDate: '2026-07-20',
-    description: 'An aging wooden utility pole is leaning dangerously toward the roadway after a storm. Needs immediate structural support.',
-    image: 'https://via.placeholder.com/900x500?text=Electric+Pole',
-  },
-  {
-    id: 10,
-    title: 'Garbage Dump Outside Primary School Gate',
-    category: 'Waste Management',
-    location: 'Seethammadhara',
-    status: 'Reported',
-    reportedDate: '2026-07-26',
-    description: 'Unsanitary waste dumped right beside the primary school boundary wall, attracting stray animals and pests daily.',
-    image: 'https://via.placeholder.com/900x500?text=School+Garbage',
-  },
-];
 
 export default function IssueDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user, token } = useAuth();
 
-  // Find issue matching the route param
-  const issue = ISSUES_DATA.find((item) => item.id === Number(id));
+  const [issue, setIssue] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Placeholder action handler for UI buttons
-  const handleAction = (actionName) => {
-    alert(`${actionName}: Feature will be available after backend integration.`);
-  };
+  const [actionMessage, setActionMessage] = useState('');
+  const [actionError, setActionError] = useState('');
 
-  // Status Badge CSS Class Mapper
-  const getStatusBadgeClass = (status) => {
-    switch (status) {
-      case 'Reported':
-        return 'details-status-badge status-reported';
-      case 'In Progress':
-        return 'details-status-badge status-in-progress';
-      case 'Resolved':
-        return 'details-status-badge status-resolved';
-      default:
-        return 'details-status-badge';
+  // Fetch issue details
+  useEffect(() => {
+    const fetchIssueDetails = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const res = await axios.get(`http://localhost:5000/api/issues/${id}`);
+        setIssue(res.data);
+      } catch (err) {
+        console.error('Failed to fetch issue details:', err);
+        setError('Issue not found or failed to load from server.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchIssueDetails();
+    }
+  }, [id]);
+
+  // Upvote Handler (+10 XP)
+  const handleUpvote = async () => {
+    if (!user || !token) {
+      setActionError('Please log in to upvote issues and earn XP.');
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `http://localhost:5000/api/issues/${id}/upvote`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setActionMessage('🎉 ' + res.data.message);
+      setIssue((prev) => ({
+        ...prev,
+        upvotes: [...(prev.upvotes || []), { user: user._id }],
+      }));
+      setTimeout(() => setActionMessage(''), 4000);
+    } catch (err) {
+      setActionError(err.response?.data?.message || 'Upvote failed.');
+      setTimeout(() => setActionError(''), 4000);
     }
   };
 
-  // Fallback state if issue ID is invalid
-  if (!issue) {
+  // Community Verify Handler (+20 XP)
+  const handleVerify = async () => {
+    if (!user || !token) {
+      setActionError('Please log in to verify issues and earn XP.');
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `http://localhost:5000/api/issues/${id}/verify`,
+        { note: 'Verified by community member on-site' },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setActionMessage('🛡️ ' + res.data.message);
+      setIssue((prev) => ({
+        ...prev,
+        verifications: [...(prev.verifications || []), { user: user._id }],
+        timeline: [
+          ...(prev.timeline || []),
+          { status: 'Verified', note: `Verified on-site by ${user.name}`, date: new Date() },
+        ],
+      }));
+      setTimeout(() => setActionMessage(''), 4000);
+    } catch (err) {
+      setActionError(err.response?.data?.message || 'Verification failed.');
+      setTimeout(() => setActionError(''), 4000);
+    }
+  };
+
+  const getStatusBadgeClass = (status) => {
+    switch (status) {
+      case 'Reported': return 'details-status-badge status-reported';
+      case 'In Progress': return 'details-status-badge status-in-progress';
+      case 'Resolved': return 'details-status-badge status-resolved';
+      default: return 'details-status-badge';
+    }
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return 'N/A';
+    const date = new Date(dateStr);
+    return isNaN(date.getTime()) ? dateStr : date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  };
+
+  if (loading) {
+    return (
+      <div className="issue-details-container" style={{ textAlign: 'center', padding: '80px 20px' }}>
+        <p style={{ fontSize: '1.2rem', color: '#94a3b8' }}>Loading issue telemetry & AI predictions...</p>
+      </div>
+    );
+  }
+
+  if (error || !issue) {
     return (
       <div className="issue-details-container">
         <div className="not-found-card">
-          <div className="not-found-icon" aria-hidden="true">⚠️</div>
-          <h2 className="not-found-title">Issue Not Found</h2>
-          <p className="not-found-message">The requested issue does not exist or has been removed.</p>
-          <button
-            type="button"
-            className="back-btn"
-            onClick={() => navigate('/issues')}
-          >
-            ← Back to Issues
-          </button>
+          <h2>Issue Not Found</h2>
+          <p>{error}</p>
+          <button className="back-btn" onClick={() => navigate('/issues')}>← Back to Issues</button>
         </div>
       </div>
     );
@@ -154,97 +129,113 @@ export default function IssueDetails() {
 
   return (
     <div className="issue-details-container">
-      {/* Top Header Section */}
       <header className="details-header">
-        <button
-          type="button"
-          className="back-link-btn"
-          onClick={() => navigate('/issues')}
-        >
-          ← Back to All Issues
-        </button>
-        <h1 className="details-page-title">Issue Details</h1>
-        <p className="details-page-subtitle">
-          View complete information about the reported community issue.
-        </p>
+        <button className="back-link-btn" onClick={() => navigate('/issues')}>← Back to All Issues</button>
+        <h1 className="details-page-title">{issue.title}</h1>
+        <p className="details-page-subtitle">Hyperlocal issue details, community validation & real-time progress tracker.</p>
       </header>
 
-      {/* Main Details Card */}
+      {actionMessage && <div className="action-toast-success">{actionMessage}</div>}
+      {actionError && <div className="action-toast-error">{actionError}</div>}
+
       <main className="details-card">
-        {/* Hero Image Section */}
+        {/* Hero Media Section */}
         <div className="details-image-container">
-          <img
-            src={issue.image}
-            alt={issue.title}
-            className="details-image"
-          />
-          <span className={getStatusBadgeClass(issue.status)}>
-            {issue.status}
-          </span>
+          {issue.video ? (
+            <video src={issue.video} controls className="details-image" />
+          ) : (
+            <img src={issue.image || 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=800&q=80'} alt={issue.title} className="details-image" />
+          )}
+          <span className={getStatusBadgeClass(issue.status)}>{issue.status}</span>
         </div>
 
-        {/* Card Body Layout */}
+        {/* Content Layout */}
         <div className="details-content-grid">
-          {/* Main Information Column */}
           <section className="details-main-info">
-            <div className="details-category-tag">{issue.category}</div>
-            <h2 className="details-issue-title">{issue.title}</h2>
+            <div className="tags-row">
+              <span className="details-category-tag">{issue.category}</span>
+              <span className={`severity-tag ${issue.aiSeverity ? issue.aiSeverity.toLowerCase() : 'medium'}`}>
+                AI Severity: {issue.aiSeverity || 'Medium'}
+              </span>
+              <span className="priority-score-chip">
+                AI Priority Score: <strong>{issue.aiPriorityScore || 80}/100</strong>
+              </span>
+            </div>
 
             <div className="details-section">
               <h3 className="section-heading">Description</h3>
               <p className="details-description">{issue.description}</p>
             </div>
 
-            {/* Interactive Action Buttons */}
+            {/* AI Tags Row */}
+            {issue.aiTags && issue.aiTags.length > 0 && (
+              <div className="details-section">
+                <h4 className="subheading">AI Keyword Tags</h4>
+                <div className="ai-tags-flex">
+                  {issue.aiTags.map((tag, idx) => (
+                    <span key={idx} className="ai-tag">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Gamified Community Actions */}
             <div className="details-actions">
-              <button
-                type="button"
-                className="action-btn primary-action"
-                onClick={() => handleAction('Verify Issue')}
-              >
-                Verify Issue
+              <button type="button" className="action-btn upvote-btn" onClick={handleUpvote}>
+                <FaThumbsUp /> Confirm / Upvote ({issue.upvotes?.length || 0}) <span className="xp-tag">+10 XP</span>
               </button>
-              <button
-                type="button"
-                className="action-btn secondary-action"
-                onClick={() => handleAction('Mark Helpful')}
-              >
-                Mark Helpful
+              <button type="button" className="action-btn verify-btn" onClick={handleVerify}>
+                <FaShieldAlt /> On-Site Verify ({issue.verifications?.length || 0}) <span className="xp-tag">+20 XP</span>
               </button>
+            </div>
+
+            {/* Real-time Resolution Timeline */}
+            <div className="details-section timeline-section">
+              <h3 className="section-heading">Real-Time Progress Tracker</h3>
+              <div className="timeline-stepper">
+                {issue.timeline && issue.timeline.length > 0 ? (
+                  issue.timeline.map((step, idx) => (
+                    <div key={idx} className="timeline-item">
+                      <div className="timeline-icon-box">
+                        <FaCheckCircle className="timeline-check-icon" />
+                      </div>
+                      <div className="timeline-content">
+                        <h4 className="timeline-status">{step.status}</h4>
+                        <p className="timeline-note">{step.note}</p>
+                        <span className="timeline-meta">By {step.updatedBy || 'System'} • {formatDate(step.date)}</span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p style={{ color: '#94a3b8' }}>Tracking initialized.</p>
+                )}
+              </div>
             </div>
           </section>
 
-          {/* Side Info Panel */}
-          <aside className="details-sidebar" aria-label="Issue Summary Information">
+          {/* Sidebar */}
+          <aside className="details-sidebar">
             <h3 className="sidebar-heading">Issue Information</h3>
             <dl className="info-list">
               <div className="info-item">
-                <dt className="info-label">Issue ID</dt>
-                <dd className="info-value">#{issue.id}</dd>
+                <dt className="info-label">Assigned Department</dt>
+                <dd className="info-value highlight-value">{issue.assignedDept || 'Municipal Task Force'}</dd>
               </div>
-
               <div className="info-item">
-                <dt className="info-label">Category</dt>
-                <dd className="info-value">{issue.category}</dd>
+                <dt className="info-label">Location Landmark</dt>
+                <dd className="info-value"><FaMapMarkerAlt /> {issue.location}</dd>
               </div>
-
-              <div className="info-item">
-                <dt className="info-label">Location</dt>
-                <dd className="info-value">{issue.location}</dd>
-              </div>
-
               <div className="info-item">
                 <dt className="info-label">Reported Date</dt>
-                <dd className="info-value">{issue.reportedDate}</dd>
+                <dd className="info-value">{formatDate(issue.reportedDate || issue.createdAt)}</dd>
               </div>
-
               <div className="info-item">
-                <dt className="info-label">Current Status</dt>
-                <dd className="info-value">
-                  <span className={`status-pill ${issue.status.toLowerCase().replace(' ', '-')}`}>
-                    {issue.status}
-                  </span>
-                </dd>
+                <dt className="info-label">Reported By</dt>
+                <dd className="info-value">{issue.user?.name || 'Citizen Hero'}</dd>
+              </div>
+              <div className="info-item">
+                <dt className="info-label">Community Validations</dt>
+                <dd className="info-value">{issue.verifications?.length || 0} Verifications</dd>
               </div>
             </dl>
           </aside>

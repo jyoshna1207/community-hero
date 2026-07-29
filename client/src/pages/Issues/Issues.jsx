@@ -1,110 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Issues.css';
-
-// Realistic local dummy data array (minimum 10 items)
-const DUMMY_ISSUES = [
-  {
-    id: 1,
-    title: 'Garbage Dump Near Community Center',
-    category: 'Waste Management',
-    location: 'Gajuwaka',
-    status: 'Reported',
-    reportedDate: '2026-07-24',
-    description: 'Unattended heap of household waste accumulating near the entrance of the community center, causing severe foul odor and health risks.',
-    image: 'https://via.placeholder.com/400x250?text=Waste+Management',
-  },
-  {
-    id: 2,
-    title: 'Severe Pothole on Main Arterial Road',
-    category: 'Roads',
-    location: 'MVP Colony',
-    status: 'In Progress',
-    reportedDate: '2026-07-22',
-    description: 'Deep pothole caused by recent heavy rains right at the central intersection. Poses high risk to two-wheelers during peak traffic.',
-    image: 'https://via.placeholder.com/400x250?text=Road+Damage',
-  },
-  {
-    id: 3,
-    title: 'Pipeline Water Leakage on Street 4',
-    category: 'Water Supply',
-    location: 'Madhurawada',
-    status: 'Resolved',
-    reportedDate: '2026-07-18',
-    description: 'Underground supply line burst leading to thousands of liters of clean water wastage daily. Repaired by civic authorities.',
-    image: 'https://via.placeholder.com/400x250?text=Water+Leakage',
-  },
-  {
-    id: 4,
-    title: 'Non-Functional Street Lights along Highway',
-    category: 'Street Lights',
-    location: 'Steel Plant',
-    status: 'Reported',
-    reportedDate: '2026-07-25',
-    description: 'A stretch of 6 consecutive street lights are completely dark, causing night safety concerns for pedestrians and commuters.',
-    image: 'https://via.placeholder.com/400x250?text=Street+Lights',
-  },
-  {
-    id: 5,
-    title: 'Overflowing Sewage Drain Near Market',
-    category: 'Drainage',
-    location: 'NAD Junction',
-    status: 'In Progress',
-    reportedDate: '2026-07-21',
-    description: 'Blocked underground drain causing black water to spill onto the main commercial footpath, affecting local shopkeepers.',
-    image: 'https://via.placeholder.com/400x250?text=Overflowing+Drain',
-  },
-  {
-    id: 6,
-    title: 'Illegal Plastic Waste Burning',
-    category: 'Public Safety',
-    location: 'Kurmannapalem',
-    status: 'Reported',
-    reportedDate: '2026-07-26',
-    description: 'Open burning of commercial plastic waste happening every evening in vacant plots, releasing toxic fumes into nearby homes.',
-    image: 'https://via.placeholder.com/400x250?text=Waste+Burning',
-  },
-  {
-    id: 7,
-    title: 'Uncovered Open Manhole on School Lane',
-    category: 'Public Safety',
-    location: 'Simhachalam',
-    status: 'In Progress',
-    reportedDate: '2026-07-23',
-    description: 'Heavy concrete cover broken and removed. Open hole right along the primary route used daily by primary school children.',
-    image: 'https://via.placeholder.com/400x250?text=Open+Manhole',
-  },
-  {
-    id: 8,
-    title: 'Broken Play Equipment & Overgrown Grass',
-    category: 'Parks',
-    location: 'Akkayyapalem',
-    status: 'Resolved',
-    reportedDate: '2026-07-15',
-    description: 'Childrens park was neglected with broken swings and tall wild weeds. Maintenance work has been completed successfully.',
-    image: 'https://via.placeholder.com/400x250?text=Park+Maintenance',
-  },
-  {
-    id: 9,
-    title: 'Tilting Electric Pole Near Bus Stop',
-    category: 'Electricity',
-    location: 'Dwaraka Nagar',
-    status: 'In Progress',
-    reportedDate: '2026-07-20',
-    description: 'An aging wooden utility pole is leaning dangerously toward the roadway after a storm. Needs immediate structural support.',
-    image: 'https://via.placeholder.com/400x250?text=Electric+Pole',
-  },
-  {
-    id: 10,
-    title: 'Garbage Dump Outside Primary School Gate',
-    category: 'Waste Management',
-    location: 'Seethammadhara',
-    status: 'Reported',
-    reportedDate: '2026-07-26',
-    description: 'Unsanitary waste dumped right beside the primary school boundary wall, attracting stray animals and pests daily.',
-    image: 'https://via.placeholder.com/400x250?text=School+Garbage',
-  },
-];
 
 const CATEGORY_OPTIONS = [
   'All Categories',
@@ -124,21 +21,46 @@ const STATUS_OPTIONS = ['All Status', 'Reported', 'In Progress', 'Resolved'];
 export default function Issues() {
   const navigate = useNavigate();
 
+  // Issues & Async state
+  const [issues, setIssues] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
   // Filter & Search states
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [selectedStatus, setSelectedStatus] = useState('All Status');
 
-  // Combined client-side filtering logic
+  // Fetch issues from Backend API
+  useEffect(() => {
+    const fetchIssues = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const res = await axios.get('http://localhost:5000/api/issues');
+        setIssues(res.data);
+      } catch (err) {
+        console.error('Failed to fetch issues from backend:', err);
+        setError('Failed to load issues from server. Please check your backend connection.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchIssues();
+  }, []);
+
+  // Combined client-side filtering logic over fetched issues
   const filteredIssues = useMemo(() => {
-    return DUMMY_ISSUES.filter((issue) => {
-      // Search matching (Title, Category, or Location)
+    return issues.filter((issue) => {
+      // Search matching (Title, Category, Location, or Description)
       const query = searchTerm.trim().toLowerCase();
       const matchesSearch =
         query === '' ||
-        issue.title.toLowerCase().includes(query) ||
-        issue.category.toLowerCase().includes(query) ||
-        issue.location.toLowerCase().includes(query);
+        (issue.title && issue.title.toLowerCase().includes(query)) ||
+        (issue.category && issue.category.toLowerCase().includes(query)) ||
+        (issue.location && issue.location.toLowerCase().includes(query)) ||
+        (issue.description && issue.description.toLowerCase().includes(query));
 
       // Category matching
       const matchesCategory =
@@ -151,7 +73,7 @@ export default function Issues() {
 
       return matchesSearch && matchesCategory && matchesStatus;
     });
-  }, [searchTerm, selectedCategory, selectedStatus]);
+  }, [issues, searchTerm, selectedCategory, selectedStatus]);
 
   // Navigate to detailed issue page
   const handleViewDetails = (issueId) => {
@@ -170,6 +92,13 @@ export default function Issues() {
       default:
         return 'status-badge';
     }
+  };
+
+  // Date formatter
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return isNaN(date.getTime()) ? dateStr : date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   };
 
   return (
@@ -240,16 +169,24 @@ export default function Issues() {
         </div>
       </section>
 
-      {/* Issues Grid / Empty State */}
+      {/* Issues Grid / Empty / Loading State */}
       <main className="issues-content">
-        {filteredIssues.length > 0 ? (
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-secondary, #94a3b8)' }}>
+            <p style={{ fontSize: '1.1rem' }}>Loading reported issues from backend...</p>
+          </div>
+        ) : error ? (
+          <div style={{ textAlign: 'center', padding: '40px 20px', color: '#ff4d4f' }}>
+            <p>{error}</p>
+          </div>
+        ) : filteredIssues.length > 0 ? (
           <div className="issues-grid">
             {filteredIssues.map((issue) => (
-              <article key={issue.id} className="issue-card">
+              <article key={issue._id || issue.id} className="issue-card">
                 {/* Image & Status Badge */}
                 <div className="card-image-wrapper">
                   <img
-                    src={issue.image}
+                    src={issue.image || 'https://via.placeholder.com/400x250?text=Community+Issue'}
                     alt={issue.title}
                     className="card-image"
                     loading="lazy"
@@ -263,7 +200,7 @@ export default function Issues() {
                 <div className="card-body">
                   <div className="card-meta-top">
                     <span className="card-category">{issue.category}</span>
-                    <span className="card-date">{issue.reportedDate}</span>
+                    <span className="card-date">{formatDate(issue.reportedDate || issue.createdAt)}</span>
                   </div>
 
                   <h2 className="card-title">{issue.title}</h2>
@@ -296,7 +233,7 @@ export default function Issues() {
                   <button
                     type="button"
                     className="view-details-btn"
-                    onClick={() => handleViewDetails(issue.id)}
+                    onClick={() => handleViewDetails(issue._id || issue.id)}
                   >
                     View Details
                   </button>

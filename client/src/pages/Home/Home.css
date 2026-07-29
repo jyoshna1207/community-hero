@@ -1,33 +1,36 @@
 /* Home Page Container */
 .home-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 40px 20px;
-  font-family: inherit;
-  color: #1e293b;
+  padding: 40px 24px 80px;
+  color: #f8fafc;
 }
 
 /* Hero Section */
 .home-hero {
   text-align: center;
-  padding: 60px 20px;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  border-radius: 12px;
+  padding: 80px 24px;
+  background: radial-gradient(circle at top center, rgba(99, 102, 241, 0.25) 0%, rgba(30, 41, 59, 0.85) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
   margin-bottom: 40px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
 }
 
 .home-hero h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 16px;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
 }
 
 .home-hero p {
-  font-size: 1.1rem;
-  color: #475569;
-  max-width: 600px;
-  margin: 0 auto 24px auto;
+  font-size: 1.2rem;
+  color: #cbd5e1;
+  max-width: 720px;
+  margin: 0 auto 32px auto;
   line-height: 1.6;
 }
 
@@ -41,31 +44,34 @@
 
 .home-btn-primary,
 .home-btn-secondary {
-  padding: 12px 24px;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 8px;
+  padding: 14px 32px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  border-radius: 12px;
   text-decoration: none;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .home-btn-primary {
-  background-color: #2563eb;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: #ffffff;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
 }
 
 .home-btn-primary:hover {
-  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
 }
 
 .home-btn-secondary {
-  background-color: #ffffff;
-  color: #2563eb;
-  border: 1.5px solid #2563eb;
+  background: rgba(255, 255, 255, 0.08);
+  color: #38bdf8;
+  border: 1.5px solid #38bdf8;
 }
 
 .home-btn-secondary:hover {
-  background-color: #eff6ff;
+  background: rgba(56, 189, 248, 0.15);
+  transform: translateY(-2px);
 }
 
 /* Responsive Mobile Adjustments */
@@ -75,7 +81,7 @@
   }
 
   .home-hero h1 {
-    font-size: 2rem;
+    font-size: 2.1rem;
   }
 
   .home-hero p {

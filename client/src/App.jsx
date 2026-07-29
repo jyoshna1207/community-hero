@@ -10,6 +10,8 @@ import Issues from "./pages/Issues/Issues";
 import IssueDetails from "./pages/IssueDetails/IssueDetails";
 import ReportIssue from "./pages/ReportIssue/ReportIssue";
 import MyReports from "./pages/MyReports/MyReports";
+import Leaderboard from "./pages/Leaderboard/Leaderboard";
+import Insights from "./pages/Insights/Insights";
 import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
 import NotFound from "./pages/NotFound/NotFound";
@@ -28,28 +30,17 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/issues" element={<Issues />} />
+          <Route path="/issues/:id" element={<IssueDetails />} />
+          <Route path="/issue/:id" element={<IssueDetails />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/insights" element={<Insights />} />
           
           <Route 
             path="/dashboard" 
             element={
               <ProtectedRoute>
                 <Dashboard />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/issues" 
-            element={
-              <ProtectedRoute>
-                <Issues />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/issues/:id" 
-            element={
-              <ProtectedRoute>
-                <IssueDetails />
               </ProtectedRoute>
             } 
           />

@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '../../context/AuthContext';
+import { FaRobot, FaMapMarkerAlt, FaVideo, FaImage, FaBolt, FaCheckCircle } from 'react-icons/fa';
 import './ReportIssue.css';
 
 const INITIAL_FORM_STATE = {
@@ -6,7 +10,9 @@ const INITIAL_FORM_STATE = {
   category: '',
   description: '',
   location: '',
+  locationCoords: { lat: 17.6868, lng: 83.2185 },
   image: null,
+  video: null,
 };
 
 const CATEGORIES = [
@@ -22,70 +28,54 @@ const CATEGORIES = [
 ];
 
 export default function ReportIssue() {
+  const navigate = useNavigate();
+  const { user, token } = useAuth();
+
   const [formData, setFormData] = useState(INITIAL_FORM_STATE);
   const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [videoPreview, setVideoPreview] = useState(null);
+  
+  // AI Auto-Classification State
+  const [aiData, setAiData] = useState(null);
+  const [isAnalyzingAi, setIsAnalyzingAi] = useState(false);
+  const [detectingGps, setDetectingGps] = useState(false);
 
-  // Validate individual field rules
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState('');
+
+  // Validate field rules
   const validateField = (name, value) => {
     let error = '';
-
     switch (name) {
       case 'title':
-        if (!value.trim()) {
-          error = 'Title is required.';
-        } else if (value.trim().length < 5) {
-          error = 'Title must be at least 5 characters long.';
-        }
+        if (!value.trim()) error = 'Title is required.';
+        else if (value.trim().length < 5) error = 'Title must be at least 5 characters long.';
         break;
-
       case 'category':
-        if (!value) {
-          error = 'Please select a category.';
-        }
+        if (!value) error = 'Please select a category.';
         break;
-
       case 'description':
-        if (!value.trim()) {
-          error = 'Description is required.';
-        } else if (value.trim().length < 20) {
-          error = 'Description must be at least 20 characters long.';
-        } else if (value.trim().length > 500) {
-          error = 'Description cannot exceed 500 characters.';
-        }
+        if (!value.trim()) error = 'Description is required.';
+        else if (value.trim().length < 20) error = 'Description must be at least 20 characters long.';
         break;
-
       case 'location':
-        if (!value.trim()) {
-          error = 'Location is required.';
-        }
+        if (!value.trim()) error = 'Location is required.';
         break;
-
-      case 'image':
-        if (!value) {
-          error = 'An image is required.';
-        }
-        break;
-
       default:
         break;
     }
-
     return error;
   };
 
-  // Run validation across all fields
   const validateForm = () => {
     const newErrors = {};
-
     newErrors.title = validateField('title', formData.title);
     newErrors.category = validateField('category', formData.category);
     newErrors.description = validateField('description', formData.description);
     newErrors.location = validateField('location', formData.location);
-    newErrors.image = validateField('image', formData.image);
 
-    // Remove empty error keys
     Object.keys(newErrors).forEach((key) => {
       if (!newErrors[key]) delete newErrors[key];
     });
@@ -94,221 +84,312 @@ export default function ReportIssue() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle standard text, select, and textarea input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setSubmitError('');
 
-    // Clear error dynamically as the user types/selects
     if (errors[name]) {
       const fieldError = validateField(name, value);
       setErrors((prev) => ({ ...prev, [name]: fieldError }));
     }
   };
 
-  // Handle file select, validation, and preview setup
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-
-    if (!file) return;
-
-    // Check file type
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-    if (!validTypes.includes(file.type)) {
-      setErrors((prev) => ({
-        ...prev,
-        image: 'Please upload a valid image file (.jpg, .jpeg, or .png).',
-      }));
+  // AI Auto-Analysis Handler
+  const handleAiAnalyze = async () => {
+    if (!formData.title && !formData.description) {
+      setSubmitError('Please enter a title or description first for the AI scanner to analyze.');
       return;
     }
 
-    // Update form state
+    setIsAnalyzingAi(true);
+    setSubmitError('');
+
+    try {
+      const res = await axios.post('http://localhost:5000/api/issues/ai-analyze', {
+        title: formData.title,
+        description: formData.description,
+      });
+
+      setAiData(res.data);
+      setFormData((prev) => ({
+        ...prev,
+        category: res.data.category || prev.category,
+      }));
+    } catch (err) {
+      console.error('AI analysis error:', err);
+    } finally {
+      setIsAnalyzingAi(false);
+    }
+  };
+
+  // Detect GPS Location
+  const handleDetectGps = () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+
+    setDetectingGps(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setFormData((prev) => ({
+          ...prev,
+          location: `GPS: ${latitude.toFixed(4)}° N, ${longitude.toFixed(4)}° E (Detected)`,
+          locationCoords: { lat: latitude, lng: longitude },
+        }));
+        setDetectingGps(false);
+      },
+      (err) => {
+        console.error('GPS error:', err);
+        setFormData((prev) => ({
+          ...prev,
+          location: 'MVP Colony Main Intersection, Visakhapatnam',
+          locationCoords: { lat: 17.7412, lng: 83.3312 },
+        }));
+        setDetectingGps(false);
+      }
+    );
+  };
+
+  // Media Handlers
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
     setFormData((prev) => ({ ...prev, image: file }));
 
-    // Generate local image preview URL
     const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-    };
+    reader.onloadend = () => setImagePreview(reader.result);
     reader.readAsDataURL(file);
-
-    // Clear error
-    setErrors((prev) => ({ ...prev, image: '' }));
   };
 
-  // Remove selected image
-  const handleRemoveImage = () => {
-    setFormData((prev) => ({ ...prev, image: null }));
-    setImagePreview(null);
+  const handleVideoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setFormData((prev) => ({ ...prev, video: file }));
+
+    const reader = new FileReader();
+    reader.onloadend = () => setVideoPreview(reader.result);
+    reader.readAsDataURL(file);
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  // Submit Handler with +50 XP Reward
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError('');
+    setSubmitSuccess('');
+
+    if (!user || !token) {
+      setSubmitError('You must be logged in to report an issue. Please log in first.');
+      setTimeout(() => navigate('/login'), 2000);
+      return;
+    }
 
     const isValid = validateForm();
-
     if (!isValid) return;
 
     setIsSubmitting(true);
 
-    // Simulated API call reset delay
-    setTimeout(() => {
-      alert('Issue submitted successfully!');
+    try {
+      const payload = {
+        title: formData.title,
+        category: formData.category,
+        description: formData.description,
+        location: formData.location,
+        locationCoords: formData.locationCoords,
+        image: imagePreview || 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=800&q=80',
+        video: videoPreview || '',
+        aiSeverity: aiData?.aiSeverity || 'High',
+        aiPriorityScore: aiData?.aiPriorityScore || 85,
+        aiEstimatedDays: aiData?.aiEstimatedDays || 2,
+        aiTags: aiData?.aiTags || ['#CitizenReport', '#CommunityHero'],
+      };
 
-      // Reset state
-      setFormData(INITIAL_FORM_STATE);
-      setImagePreview(null);
-      setErrors({});
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const res = await axios.post('http://localhost:5000/api/issues', payload, config);
+
+      if (res.status === 201) {
+        setSubmitSuccess('🎉 Issue submitted! You earned +50 Hero XP Points!');
+        setFormData(INITIAL_FORM_STATE);
+        setImagePreview(null);
+        setVideoPreview(null);
+        setAiData(null);
+
+        setTimeout(() => navigate('/issues'), 1800);
+      }
+    } catch (err) {
+      console.error('Submit issue error:', err);
+      const errMsg = err.response?.data?.message || 'Failed to submit report. Please try again.';
+      setSubmitError(errMsg);
+    } finally {
       setIsSubmitting(false);
-    }, 400);
+    }
   };
 
   return (
     <div className="report-issue-container">
       <div className="report-issue-card">
-        {/* Header Section */}
         <header className="report-issue-header">
-          <h1 className="report-issue-title">Report a Community Issue</h1>
+          <div className="xp-reward-badge">
+            <FaBolt className="bolt-icon" /> +50 XP Reward
+          </div>
+          <h1 className="report-issue-title">Report a Hyperlocal Issue</h1>
           <p className="report-issue-subtitle">
-            Notice something broken or in need of attention in your neighborhood? Let us know so local authorities and community leaders can solve it together.
+            Upload photos, video proof, and use AI scanning to notify municipal authorities and earn Hero Points!
           </p>
         </header>
 
-        {/* Form Section */}
+        {submitError && <div className="error-banner">{submitError}</div>}
+        {submitSuccess && <div className="success-banner">{submitSuccess}</div>}
+
         <form className="report-issue-form" onSubmit={handleSubmit} noValidate>
           {/* Issue Title */}
           <div className="form-group">
-            <label htmlFor="title" className="form-label">
-              Issue Title <span className="required-star">*</span>
-            </label>
+            <label htmlFor="title" className="form-label">Issue Title <span className="required-star">*</span></label>
             <input
               type="text"
               id="title"
               name="title"
               className={`form-input ${errors.title ? 'input-error' : ''}`}
-              placeholder="e.g., Deep pothole near Main Street crossroad"
+              placeholder="e.g., Severe Pothole near MVP Colony main junction"
               value={formData.title}
               onChange={handleChange}
-              aria-invalid={!!errors.title}
+              disabled={isSubmitting}
             />
             {errors.title && <span className="error-text">{errors.title}</span>}
           </div>
 
-          {/* Category */}
+          {/* Description */}
           <div className="form-group">
-            <label htmlFor="category" className="form-label">
-              Category <span className="required-star">*</span>
-            </label>
+            <label htmlFor="description" className="form-label">Description & Details <span className="required-star">*</span></label>
+            <textarea
+              id="description"
+              name="description"
+              className={`form-textarea ${errors.description ? 'input-error' : ''}`}
+              placeholder="Describe the issue in detail (e.g., exact spot, depth of pothole, water leakage rate, hazard level)..."
+              rows="4"
+              value={formData.description}
+              onChange={handleChange}
+              disabled={isSubmitting}
+            />
+            {errors.description && <span className="error-text">{errors.description}</span>}
+          </div>
+
+          {/* AI Scanner Button & Banner */}
+          <div className="ai-scanner-section">
+            <button
+              type="button"
+              className="btn-ai-scan"
+              onClick={handleAiAnalyze}
+              disabled={isAnalyzingAi || isSubmitting}
+            >
+              <FaRobot className="robot-icon" />
+              {isAnalyzingAi ? 'Analyzing with AI Engine...' : '🤖 Auto-Analyze & Classify with AI'}
+            </button>
+
+            {aiData && (
+              <div className="ai-result-box">
+                <div className="ai-result-header">
+                  <span className="ai-badge">AI Analysis Result</span>
+                  <span className="ai-score">Priority Score: <strong>{aiData.aiPriorityScore}/100</strong></span>
+                </div>
+                <div className="ai-tags-row">
+                  <span className={`ai-severity-chip ${aiData.aiSeverity.toLowerCase()}`}>
+                    Severity: {aiData.aiSeverity}
+                  </span>
+                  {aiData.aiTags?.map((tag, idx) => (
+                    <span key={idx} className="ai-tag-chip">{tag}</span>
+                  ))}
+                </div>
+                <p className="ai-dept-info">Suggested Department: <strong>{aiData.suggestedDept}</strong> (Est. Fix: {aiData.aiEstimatedDays} Days)</p>
+              </div>
+            )}
+          </div>
+
+          {/* Category Dropdown */}
+          <div className="form-group">
+            <label htmlFor="category" className="form-label">Category <span className="required-star">*</span></label>
             <select
               id="category"
               name="category"
               className={`form-select ${errors.category ? 'input-error' : ''}`}
               value={formData.category}
               onChange={handleChange}
-              aria-invalid={!!errors.category}
+              disabled={isSubmitting}
             >
-              <option value="" disabled>
-                Select a category
-              </option>
+              <option value="" disabled>Select category</option>
               {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
+                <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
             {errors.category && <span className="error-text">{errors.category}</span>}
           </div>
 
-          {/* Description */}
+          {/* Location & GPS Button */}
           <div className="form-group">
-            <label htmlFor="description" className="form-label">
-              Description <span className="required-star">*</span>
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              className={`form-textarea ${errors.description ? 'input-error' : ''}`}
-              placeholder="Describe the issue in detail (e.g., exact spot, potential hazards, how long it has been present)..."
-              rows="4"
-              value={formData.description}
-              onChange={handleChange}
-              maxLength={500}
-              aria-invalid={!!errors.description}
-            />
-            <div className="textarea-footer">
-              {errors.description ? (
-                <span className="error-text">{errors.description}</span>
-              ) : (
-                <span className="hint-text">Minimum 20 characters</span>
-              )}
-              <span className="char-count">{formData.description.length}/500</span>
+            <div className="location-label-row">
+              <label htmlFor="location" className="form-label">Location / Landmark <span className="required-star">*</span></label>
+              <button type="button" className="btn-gps" onClick={handleDetectGps} disabled={detectingGps}>
+                <FaMapMarkerAlt /> {detectingGps ? 'Locating...' : 'Detect GPS Location'}
+              </button>
             </div>
-          </div>
-
-          {/* Upload Image */}
-          <div className="form-group">
-            <label htmlFor="image" className="form-label">
-              Upload Image <span className="required-star">*</span>
-            </label>
-            
-            {!imagePreview ? (
-              <div className={`file-upload-box ${errors.image ? 'input-error' : ''}`}>
-                <input
-                  type="file"
-                  id="image"
-                  name="image"
-                  accept="image/jpeg, image/jpg, image/png"
-                  onChange={handleImageChange}
-                  className="file-input-hidden"
-                />
-                <label htmlFor="image" className="file-upload-label">
-                  <svg className="upload-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  <span>Click or drag image to upload (.jpg, .jpeg, .png)</span>
-                </label>
-              </div>
-            ) : (
-              <div className="image-preview-wrapper">
-                <img src={imagePreview} alt="Issue preview" className="image-preview" />
-                <div className="image-info-bar">
-                  <span className="image-filename">{formData.image?.name}</span>
-                  <button
-                    type="button"
-                    className="remove-image-btn"
-                    onClick={handleRemoveImage}
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            )}
-            {errors.image && <span className="error-text">{errors.image}</span>}
-          </div>
-
-          {/* Location */}
-          <div className="form-group">
-            <label htmlFor="location" className="form-label">
-              Location <span className="required-star">*</span>
-            </label>
             <input
               type="text"
               id="location"
               name="location"
               className={`form-input ${errors.location ? 'input-error' : ''}`}
-              placeholder="Enter area/location (e.g., Sector 4, near Central Park entrance)"
+              placeholder="e.g., Gajuwaka Main Road, near Community Center"
               value={formData.location}
               onChange={handleChange}
-              aria-invalid={!!errors.location}
+              disabled={isSubmitting}
             />
             {errors.location && <span className="error-text">{errors.location}</span>}
           </div>
 
+          {/* Image Upload */}
+          <div className="form-group">
+            <label className="form-label"><FaImage /> Photo Upload</label>
+            {!imagePreview ? (
+              <div className="file-upload-box">
+                <input type="file" id="image" accept="image/*" onChange={handleImageChange} className="file-input-hidden" />
+                <label htmlFor="image" className="file-upload-label">Click or Drag Photo to Upload (.jpg, .png)</label>
+              </div>
+            ) : (
+              <div className="media-preview-wrapper">
+                <img src={imagePreview} alt="Preview" className="media-preview" />
+                <button type="button" className="remove-media-btn" onClick={() => setImagePreview(null)}>Remove Photo</button>
+              </div>
+            )}
+          </div>
+
+          {/* Video Upload */}
+          <div className="form-group">
+            <label className="form-label"><FaVideo /> Video Proof Upload (Optional)</label>
+            {!videoPreview ? (
+              <div className="file-upload-box">
+                <input type="file" id="video" accept="video/*" onChange={handleVideoChange} className="file-input-hidden" />
+                <label htmlFor="video" className="file-upload-label">Click or Drag Short Video Clip (.mp4, .webm)</label>
+              </div>
+            ) : (
+              <div className="media-preview-wrapper">
+                <video src={videoPreview} controls className="media-preview" />
+                <button type="button" className="remove-media-btn" onClick={() => setVideoPreview(null)}>Remove Video</button>
+              </div>
+            )}
+          </div>
+
           {/* Submit Button */}
           <button type="submit" className="submit-btn" disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : 'Report Issue'}
+            {isSubmitting ? 'Submitting Report...' : '🚀 Submit Report & Claim +50 XP'}
           </button>
         </form>
       </div>

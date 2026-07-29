@@ -4,20 +4,21 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 70px;
-  background-color: #ffffff;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  height: 72px;
+  background-color: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   z-index: 1000;
   display: flex;
   align-items: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .navbar-container {
-  max-width: 1200px;
   width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -29,9 +30,9 @@
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: #1e3a8a;
-  font-size: 1.4rem;
-  font-weight: 700;
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 800;
   transition: opacity 0.2s ease;
 }
 
@@ -40,11 +41,11 @@
 }
 
 .logo-icon {
-  font-size: 1.7rem;
-  color: #2563eb;
+  font-size: 1.6rem;
+  color: #38bdf8;
 }
 
-/* Navigation Container - Fixed for Desktop Spacing */
+/* Navigation Container */
 .navbar-menu {
   display: flex;
   align-items: center;
@@ -59,42 +60,31 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 12px;
+  gap: 16px;
 }
 
 /* Links & Active State */
-
 .nav-link {
   position: relative;
   text-decoration: none;
-  color: #475569;
-  font-size: 0.9rem; /* 👈 Slightly optimized font size */
-  font-weight: 500;
-  padding: 8px 10px; /* 👈 Slightly tighter horizontal padding */
+  color: #cbd5e1;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 8px 12px;
   border-radius: 8px;
-  white-space: nowrap; /* 👈 Forces text to stay on a single line */
+  white-space: nowrap;
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .nav-link:hover {
-  color: #2563eb;
-  background-color: #eff6ff;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 .nav-link.active {
-  color: #2563eb;
-  font-weight: 600;
-}
-
-.nav-link.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 12px;
-  right: 12px;
-  height: 2.5px;
-  background-color: #2563eb;
-  border-radius: 2px;
+  color: #38bdf8;
+  font-weight: 700;
+  background-color: rgba(56, 189, 248, 0.12);
 }
 
 /* Buttons & Actions */
@@ -111,38 +101,35 @@
 
 .btn-login {
   text-decoration: none;
-  color: #2563eb;
-  border: 1.5px solid #2563eb;
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  color: #38bdf8;
+  border: 1.5px solid #38bdf8;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
   transition: all 0.2s ease;
 }
 
 .btn-login:hover {
-  background-color: #eff6ff;
+  background-color: rgba(56, 189, 248, 0.15);
   transform: translateY(-1px);
 }
 
 .btn-register {
   text-decoration: none;
   color: #ffffff;
-  background-color: #2563eb;
-  border: 1.5px solid #2563eb;
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
 }
 
 .btn-register:hover {
-  background-color: #1d4ed8;
-  border-color: #1d4ed8;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.5);
 }
 
 /* User Profile Avatar */
@@ -150,21 +137,21 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #6366f1, #a855f7);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 1.1rem;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 2px 10px rgba(168, 85, 247, 0.4);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profile-avatar-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  transform: scale(1.08);
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.6);
 }
 
 .avatar-initial {
@@ -177,15 +164,10 @@
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #1e293b;
+  color: #ffffff;
   cursor: pointer;
   padding: 6px;
   border-radius: 6px;
-  transition: background-color 0.2s ease;
-}
-
-.mobile-toggle-btn:hover {
-  background-color: #f1f5f9;
 }
 
 /* Responsive Media Queries */
@@ -198,10 +180,10 @@
 
   .navbar-menu {
     position: absolute;
-    top: 70px;
+    top: 72px;
     left: 0;
     width: 100%;
-    background-color: #ffffff;
+    background-color: #0f172a;
     flex-direction: column;
     align-items: center;
     margin-left: 0;
@@ -209,17 +191,15 @@
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
-    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.25s ease,
-                padding 0.35s ease;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    transition: max-height 0.35s ease, opacity 0.25s ease;
   }
 
   .navbar-menu.active {
-    max-height: 450px;
+    max-height: 480px;
     opacity: 1;
     padding: 25px 20px;
-    border-top: 1px solid #f1f5f9;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .nav-links {
@@ -232,40 +212,16 @@
   .nav-link {
     display: block;
     padding: 8px 16px;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     text-align: center;
-  }
-
-  .nav-link.active::after {
-    display: none;
   }
 
   .nav-auth-actions {
     margin-top: 20px;
     padding-top: 20px;
-    border-top: 1px solid #f1f5f9;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     width: 100%;
     display: flex;
     justify-content: center;
-  }
-
-  .auth-buttons {
-    width: 100%;
-    max-width: 300px;
-    gap: 12px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .btn-login,
-  .btn-register {
-    flex: 1;
-    text-align: center;
-    padding: 10px 16px;
-  }
-
-  .profile-avatar-btn {
-    width: 46px;
-    height: 46px;
   }
 }

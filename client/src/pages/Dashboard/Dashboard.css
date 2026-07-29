@@ -1,33 +1,33 @@
 /* Color & Layout Variables */
 :root {
-  --dash-bg: #f8fafc;
-  --dash-card-bg: #ffffff;
-  --dash-text-main: #0f172a;
-  --dash-text-muted: #64748b;
-  --dash-border: #e2e8f0;
-  --dash-radius: 16px;
-  --dash-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  --dash-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.08);
-  --dash-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --dash-bg: #0f172a;
+  --dash-card-bg: rgba(30, 41, 59, 0.75);
+  --dash-text-main: #f8fafc;
+  --dash-text-muted: #94a3b8;
+  --dash-border: rgba(255, 255, 255, 0.1);
+  --dash-radius: 20px;
+  --dash-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  --dash-shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.35);
+  --dash-transition: all 0.3s ease;
 
   /* Summary Card Accent Colors */
-  --blue-primary: #2563eb;
-  --blue-bg: #eff6ff;
-  --orange-primary: #ea580c;
-  --orange-bg: #fff7ed;
-  --green-primary: #16a34a;
-  --green-bg: #f0fdf4;
-  --red-primary: #dc2626;
-  --red-bg: #fef2f2;
+  --blue-primary: #38bdf8;
+  --blue-bg: rgba(56, 189, 248, 0.15);
+  --orange-primary: #f97316;
+  --orange-bg: rgba(249, 115, 22, 0.15);
+  --green-primary: #10b981;
+  --green-bg: rgba(16, 185, 129, 0.15);
+  --red-primary: #ef4444;
+  --red-bg: rgba(239, 68, 68, 0.15);
 }
 
 /* Base Page Container */
 .dashboard-container {
   min-height: 100vh;
   background-color: var(--dash-bg);
-  padding: 2.5rem 1.5rem;
+  padding: 2.5rem 1.5rem 5rem;
   box-sizing: border-box;
-  max-width: 1280px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -37,7 +37,7 @@
 }
 
 .dashboard-title {
-  font-size: 2.25rem;
+  font-size: 2.4rem;
   font-weight: 800;
   color: var(--dash-text-main);
   margin: 0 0 0.5rem 0;
@@ -45,7 +45,7 @@
 }
 
 .dashboard-subtitle {
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: var(--dash-text-muted);
   margin: 0;
 }
@@ -53,26 +53,28 @@
 /* Summary Cards Grid (4 Columns Desktop) */
 .summary-cards-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .summary-card {
   background-color: var(--dash-card-bg);
   border-radius: var(--dash-radius);
-  padding: 1.5rem;
+  padding: 1.5rem 1.75rem;
   box-shadow: var(--dash-shadow);
   border: 1px solid var(--dash-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   transition: var(--dash-transition);
+  backdrop-filter: blur(12px);
 }
 
 .summary-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--dash-shadow-hover);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .summary-card-info {
@@ -84,27 +86,27 @@
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--dash-text-muted);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.5rem;
 }
 
 .summary-card-value {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 800;
   color: var(--dash-text-main);
   line-height: 1;
 }
 
 .summary-card-icon-wrapper {
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .summary-card-icon {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
 }
 
 /* Card Themes */
@@ -128,7 +130,7 @@
   color: var(--red-primary);
 }
 
-/* Main Cards Section (3 Columns Desktop) */
+/* Main Cards Section */
 .dashboard-main-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -138,16 +140,17 @@
 .dash-card {
   background-color: var(--dash-card-bg);
   border-radius: var(--dash-radius);
-  padding: 1.5rem;
+  padding: 1.75rem;
   box-shadow: var(--dash-shadow);
   border: 1px solid var(--dash-border);
   display: flex;
   flex-direction: column;
+  backdrop-filter: blur(12px);
 }
 
 .dash-card-heading {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 800;
   color: var(--dash-text-main);
   margin: 0 0 1.25rem 0;
 }
@@ -168,11 +171,6 @@
 
 .recent-report-item:last-child {
   border-bottom: none;
-  padding-bottom: 0;
-}
-
-.recent-report-item:first-child {
-  padding-top: 0;
 }
 
 .recent-report-left {
@@ -182,10 +180,10 @@
 }
 
 .recent-report-icon-box {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background-color: #f1f5f9;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.05);
   color: var(--blue-primary);
   display: flex;
   align-items: center;
@@ -194,7 +192,7 @@
 }
 
 .recent-report-icon {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
 }
 
 .recent-report-details {
@@ -204,7 +202,7 @@
 
 .recent-report-title {
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--dash-text-main);
   margin: 0 0 0.15rem 0;
 }
@@ -216,27 +214,27 @@
 
 /* Status Badges */
 .dash-status-badge {
-  padding: 0.3rem 0.65rem;
+  padding: 0.35rem 0.75rem;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 800;
   border-radius: 9999px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
 
 .badge-reported {
-  background-color: #fef2f2;
-  color: #dc2626;
+  background-color: rgba(249, 115, 22, 0.2);
+  color: #f97316;
 }
 
 .badge-pending {
-  background-color: #fff7ed;
-  color: #ea580c;
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
 }
 
 .badge-resolved {
-  background-color: #f0fdf4;
-  color: #16a34a;
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #10b981;
 }
 
 /* Category Distribution Bars */
@@ -267,7 +265,7 @@
 .progress-bar-bg {
   width: 100%;
   height: 8px;
-  background-color: #f1f5f9;
+  background-color: rgba(255, 255, 255, 0.08);
   border-radius: 9999px;
   overflow: hidden;
 }
@@ -278,8 +276,8 @@
   transition: width 0.6s ease-in-out;
 }
 
-.bar-blue { background-color: #2563eb; }
-.bar-green { background-color: #16a34a; }
+.bar-blue { background-color: #3b82f6; }
+.bar-green { background-color: #10b981; }
 .bar-cyan { background-color: #06b6d4; }
 .bar-amber { background-color: #f59e0b; }
 .bar-purple { background-color: #8b5cf6; }
@@ -296,7 +294,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.25rem;
-  border-radius: 12px;
+  border-radius: 14px;
   transition: var(--dash-transition);
 }
 
@@ -312,77 +310,34 @@
 
 .status-box-title {
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .status-box-count {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 800;
 }
 
 .box-reported {
-  background-color: #fef2f2;
-  color: #991b1b;
+  background-color: rgba(249, 115, 22, 0.15);
+  color: #f97316;
+  border: 1px solid rgba(249, 115, 22, 0.3);
 }
-.box-reported .status-box-icon { color: #dc2626; }
 
 .box-resolved {
-  background-color: #f0fdf4;
-  color: #166534;
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
-.box-resolved .status-box-icon { color: #16a34a; }
 
 .box-pending {
-  background-color: #fff7ed;
-  color: #9a3412;
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
-.box-pending .status-box-icon { color: #ea580c; }
 
-/* Media Queries */
-
-/* Tablet (2 columns for summary, 1 column for main) */
 @media (max-width: 1024px) {
-  .summary-cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .dashboard-main-grid {
     grid-template-columns: 1fr;
-  }
-}
-
-/* Mobile (Stack Everything Vertically) */
-@media (max-width: 640px) {
-  .dashboard-container {
-    padding: 1.5rem 1rem;
-  }
-
-  .dashboard-title {
-    font-size: 1.75rem;
-  }
-
-  .summary-cards-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .dashboard-main-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-}
-/* Responsive Mobile Adjustments */
-@media screen and (max-width: 768px) {
-  /* Make cards and containers take up most of the mobile screen width with safe padding */
-  .register-card,
-  .report-issue-card {
-    width: 90% !important;
-    margin: 20px auto !important;
-    padding: 20px !important;
-  }
-
-  /* Stack inputs or full-width buttons gracefully on small screens */
-  .submit-btn {
-    width: 100% !important;
   }
 }
