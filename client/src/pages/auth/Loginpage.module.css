@@ -1,0 +1,39 @@
+.authLayout {
+  display: flex;
+  min-height: 100vh;
+  width: 100vw;
+  background: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+.formSection {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: #ffffff;
+}
+.form { display: flex; flex-direction: column; width: 100%; }
+.eyeBtn { background: transparent; border: none; cursor: pointer; color: #9ca3af; font-size: 18px; display: flex; align-items: center; transition: color 0.2s; }
+.eyeBtn:hover { color: #374151; }
+.optionsRow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.checkboxLabel { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #4b5563; cursor: pointer; }
+.checkboxLabel input { width: 16px; height: 16px; accent-color: #10b981; cursor: pointer; }
+.forgotLink { font-size: 13px; font-weight: 600; color: #10b981; text-decoration: none; transition: color 0.2s; }
+.forgotLink:hover { color: #047857; text-decoration: underline; }
+.submitBtn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; background: #10b981; color: #ffffff; border: none; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25); }
+.submitBtn:hover:not(:disabled) { background: #059669; }
+.submitBtn:active:not(:disabled) { transform: scale(0.99); }
+.submitBtn:disabled { background: #6ee7b7; cursor: not-allowed; }
+.divider { display: flex; align-items: center; text-align: center; margin: 24px 0; color: #9ca3af; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+.divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #e5e7eb; }
+.divider span { padding: 0 12px; }
+.socialGrid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.footerText { text-align: center; font-size: 14px; color: #6b7280; margin: 0; }
+.link { color: #10b981; font-weight: 600; text-decoration: none; }
+.link:hover { text-decoration: underline; }
+
+@media (max-width: 1024px) {
+  .formSection { padding: 20px; }
+}

@@ -1,0 +1,23 @@
+/* File path: src/layouts/CitizenLayout.css */
+
+.hero-app-layout {
+  display: flex;           /* Puts sidebar and main wrapper side-by-side */
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #f8fafc;
+  overflow: hidden;        /* Prevents the whole page from scrolling awkwardly */
+}
+
+.hero-main-wrapper {
+  flex: 1;                 /* Forces this div to take up all remaining space next to the sidebar */
+  display: flex;
+  flex-direction: column;  /* Stacks Navbar, Breadcrumb, and Outlet vertically */
+  overflow-y: auto;        /* Adds a scrollbar here if your page content gets long */
+}
+
+.hero-page-content {
+  flex: 1;
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}

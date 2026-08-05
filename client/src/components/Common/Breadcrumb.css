@@ -1,0 +1,37 @@
+/* File path: src/components/common/Breadcrumb.css */
+.hero-breadcrumb {
+  padding: 12px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
+}
+
+.breadcrumb-list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumb-list a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumb-list a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-separator {
+  color: #94a3b8;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.breadcrumb-item.active span {
+  color: #64748b;
+  font-weight: 600;
+}

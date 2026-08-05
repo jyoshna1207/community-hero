@@ -1,0 +1,12 @@
+.container { display: flex; align-items: center; justify-content: center; min-height: 100vh; width: 100vw; background: #f8fafc; padding: 20px; box-sizing: border-box; }
+.content { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.iconContainer { position: relative; width: 80px; height: 80px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: #10b981; font-size: 36px; }
+.badge { position: absolute; bottom: 0; right: 0; background: #ffffff; color: #10b981; border-radius: 50%; padding: 2px; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.title { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 700; color: #111827; margin: 0 0 10px 0; }
+.description { font-family: 'Inter', sans-serif; font-size: 14px; color: #6b7280; line-height: 1.6; margin: 0 0 28px 0; }
+.resendBtn { width: 100%; padding: 12px; background: #ecfdf5; color: #047857; border: 1.5px solid #10b981; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; }
+.resendBtn:hover:not(:disabled) { background: #d1fae5; }
+.resendBtn:disabled { opacity: 0.7; cursor: not-allowed; }
+.footer { width: 100%; text-align: center; }
+.backLink { display: inline-flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: #4b5563; text-decoration: none; transition: color 0.2s; }
+.backLink:hover { color: #10b981; }.container { display: flex; align-items: center; justify-content: center; min-height: 100vh; width: 100vw; background: #f8fafc; padding: 20px; box-sizing: border-box; }
