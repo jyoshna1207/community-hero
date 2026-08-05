@@ -1,0 +1,205 @@
+.insights-page-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+.insights-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.cyan-badge {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%) !important;
+  box-shadow: 0 0 25px rgba(14, 165, 233, 0.4) !important;
+}
+
+.insights-header-icon {
+  font-size: 2rem;
+  color: #ffffff;
+}
+
+.insights-title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 8px;
+}
+
+.insights-subtitle {
+  font-size: 1.1rem;
+  color: #94a3b8;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.impact-banner-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.impact-card {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.impact-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.water-bg { background: linear-gradient(135deg, #3b82f6, #0284c7); }
+.road-bg { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.light-bg { background: linear-gradient(135deg, #eab308, #ca8a04); }
+.score-bg { background: linear-gradient(135deg, #10b981, #059669); }
+
+.impact-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.impact-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.impact-label {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.insights-section-card {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.title-icon {
+  font-size: 1.4rem;
+}
+
+.text-amber { color: #f59e0b; }
+.text-blue { color: #38bdf8; }
+.text-emerald { color: #34d399; font-weight: 700; }
+
+.section-desc {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+}
+
+.hotspot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.hotspot-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.hotspot-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.zone-name {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #f8fafc;
+}
+
+.risk-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.badge-critical {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+.badge-high {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid #f59e0b;
+}
+
+.hotspot-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.detail-label {
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.detail-value {
+  color: #cbd5e1;
+}
+
+.seasonal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.seasonal-item {
+  background: rgba(15, 23, 42, 0.6);
+  border-left: 4px solid #38bdf8;
+  padding: 16px 20px;
+  border-radius: 0 12px 12px 0;
+}
+
+.seasonal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #38bdf8;
+  margin-bottom: 4px;
+}
+
+.seasonal-desc {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}

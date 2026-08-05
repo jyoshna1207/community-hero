@@ -23,6 +23,43 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please add a password"],
     minlength: [6, "Password must be at least 6 characters"],
   },
+  points: {
+    type: Number,
+    default: 150,
+  },
+  level: {
+    type: Number,
+    default: 1,
+  },
+  title: {
+    type: String,
+    default: "Bronze Civic Guard",
+  },
+  badges: [
+    {
+      id: String,
+      name: String,
+      icon: String,
+      description: String,
+      unlockedAt: { type: Date, default: Date.now },
+    },
+  ],
+  streakDays: {
+    type: Number,
+    default: 3,
+  },
+  upvotedIssues: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Issue",
+    },
+  ],
+  verifiedIssues: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Issue",
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
@@ -32,7 +69,7 @@ const UserSchema = new mongoose.Schema({
 // Encrypt password using bcrypt
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
-    next();
+    return next();
   }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);

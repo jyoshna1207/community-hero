@@ -1,4 +1,9 @@
+<<<<<<< HEAD
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+=======
 // File path: src/context/AuthContext.jsx
+>>>>>>> 611f9a8 (completed dashboard and role-based ui)
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { ROLES, ROLE_REDIRECTS } from '../constants/roles';
@@ -13,7 +18,71 @@ const DUMMY_USERS = [
   { id: 4, name: 'Admin Boss', email: 'admin@hero.com', password: 'password', role: ROLES.ADMIN },
 ];
 
+const API_BASE_URL = 'http://localhost:5000/api/auth';
+
 export const AuthProvider = ({ children }) => {
+<<<<<<< HEAD
+  const [token, setToken] = useState(() => localStorage.getItem('community_hero_token') || null);
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('community_hero_user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [loading, setLoading] = useState(true);
+
+  // Restore user session on initial application mount
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await axios.get(`${API_BASE_URL}/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(res.data);
+        localStorage.setItem('community_hero_user', JSON.stringify(res.data));
+      } catch (err) {
+        console.error('Session restoration failed:', err);
+        // Token invalid or expired
+        setToken(null);
+        setUser(null);
+        localStorage.removeItem('community_hero_token');
+        localStorage.removeItem('community_hero_user');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [token]);
+
+  // Login handler connected to Express Backend
+  const login = async (email, password) => {
+    try {
+      const res = await axios.post(`${API_BASE_URL}/login`, { email, password });
+      const { token: jwtToken, ...userData } = res.data;
+
+      setToken(jwtToken);
+      setUser(userData);
+
+      localStorage.setItem('community_hero_token', jwtToken);
+      localStorage.setItem('community_hero_user', JSON.stringify(userData));
+
+      return { success: true, user: userData };
+    } catch (err) {
+      console.error('Login error:', err);
+      const errorMsg = err.response?.data?.message || 'Login failed. Please check your credentials.';
+      return { success: false, error: errorMsg };
+    }
+=======
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -102,10 +171,41 @@ export const AuthProvider = ({ children }) => {
         resolve({ success: true, redirectPath: ROLE_REDIRECTS[roleString] || '/dashboard' });
       }, 500);
     });
+>>>>>>> 611f9a8 (completed dashboard and role-based ui)
   };
 
+  // Register handler connected to Express Backend
+  const register = async (name, email, password) => {
+    try {
+      const res = await axios.post(`${API_BASE_URL}/register`, { name, email, password });
+      const { token: jwtToken, ...userData } = res.data;
+
+      setToken(jwtToken);
+      setUser(userData);
+
+      localStorage.setItem('community_hero_token', jwtToken);
+      localStorage.setItem('community_hero_user', JSON.stringify(userData));
+
+      return { success: true, user: userData };
+    } catch (err) {
+      console.error('Register error:', err);
+      const errorMsg = err.response?.data?.message || 'Registration failed. Please try again.';
+      return { success: false, error: errorMsg };
+    }
+  };
+
+  // Logout handler
   const logout = () => {
+    setToken(null);
     setUser(null);
+<<<<<<< HEAD
+    localStorage.removeItem('community_hero_token');
+    localStorage.removeItem('community_hero_user');
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
+=======
     setRole(null);
     setIsAuthenticated(false);
     localStorage.removeItem('hero_user');
@@ -115,6 +215,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, role, isAuthenticated, isLoading, login, logout, register }}>
+>>>>>>> 611f9a8 (completed dashboard and role-based ui)
       {children}
     </AuthContext.Provider>
   );
