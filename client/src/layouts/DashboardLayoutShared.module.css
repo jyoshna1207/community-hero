@@ -1,0 +1,60 @@
+/* src/layouts/DashboardLayoutShared.module.css */
+.portalContainer {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f8fafc;
+  font-family: inherit;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 260px;
+  background-color: #1e1b4b; /* Deep unified portal theme color */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 10px;
+}
+
+.sidebarBrand {
+  font-size: 1.25rem;
+  font-weight: bold;
+  padding: 0 15px 20px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navLinks {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  flex-grow: 1;
+}
+
+.navItem {
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  color: #cbd5e1;
+  text-decoration: none;
+  display: block;
+  transition: all 0.2s ease;
+}
+
+.navItem:hover, .activeNavLink {
+  background-color: #312e81;
+  color: white;
+}
+
+.mainContentArea {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.pageBody {
+  padding: 30px;
+  flex-grow: 1;
+}

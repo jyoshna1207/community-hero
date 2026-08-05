@@ -1,0 +1,47 @@
+.department-layout {
+  display: flex;
+  height: 100vh;
+  background-color: #f4f6f8;
+}
+
+.sidebar {
+  width: 260px;
+  background-color: #0d47a1;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  font-size: 1.25rem;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar nav a {
+  color: #cfd8dc;
+  text-decoration: none;
+  padding: 12px 15px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}

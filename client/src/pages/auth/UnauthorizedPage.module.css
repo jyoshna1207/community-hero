@@ -1,0 +1,12 @@
+.container { display: flex; align-items: center; justify-content: center; min-height: 100vh; width: 100vw; background: #f8fafc; padding: 20px; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+.card { background: #ffffff; border-radius: 20px; box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.07); padding: 50px 40px; width: 100%; max-width: 480px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+.errorCode { font-size: 72px; font-weight: 900; color: #ef4444; line-height: 1; letter-spacing: -2px; margin-bottom: 12px; }
+.iconWrapper { font-size: 32px; color: #ef4444; background: #fee2e2; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+.title { font-size: 24px; font-weight: 700; color: #111827; margin: 0 0 10px 0; }
+.description { font-size: 14px; color: #6b7280; line-height: 1.6; margin: 0 0 32px 0; }
+.buttonGroup { display: flex; gap: 12px; width: 100%; }
+.homeBtn, .loginBtn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.homeBtn { background: #f3f4f6; color: #374151; border: 1.5px solid #e5e7eb; }
+.homeBtn:hover { background: #e5e7eb; }
+.loginBtn { background: #10b981; color: #ffffff; border: 1.5px solid #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25); }
+.loginBtn:hover { background: #059669; }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
@@ -72,6 +73,22 @@ function App() {
         </Routes>
       </main>
     </AuthProvider>
+=======
+// File path: src/App.jsx
+
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import AppRoutes from './routes/AppRoutes';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </BrowserRouter>
+>>>>>>> 611f9a8 (completed dashboard and role-based ui)
   );
 }
 
