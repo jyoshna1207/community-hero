@@ -1,7 +1,6 @@
 // File path: src/routes/AppRoutes.jsx
-
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '../context/AuthContext'; // Note the '../' to go up from routes/ to src/
 
 import ProtectedRoute from './ProtectedRoute'; // Same folder
@@ -53,7 +52,7 @@ import CompletedWork from '../pages/Department/CompletedWork/CompletedWork';
 
 const AppRoutes = () => {
   return (
-      <AuthProvider>
+      
         <Routes>
           {/* Public & Authentication Routes */}
           <Route path="/" element={<LoginPage />} />
@@ -112,7 +111,6 @@ const AppRoutes = () => {
           {/* 404 Catch-All */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </AuthProvider>
   );
 };
 

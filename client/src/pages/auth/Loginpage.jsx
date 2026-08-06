@@ -20,7 +20,6 @@ import styles from './LoginPage.module.css';
   const [toastType, setToastType] = useState('success');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { login } = useAuth();
   const navigate = useNavigate();
 
   const validate = () => {
@@ -34,29 +33,36 @@ import styles from './LoginPage.module.css';
 
   
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validate()) return;
+  e.preventDefault();
 
-    setIsSubmitting(true);
-    try {
-      const response = await login(email, password);
-      setToastType('success');
-      setToastMessage('Login successful! Redirecting...');
-      setTimeout(() => navigate(response?.redirectPath || '/dashboard'), 1200);
-    } catch (err) {
-      setToastType('error');
-      setToastMessage(err.message || 'Invalid credentials. Please try again.');
-    } finally {
-      setIsSubmitting(false); // <--- This guarantees the spinner stops loading
-    }
-  };
+  if (!validate()) return;
 
-  const handleSocialLogin = (provider) => {
-    setToastType('success');
-    setToastMessage(`Redirecting to ${provider} authentication...`);
-    setTimeout(() => navigate('/'), 1000);
-  };
+  setIsSubmitting(true);
 
+  setToastType("success");
+  setToastMessage("Login successful! Redirecting...");
+
+  let redirectPath = "/dashboard";
+
+  if (email.toLowerCase().includes("admin")) {
+    redirectPath = "/admin/dashboard";
+  } else if (email.toLowerCase().includes("officer")) {
+    redirectPath = "/officer/dashboard";
+  } else if (email.toLowerCase().includes("department")) {
+    redirectPath = "/department/dashboard";
+  } else {
+    redirectPath = "/dashboard";
+  }
+
+  setTimeout(() => {
+    navigate(redirectPath);
+    setIsSubmitting(false);
+  }, 1000);
+};
+const handleSocialLogin = (provider) => {
+  setToastType("success");
+  setToastMessage(`${provider} login coming soon`);
+};
   return (
     <div className={styles.authLayout}>
       <Toast message={toastMessage} type={toastType} onClose={() => setToastMessage(null)} />

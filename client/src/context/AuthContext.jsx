@@ -61,43 +61,58 @@ export const AuthProvider = ({ children }) => {
 
   // Login
   const login = async (email, password) => {
-    try {
-      const res = await axios.post(`${API_BASE_URL}/login`, {
-        email,
-        password,
-      });
+  try {
+    const res = await axios.post(`${API_BASE_URL}/login`, {
+      email,
+      password,
+    });
 
-      const { token: jwtToken, ...userData } = res.data;
+    const { token: jwtToken, ...userData } = res.data;
 
-      setToken(jwtToken);
-      setUser(userData);
+    setToken(jwtToken);
+    setUser(userData);
 
-      localStorage.setItem(
-        "community_hero_token",
-        jwtToken
-      );
+    localStorage.setItem("community_hero_token", jwtToken);
+    localStorage.setItem(
+      "community_hero_user",
+      JSON.stringify(userData)
+    );
 
-      localStorage.setItem(
-        "community_hero_user",
-        JSON.stringify(userData)
-      );
+    let redirectPath = "/dashboard";
 
-      return {
-        success: true,
-        user: userData,
-      };
+    switch ((userData.role || "").toLowerCase()) {
+      case "admin":
+      case "administrator":
+        redirectPath = "/admin/dashboard";
+        break;
 
-    } catch (error) {
-      return {
-        success: false,
-        error:
-          error.response?.data?.message ||
-          "Login failed",
-      };
+      case "officer":
+      case "ward_officer":
+        redirectPath = "/officer/dashboard";
+        break;
+
+      case "department":
+      case "department_officer":
+        redirectPath = "/department/dashboard";
+        break;
+
+      default:
+        redirectPath = "/dashboard";
     }
-  };
 
-
+    return {
+      success: true,
+      user: userData,
+      redirectPath,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error.response?.data?.message || "Login failed",
+    };
+  }
+};
   // Register
   const register = async (
     name,
