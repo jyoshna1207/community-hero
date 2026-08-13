@@ -387,6 +387,50 @@ router.post("/:id/like", protect, async (req, res) => {
   }
 });
 
+// @desc    Update issue status & officer details (Ward Officer / Admin)
+// @route   PUT /api/issues/:id/officer-update
+// @access  Private / Public
+router.put("/:id/officer-update", async (req, res) => {
+  try {
+    const { 
+      status, priority, assignedDepartment, officerRemarks, 
+      actionTaken, expectedResolutionDate, resolutionImage, 
+      resolutionNote, updatedBy 
+    } = req.body;
+
+    const issue = await Issue.findById(req.params.id);
+    if (!issue) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
+    if (status) issue.status = status;
+    if (priority) issue.priority = priority;
+    if (assignedDepartment) issue.assignedDept = assignedDepartment;
+    if (officerRemarks !== undefined) issue.officerRemarks = officerRemarks;
+    if (actionTaken !== undefined) issue.actionTaken = actionTaken;
+    if (expectedResolutionDate !== undefined) issue.expectedResolutionDate = expectedResolutionDate;
+    if (resolutionImage !== undefined) issue.resolutionImage = resolutionImage;
+    if (resolutionNote !== undefined) issue.resolutionNote = resolutionNote;
+    if (updatedBy) issue.updatedByOfficer = updatedBy;
+
+    // Timeline event record
+    const statusNote = officerRemarks || actionTaken || `Status updated to ${status || issue.status}`;
+    issue.timeline.push({
+      status: status || issue.status,
+      note: statusNote,
+      updatedBy: updatedBy || "Ward Officer",
+      date: new Date(),
+    });
+
+    await issue.save();
+    const updated = await Issue.findById(req.params.id).populate("user", "name email points level title");
+    res.json(updated);
+  } catch (error) {
+    console.error("Officer Update Error:", error);
+    res.status(500).json({ message: "Server error updating issue by officer", error: error.message });
+  }
+});
+
 // @desc    Update issue status (Admin / Authority)
 // @route   PUT /api/issues/:id/status
 // @access  Public / Private

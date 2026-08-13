@@ -55,8 +55,41 @@ const issueSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Reported", "Under Review", "In Progress", "Resolved"],
-      default: "Reported",
+      enum: ["Reported", "UNSOLVED", "Under Review", "UNDER REVIEW", "In Progress", "IN PROGRESS", "Resolved", "SOLVED"],
+      default: "UNSOLVED",
+    },
+    priority: {
+      type: String,
+      enum: ["Low", "Medium", "High", "Critical"],
+      default: "High",
+    },
+    wardId: {
+      type: String,
+      default: "WARD-04",
+    },
+    officerRemarks: {
+      type: String,
+      default: "",
+    },
+    actionTaken: {
+      type: String,
+      default: "",
+    },
+    expectedResolutionDate: {
+      type: String,
+      default: "",
+    },
+    resolutionImage: {
+      type: String,
+      default: "",
+    },
+    resolutionNote: {
+      type: String,
+      default: "",
+    },
+    updatedByOfficer: {
+      type: String,
+      default: "",
     },
     views: {
       type: Number,

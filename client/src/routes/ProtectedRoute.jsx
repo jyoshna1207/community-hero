@@ -17,14 +17,29 @@ const ProtectedRoute = ({ allowedRole }) => {
     return <Navigate to="/login" replace />;
   }
 
-  const currentRole = (user.role || 'citizen').toLowerCase();
+  const currentRole = (user.role || 'citizen').toLowerCase().trim();
 
   if (allowedRole) {
-    const targetRole = allowedRole.toLowerCase();
-    if (currentRole !== targetRole) {
-      if (currentRole === 'admin') return <Navigate to="/admin/dashboard" replace />;
-      if (currentRole === 'officer') return <Navigate to="/officer/dashboard" replace />;
-      if (currentRole === 'department') return <Navigate to="/department/dashboard" replace />;
+    const targetRole = allowedRole.toLowerCase().trim();
+    const isOfficer = currentRole.includes('ward') || currentRole === 'officer' || currentRole === 'ward_officer';
+    const isDept = currentRole.includes('district') || currentRole.includes('dept') || currentRole === 'department';
+    const isAdmin = currentRole === 'admin';
+
+    let isAllowed = false;
+    if (targetRole.includes('ward') || targetRole === 'officer' || targetRole === 'ward_officer') {
+      isAllowed = isOfficer;
+    } else if (targetRole.includes('dept') || targetRole.includes('district') || targetRole === 'department') {
+      isAllowed = isDept;
+    } else if (targetRole === 'admin') {
+      isAllowed = isAdmin;
+    } else if (targetRole === 'citizen') {
+      isAllowed = currentRole === 'citizen';
+    }
+
+    if (!isAllowed) {
+      if (isAdmin) return <Navigate to="/admin/dashboard" replace />;
+      if (isOfficer) return <Navigate to="/ward-dashboard" replace />;
+      if (isDept) return <Navigate to="/department/dashboard" replace />;
       return <Navigate to="/dashboard" replace />;
     }
   }

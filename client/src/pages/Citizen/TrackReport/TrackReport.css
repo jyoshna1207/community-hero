@@ -138,8 +138,14 @@
 
 .badge-in-progress {
   background: #FFFBEB;
-  border: 2px solid #FDE68A;
+  border: 2px solid #FCD34D;
   color: #92400E;
+}
+
+.badge-under-review {
+  background: #FEF3C7;
+  border: 2px solid #FDE68A;
+  color: #D97706;
 }
 
 .badge-unsolved {

@@ -6,7 +6,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { 
   FiArrowLeft, FiShare2, FiMapPin, FiClock, FiCheckCircle, 
-  FiAlertCircle, FiThumbsUp, FiHeart, FiEye, FiShield, FiLoader 
+  FiAlertCircle, FiThumbsUp, FiHeart, FiEye, FiShield, FiLoader, FiBriefcase, FiCalendar, FiEdit3 
 } from 'react-icons/fi';
 import { useAuth } from '../../../context/AuthContext';
 import './TrackReport.css';
@@ -42,7 +42,7 @@ export default function TrackReport() {
   const [viewsCount, setViewsCount] = useState(1);
   const isMountedRef = useRef(true);
 
-  // 1. Fetch Report with Auto-Polling every 4 seconds for real-time status updates
+  // Fetch Report with Auto-Polling every 4 seconds for real-time status updates from Ward Officer
   const fetchReportDetails = async (isInitial = false) => {
     if (!id) {
       setError("Invalid Report ID provided.");
@@ -62,7 +62,6 @@ export default function TrackReport() {
           fetchedData = res.data;
         }
       } catch (apiErr) {
-        // Fallback to local if offline or mock ID
         if (foundLocal) {
           fetchedData = foundLocal;
         }
@@ -75,24 +74,23 @@ export default function TrackReport() {
       if (fetchedData && isMountedRef.current) {
         setReport(fetchedData);
         
-        // Real Likes & Views calculation from database / record
         const likesArr = fetchedData.likes || [];
-        setLikesCount(likesArr.length);
+        setLikesCount(Array.isArray(likesArr) ? likesArr.length : (likesArr || 0));
         setViewsCount(fetchedData.views != null ? fetchedData.views : 1);
 
-        if (user && likesArr.some(l => l.user === user._id || l.user?._id === user._id || l === user._id)) {
+        if (user && Array.isArray(likesArr) && likesArr.some(l => l.user === user._id || l.user?._id === user._id || l === user._id)) {
           setIsLiked(true);
         }
 
         setError(null);
       } else if (!report && isMountedRef.current) {
-        // Fallback report if not found in DB or storage
         setReport({
           _id: id,
           id: id,
           title: 'Pothole Near College Entrance',
           category: 'Roads',
-          status: 'In Progress',
+          status: 'UNSOLVED',
+          priority: 'High',
           location: 'Anuru, Thondangi, Kakinada, Andhra Pradesh, India',
           latitude: 17.281524,
           longitude: 82.521632,
@@ -119,7 +117,6 @@ export default function TrackReport() {
     isMountedRef.current = true;
     fetchReportDetails(true);
 
-    // Auto-polling interval for real-time status updates when admin changes status
     const interval = setInterval(() => {
       fetchReportDetails(false);
     }, 4000);
@@ -130,7 +127,6 @@ export default function TrackReport() {
     };
   }, [id]);
 
-  // 2. Handle Like / Unlike Action
   const handleToggleLike = async () => {
     if (isLiked) {
       setIsLiked(false);
@@ -183,7 +179,8 @@ export default function TrackReport() {
   const category = report.category || 'General';
   const description = report.description || 'No detailed description provided.';
   const location = report.location || 'Local Ward Location';
-  const rawStatus = (report.status || 'Reported').trim();
+  const rawStatus = (report.status || 'UNSOLVED').trim();
+  const priority = report.priority || 'High';
   const image = report.image || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80';
   const lat = Number(report.latitude ?? report.locationCoords?.lat ?? 17.281524);
   const lng = Number(report.longitude ?? report.locationCoords?.lng ?? 82.521632);
@@ -191,47 +188,43 @@ export default function TrackReport() {
     ? new Date(report.createdAt || report.reportedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) 
     : 'Recent';
 
-  // Determine 3 Primary Statuses (🟢 SOLVED, 🟠 IN PROGRESS, 🔴 UNSOLVED)
-  let primaryStatus = 'UNSOLVED'; // Default
+  // Ward Officer Action Updates
+  const officerRemarks = report.officerRemarks || '';
+  const actionTaken = report.actionTaken || '';
+  const expectedResolutionDate = report.expectedResolutionDate || '';
+  const assignedDepartment = report.assignedDepartment || report.assignedDept || 'Roads & Municipal Department';
+  const resolutionImage = report.resolutionImage || '';
+  const resolutionNote = report.resolutionNote || '';
+
+  // Determine Primary Statuses (🔴 UNSOLVED, 🟡 UNDER REVIEW, 🟠 IN PROGRESS, 🟢 SOLVED)
   let statusBadgeClass = 'badge-unsolved';
   let statusLabel = '🔴 UNSOLVED';
-  let statusMessage = 'The issue has not been resolved yet.';
+  let statusMessage = 'The issue has been reported and queued for Ward Officer review.';
 
-  if (rawStatus === 'Resolved' || rawStatus === 'Solved') {
-    primaryStatus = 'SOLVED';
+  if (rawStatus === 'SOLVED' || rawStatus === 'Resolved' || rawStatus === 'Solved') {
     statusBadgeClass = 'badge-solved';
     statusLabel = '🟢 SOLVED';
-    statusMessage = 'The issue has been resolved successfully.';
-  } else if (rawStatus === 'In Progress' || rawStatus === 'Under Review') {
-    primaryStatus = 'IN PROGRESS';
+    statusMessage = 'The issue has been resolved by the Ward Officer and Municipal Department.';
+  } else if (rawStatus === 'IN PROGRESS' || rawStatus === 'In Progress') {
     statusBadgeClass = 'badge-in-progress';
     statusLabel = '🟠 IN PROGRESS';
-    statusMessage = 'The issue is currently being worked on by authorities.';
+    statusMessage = 'The issue is currently undergoing active repairs by assigned municipal team.';
+  } else if (rawStatus === 'UNDER REVIEW' || rawStatus === 'Under Review') {
+    statusBadgeClass = 'badge-under-review';
+    statusLabel = '🟡 UNDER REVIEW';
+    statusMessage = 'The Ward Officer is evaluating the hazard and assigning technical department.';
   }
 
-  // 4-Stage Timeline Driven By Actual Database Status
-  // Stages: Report Submitted → Under Review → In Progress → Solved
+  // 4-Stage Timeline
+  const isUnderReviewDone = rawStatus === 'UNDER REVIEW' || rawStatus === 'Under Review' || rawStatus === 'IN PROGRESS' || rawStatus === 'In Progress' || rawStatus === 'SOLVED' || rawStatus === 'Resolved';
+  const isInProgressDone = rawStatus === 'IN PROGRESS' || rawStatus === 'In Progress' || rawStatus === 'SOLVED' || rawStatus === 'Resolved';
+  const isSolvedDone = rawStatus === 'SOLVED' || rawStatus === 'Resolved' || rawStatus === 'Solved';
+
   const timelineStages = [
-    {
-      key: 'submitted',
-      label: 'Report Submitted',
-      isDone: true // Always true once report exists
-    },
-    {
-      key: 'reviewed',
-      label: 'Under Review',
-      isDone: true // Checked once report is logged and under review
-    },
-    {
-      key: 'in_progress',
-      label: 'In Progress',
-      isDone: primaryStatus === 'IN PROGRESS' || primaryStatus === 'SOLVED'
-    },
-    {
-      key: 'solved',
-      label: 'Solved',
-      isDone: primaryStatus === 'SOLVED'
-    }
+    { key: 'submitted', label: 'Report Submitted', isDone: true },
+    { key: 'reviewed', label: 'Under Review', isDone: isUnderReviewDone },
+    { key: 'in_progress', label: 'In Progress', isDone: isInProgressDone },
+    { key: 'solved', label: 'Solved', isDone: isSolvedDone }
   ];
 
   return (
@@ -246,7 +239,7 @@ export default function TrackReport() {
 
       {/* Main Tracking Card Wireframe Box */}
       <div className="track-main-card">
-        {/* Header Header */}
+        {/* Card Header */}
         <div className="track-card-header">
           <div>
             <h1 className="track-issue-title">{title}</h1>
@@ -255,10 +248,13 @@ export default function TrackReport() {
               <span className="id-value">#{reportId}</span>
             </div>
           </div>
-          <span className="category-pill-badge">{category}</span>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <span className="category-pill-badge">{category}</span>
+            <span className={`priority-badge ${priority.toLowerCase()}`}>{priority} Priority</span>
+          </div>
         </div>
 
-        {/* 3. CURRENT STATUS CARD */}
+        {/* CURRENT STATUS CARD */}
         <div className="current-status-section">
           <label className="section-micro-label">CURRENT STATUS</label>
           <div className={`status-display-box ${statusBadgeClass}`}>
@@ -269,7 +265,7 @@ export default function TrackReport() {
           </div>
         </div>
 
-        {/* 4. VISUAL STATUS TIMELINE */}
+        {/* VISUAL STATUS TIMELINE */}
         <div className="status-timeline-section">
           <label className="section-micro-label">STATUS TIMELINE</label>
           <div className="timeline-horizontal-flow">
@@ -290,14 +286,83 @@ export default function TrackReport() {
           </div>
         </div>
 
+        {/* WARD OFFICER UPDATE & ACTION TAKEN CARD */}
+        {(officerRemarks || actionTaken || expectedResolutionDate || assignedDepartment) && (
+          <div style={{
+            background: '#F8FAFC',
+            border: '1px solid #CBD5E1',
+            borderRadius: '12px',
+            padding: '18px',
+            margin: '20px 0'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, color: '#0F172A', fontSize: '0.95rem', marginBottom: '12px' }}>
+              <FiShield style={{ color: '#155EEF' }} /> Ward Officer Live Updates
+            </div>
+
+            {assignedDepartment && (
+              <div style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <FiBriefcase style={{ color: '#155EEF' }} /> <strong>Assigned Department:</strong> {assignedDepartment}
+              </div>
+            )}
+
+            {officerRemarks && (
+              <div style={{ fontSize: '0.88rem', color: '#0F172A', background: '#FFFFFF', padding: '10px 14px', borderRadius: '8px', border: '1px solid #E2E8F0', marginBottom: '8px' }}>
+                <strong>Officer Remarks:</strong> "{officerRemarks}"
+              </div>
+            )}
+
+            {actionTaken && (
+              <div style={{ fontSize: '0.85rem', color: '#166534', background: '#F0FDF4', padding: '8px 12px', borderRadius: '8px', border: '1px solid #BBF7D0', marginBottom: '8px' }}>
+                <strong>Action Taken:</strong> {actionTaken}
+              </div>
+            )}
+
+            {expectedResolutionDate && (
+              <div style={{ fontSize: '0.825rem', color: '#D97706', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700 }}>
+                <FiCalendar /> Expected Resolution: {expectedResolutionDate}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* RESOLUTION PROOF (BEFORE & AFTER) */}
+        {resolutionImage && (
+          <div style={{
+            background: '#F0FDF4',
+            border: '2px solid #86EFAC',
+            borderRadius: '14px',
+            padding: '20px',
+            margin: '20px 0'
+          }}>
+            <h3 style={{ margin: '0 0 10px 0', fontSize: '1.05rem', color: '#166534', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <FiCheckCircle /> Resolution Proof & Verified Solution
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginTop: '12px' }}>
+              <div>
+                <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '4px' }}>BEFORE (Reported Photo)</span>
+                <img src={image} alt="Reported problem" style={{ width: '100%', height: '160px', borderRadius: '10px', objectFit: 'cover', border: '1px solid #CBD5E1' }} />
+              </div>
+              <div>
+                <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#166534', display: 'block', marginBottom: '4px' }}>AFTER (Resolution Photo Proof)</span>
+                <img src={resolutionImage} alt="Resolution proof" style={{ width: '100%', height: '160px', borderRadius: '10px', objectFit: 'cover', border: '2px solid #86EFAC' }} />
+              </div>
+            </div>
+            {resolutionNote && (
+              <p style={{ margin: '12px 0 0 0', fontSize: '0.9rem', color: '#15803D', fontWeight: 600, background: '#FFFFFF', padding: '10px 14px', borderRadius: '8px', border: '1px solid #BBF7D0' }}>
+                "{resolutionNote}"
+              </p>
+            )}
+          </div>
+        )}
+
         <hr className="divider-line" />
 
-        {/* A. REPORT SUMMARY DETAILS */}
+        {/* REPORT SUMMARY DETAILS */}
         <div className="problem-details-section">
           <label className="section-micro-label">PROBLEM DETAILS</label>
           <p className="problem-description">{description}</p>
           
-          {image && (
+          {image && !resolutionImage && (
             <div className="report-image-preview-wrapper">
               <img src={image} alt={title} className="report-image-preview" />
             </div>
@@ -315,7 +380,7 @@ export default function TrackReport() {
           </div>
         </div>
 
-        {/* 9. REPORT LOCATION & SMALL MAP */}
+        {/* REPORT LOCATION & MAP */}
         <div className="location-map-section">
           <label className="section-micro-label">📍 LOCATION</label>
           <p className="location-address-text">{location}</p>
@@ -340,7 +405,7 @@ export default function TrackReport() {
           </div>
         </div>
 
-        {/* 5. COMMUNITY ENGAGEMENT (VIEWS & LIKES) */}
+        {/* COMMUNITY ENGAGEMENT (VIEWS & LIKES) */}
         <div className="community-engagement-section">
           <label className="section-micro-label">COMMUNITY IMPACT & ENGAGEMENT</label>
 
@@ -356,7 +421,6 @@ export default function TrackReport() {
             </div>
           </div>
 
-          {/* 7. LIKE / LIKED INTERACTIVE BUTTON */}
           <button 
             type="button" 
             className={`btn-like-toggle ${isLiked ? 'liked' : ''}`}

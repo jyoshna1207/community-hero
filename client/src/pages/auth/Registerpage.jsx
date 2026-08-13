@@ -17,6 +17,9 @@ const RegisterPage = () => {
     password: '',
     confirmPassword: '',
     role: 'Citizen',
+    wardId: 'WARD-04',
+    wardName: 'Duvvada Ward 4',
+    municipality: 'Visakhapatnam Municipal Corporation',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -53,16 +56,21 @@ const RegisterPage = () => {
     if (!validate()) return;
 
     setIsSubmitting(true);
-    const res = await register(formData.fullName, formData.email, formData.password, formData.role);
+    const res = await register(formData);
     if (res.success) {
       setToastType('success');
       setToastMessage('Account created successfully! Redirecting...');
       setTimeout(() => {
-        const role = (formData.role || 'citizen').toLowerCase();
-        if (role === 'admin') navigate('/admin/dashboard');
-        else if (role === 'officer') navigate('/officer/dashboard');
-        else if (role === 'department') navigate('/department/dashboard');
-        else navigate('/dashboard');
+        const userRole = (res.user?.role || formData.role || 'citizen').toLowerCase().trim();
+        if (userRole.includes('ward') || userRole === 'officer' || userRole === 'ward_officer') {
+          navigate('/ward-dashboard');
+        } else if (userRole.includes('district') || userRole.includes('dept') || userRole === 'department') {
+          navigate('/department/dashboard');
+        } else if (userRole === 'admin') {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/dashboard');
+        }
         setIsSubmitting(false);
       }, 1200);
     } else {
@@ -151,6 +159,41 @@ const RegisterPage = () => {
               ))}
             </div>
           </div>
+
+          {formData.role === 'Ward Officer' && (
+            <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
+              <h4 style={{ margin: '0 0 12px 0', fontSize: '0.88rem', color: '#0F172A', fontWeight: 700 }}>Assigned Ward Details</h4>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <AuthInput
+                  label="Ward Number / ID"
+                  type="text"
+                  name="wardId"
+                  placeholder="e.g. WARD-04"
+                  value={formData.wardId}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                />
+                <AuthInput
+                  label="Ward Name"
+                  type="text"
+                  name="wardName"
+                  placeholder="e.g. Duvvada Ward 4"
+                  value={formData.wardName}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                />
+              </div>
+              <AuthInput
+                label="Municipality / City"
+                type="text"
+                name="municipality"
+                placeholder="e.g. Visakhapatnam Municipal Corporation"
+                value={formData.municipality}
+                onChange={handleChange}
+                disabled={isSubmitting}
+              />
+            </div>
+          )}
 
           <AuthInput
             label="Password"

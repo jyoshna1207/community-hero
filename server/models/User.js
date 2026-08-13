@@ -25,8 +25,28 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["citizen", "admin", "officer", "department"],
+    enum: ["citizen", "admin", "officer", "ward_officer", "district_officer", "department_officer", "department"],
     default: "citizen",
+  },
+  wardId: {
+    type: String,
+    default: "WARD-04",
+  },
+  wardName: {
+    type: String,
+    default: "Duvvada Ward 4",
+  },
+  municipality: {
+    type: String,
+    default: "Visakhapatnam Municipal Corporation",
+  },
+  departmentName: {
+    type: String,
+    default: "Public Works Department",
+  },
+  phone: {
+    type: String,
+    default: "",
   },
   points: {
     type: Number,

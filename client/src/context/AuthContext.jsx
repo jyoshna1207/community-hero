@@ -78,26 +78,15 @@ export const AuthProvider = ({ children }) => {
       JSON.stringify(userData)
     );
 
-    let redirectPath = "/dashboard";
-
-    switch ((userData.role || "").toLowerCase()) {
-      case "admin":
-      case "administrator":
-        redirectPath = "/admin/dashboard";
-        break;
-
-      case "officer":
-      case "ward_officer":
-        redirectPath = "/officer/dashboard";
-        break;
-
-      case "department":
-      case "department_officer":
-        redirectPath = "/department/dashboard";
-        break;
-
-      default:
-        redirectPath = "/dashboard";
+    const userRole = (userData.role || "").toLowerCase().trim();
+    if (userRole === "admin" || userRole === "administrator") {
+      redirectPath = "/admin/dashboard";
+    } else if (userRole.includes("ward") || userRole === "officer" || userRole === "ward_officer") {
+      redirectPath = "/ward-dashboard";
+    } else if (userRole.includes("district") || userRole.includes("dept") || userRole.includes("department")) {
+      redirectPath = "/department/dashboard";
+    } else {
+      redirectPath = "/dashboard";
     }
 
     return {
@@ -115,26 +104,29 @@ export const AuthProvider = ({ children }) => {
 };
   // Register
   const register = async (nameOrData, emailArg, passwordArg, roleArg = "citizen") => {
-    let name, email, password, role;
+    let payload = {};
     if (typeof nameOrData === "object" && nameOrData !== null) {
-      name = nameOrData.name || nameOrData.fullName;
-      email = nameOrData.email;
-      password = nameOrData.password;
-      role = nameOrData.role || "citizen";
+      payload = {
+        name: nameOrData.name || nameOrData.fullName,
+        email: nameOrData.email,
+        password: nameOrData.password,
+        role: nameOrData.role || "citizen",
+        wardId: nameOrData.wardId || "WARD-04",
+        wardName: nameOrData.wardName || "Duvvada Ward 4",
+        municipality: nameOrData.municipality || "Visakhapatnam",
+        phone: nameOrData.phone || "",
+      };
     } else {
-      name = nameOrData;
-      email = emailArg;
-      password = passwordArg;
-      role = roleArg || "citizen";
+      payload = {
+        name: nameOrData,
+        email: emailArg,
+        password: passwordArg,
+        role: roleArg || "citizen",
+      };
     }
 
     try {
-      const res = await axios.post(`${API_BASE_URL}/register`, {
-        name,
-        email,
-        password,
-        role: (role || "citizen").toLowerCase(),
-      });
+      const res = await axios.post(`${API_BASE_URL}/register`, payload);
 
       const { token: jwtToken, ...userData } = res.data;
 

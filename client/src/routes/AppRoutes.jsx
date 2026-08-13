@@ -40,6 +40,7 @@ import AdminSettings from '../pages/Admin/Settings/Settings';
 
 // Officer Pages
 import OfficerDashboard from '../pages/Officer/Dashboard/OfficerDashboard';
+import WardDashboard from '../pages/Officer/WardDashboard/WardDashboard';
 import VerifyIssues from '../pages/Officer/VerifyIssues/VerifyIssues';
 import AssignedIssues from '../pages/Officer/AssignedIssues/AssignedIssues';
 import OfficerHistory from '../pages/Officer/IssueHistory/IssueHistory';
@@ -95,8 +96,9 @@ const AppRoutes = () => {
 
           {/* Protected Ward Officer Routes */}
           <Route element={<ProtectedRoute allowedRole="officer" />}>
+            <Route path="/ward-dashboard" element={<WardDashboard />} />
             <Route element={<OfficerLayout />}>
-              <Route path="/officer/dashboard" element={<OfficerDashboard />} />
+              <Route path="/officer/dashboard" element={<WardDashboard />} />
               <Route path="/officer/verify-issues" element={<VerifyIssues />} />
               <Route path="/officer/assigned-issues" element={<AssignedIssues />} />
               <Route path="/officer/history" element={<OfficerHistory />} />
