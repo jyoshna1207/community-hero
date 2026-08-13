@@ -134,19 +134,28 @@ export default function MyReports() {
               filteredReports.map((rep) => (
                 <tr key={rep.id || rep._id}>
                   <td>
-                    <div>
-                      <strong style={{ fontSize: '0.95rem', color: '#0F172A' }}>{rep.title}</strong>
-                      {rep.location && (
-                        <div style={{ fontSize: '0.8rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
-                          <FiMapPin style={{ color: '#EF4444' }} />
-                          <span>{rep.location}</span>
-                        </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      {rep.image && (
+                        <img 
+                          src={rep.image} 
+                          alt={rep.title} 
+                          style={{ width: '48px', height: '48px', borderRadius: '8px', objectFit: 'cover', flexShrink: 0, border: '1px solid #E2E8F0' }} 
+                        />
                       )}
-                      {rep.latitude && rep.longitude && (
-                        <div style={{ fontSize: '0.75rem', color: '#155EEF', fontFamily: 'monospace', marginTop: '2px' }}>
-                          Lat: {Number(rep.latitude).toFixed(4)} | Lng: {Number(rep.longitude).toFixed(4)}
-                        </div>
-                      )}
+                      <div>
+                        <strong style={{ fontSize: '0.95rem', color: '#0F172A' }}>{rep.title}</strong>
+                        {rep.location && (
+                          <div style={{ fontSize: '0.8rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                            <FiMapPin style={{ color: '#EF4444' }} />
+                            <span>{rep.location}</span>
+                          </div>
+                        )}
+                        {rep.latitude && rep.longitude && (
+                          <div style={{ fontSize: '0.75rem', color: '#155EEF', fontFamily: 'monospace', marginTop: '2px' }}>
+                            Lat: {Number(rep.latitude).toFixed(4)} | Lng: {Number(rep.longitude).toFixed(4)}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </td>
                   <td>{rep.category}</td>

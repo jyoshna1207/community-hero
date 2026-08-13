@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   FiCheckCircle, FiUploadCloud, FiAlertTriangle, FiDroplet, 
-  FiTrash2, FiSun, FiWind, FiHome, FiHelpCircle, FiCheck, FiMapPin 
+  FiTrash2, FiSun, FiWind, FiHome, FiHelpCircle, FiCheck, FiMapPin, FiX, FiImage 
 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -20,7 +20,7 @@ export default function ReportIssue() {
   const [submitError, setSubmitError] = useState('');
   
   const [issueDetails, setIssueDetails] = useState({
-    title: 'Large Pothole Near Main Road',
+    title: '',
     description: '',
     photo: null
   });
@@ -43,6 +43,25 @@ export default function ReportIssue() {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
+  // Handle Photo File Upload & Base64 Data URL Conversion
+  const handlePhotoSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setIssueDetails(prev => ({
+          ...prev,
+          photo: reader.result
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    setIssueDetails(prev => ({ ...prev, photo: null }));
+  };
+
   const [submittedReportId, setSubmittedReportId] = useState('CH-2026-00124');
 
   const handleFinalSubmit = async () => {
@@ -54,13 +73,14 @@ export default function ReportIssue() {
     const newReport = {
       _id: generatedId,
       id: generatedId,
-      title: issueDetails.title || 'Civic Issue Report',
+      title: issueDetails.title || `${selectedCategory} Issue`,
       category: selectedCategory === 'Road Damage' ? 'Roads' : selectedCategory,
       description: issueDetails.description || 'Reported civic issue requiring municipal attention at specified location.',
       location: locationAddress,
       latitude: locationCoords.latitude,
       longitude: locationCoords.longitude,
       locationCoords: { lat: locationCoords.latitude, lng: locationCoords.longitude },
+      image: issueDetails.photo || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
       status: 'Reported',
       priority: 'High',
       date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -75,7 +95,8 @@ export default function ReportIssue() {
         location: locationAddress,
         latitude: locationCoords.latitude,
         longitude: locationCoords.longitude,
-        locationCoords: { lat: locationCoords.latitude, lng: locationCoords.longitude }
+        locationCoords: { lat: locationCoords.latitude, lng: locationCoords.longitude },
+        image: newReport.image
       };
 
       if (token) {
@@ -226,12 +247,31 @@ export default function ReportIssue() {
             ></textarea>
           </div>
 
+          {/* PHOTO EVIDENCE UPLOADER */}
           <div className="guided-form-group">
             <label>Photo Evidence</label>
-            <div className="photo-upload-box">
-              <FiUploadCloud className="upload-icon" />
-              <span>Tap or drag photo evidence here</span>
-            </div>
+
+            {issueDetails.photo ? (
+              <div className="uploaded-photo-preview-card">
+                <img src={issueDetails.photo} alt="Issue evidence" className="uploaded-img" />
+                <button type="button" className="btn-remove-photo" onClick={handleRemovePhoto}>
+                  <FiX /> Remove Photo
+                </button>
+              </div>
+            ) : (
+              <label htmlFor="photo-upload-input" className="photo-upload-box" style={{ cursor: 'pointer' }}>
+                <input 
+                  type="file" 
+                  id="photo-upload-input" 
+                  accept="image/*" 
+                  onChange={handlePhotoSelect} 
+                  style={{ display: 'none' }}
+                />
+                <FiUploadCloud className="upload-icon" />
+                <span style={{ fontWeight: 700, color: '#0F172A' }}>Upload or Take Photo Evidence</span>
+                <span style={{ fontSize: '0.8rem', color: '#64748B' }}>Supports JPG, PNG, WEBP</span>
+              </label>
+            )}
           </div>
 
           <div className="guided-actions-footer">
@@ -266,6 +306,13 @@ export default function ReportIssue() {
               return `${locality} Ward & District Officers`;
             })()}.
           </p>
+
+          {/* Submitted Photo Preview Badge */}
+          {issueDetails.photo && (
+            <div style={{ width: '100%', height: '180px', borderRadius: '12px', overflow: 'hidden', margin: '14px 0', border: '1px solid #E2E8F0' }}>
+              <img src={issueDetails.photo} alt="Submitted evidence" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+          )}
 
           <div style={{
             background: '#F8FAFC',
