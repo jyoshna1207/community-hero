@@ -130,9 +130,6 @@ export default function Profile() {
           <button className="btn-primary" onClick={() => alert("Profile updated successfully")}>
             <FiEdit /> Edit Profile
           </button>
-          <button className="btn-secondary-outline" onClick={() => alert("Password reset link sent to your email")}>
-            <FiLock /> Change Password
-          </button>
           <button className="btn-danger-outline" onClick={handleLogout}>
             <FiLogOut /> Logout
           </button>
