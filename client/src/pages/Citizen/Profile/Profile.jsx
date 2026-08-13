@@ -168,14 +168,7 @@ export default function Profile() {
 
       {/* Account Actions Box */}
       <div className="profile-actions-box">
-        <div className="actions-header-row">
-          <h3>Account Details & Settings</h3>
-          {!isEditing && (
-            <button className="btn-primary" onClick={() => setIsEditing(true)}>
-              <FiEdit /> Edit Profile
-            </button>
-          )}
-        </div>
+        <h3>Account Settings</h3>
 
         {/* EDIT PROFILE FORM MODAL / CARD */}
         {isEditing ? (
@@ -207,6 +200,7 @@ export default function Profile() {
                   type="text" 
                   value={formData.phone} 
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })} 
+                  placeholder="Enter phone number"
                 />
               </div>
 
@@ -216,6 +210,7 @@ export default function Profile() {
                   type="text" 
                   value={formData.location} 
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })} 
+                  placeholder="Enter location or ward"
                 />
               </div>
             </div>
@@ -230,21 +225,13 @@ export default function Profile() {
             </div>
           </form>
         ) : (
-          <div className="profile-info-preview">
-            <div className="info-row">
-              <span className="info-label">Location:</span>
-              <span className="info-val">{formData.location}</span>
-            </div>
-            <div className="info-row">
-              <span className="info-label">Phone:</span>
-              <span className="info-val">{formData.phone}</span>
-            </div>
-
-            <div className="profile-buttons-flex" style={{ marginTop: '16px' }}>
-              <button className="btn-danger-outline" onClick={handleLogout}>
-                <FiLogOut /> Logout
-              </button>
-            </div>
+          <div className="profile-buttons-flex">
+            <button className="btn-primary" onClick={() => setIsEditing(true)}>
+              <FiEdit /> Edit Profile
+            </button>
+            <button className="btn-danger-outline" onClick={handleLogout}>
+              <FiLogOut /> Logout
+            </button>
           </div>
         )}
       </div>
