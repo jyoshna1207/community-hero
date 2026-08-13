@@ -30,21 +30,28 @@
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 14px;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  padding: 14px 18px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
 }
 
+.explore-search-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
 .explore-search-bar {
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 10px;
   background: #F8FAFC;
   border: 1.5px solid #E2E8F0;
   border-radius: 10px;
-  padding: 11px 16px;
+  padding: 10px 16px;
   transition: border-color 0.15s ease;
 }
 

@@ -4,11 +4,10 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { 
   FiSearch, FiMapPin, FiCalendar, FiList, FiMap, 
-  FiPlusCircle, FiLoader 
+  FiPlusCircle, FiLoader, FiAlertCircle 
 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { categoriesList, statusList, priorityList } from './IssuesData';
 import './Issues.css';
 
 // Leaflet marker generator based on issue status
@@ -52,10 +51,6 @@ function MapController({ centerCoords }) {
 export default function Issues() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedStatus, setSelectedStatus] = useState('All');
-  const [selectedPriority, setSelectedPriority] = useState('All');
-  const [selectedLocationFilter, setSelectedLocationFilter] = useState('Nearby'); // 'Nearby' or specific place
   const [viewMode, setViewMode] = useState('map'); // 'map' or 'list'
 
   const [allIssues, setAllIssues] = useState([]);
@@ -77,13 +72,9 @@ export default function Issues() {
           title: item.title,
           category: item.category,
           status: item.status || 'Reported',
-          priority: item.priority || 'High',
           location: item.location,
-          placeName: item.location ? item.location.split(',')[0].trim() : 'Your Location',
           latitude: Number(item.latitude ?? item.locationCoords?.lat ?? 17.281524),
           longitude: Number(item.longitude ?? item.locationCoords?.lng ?? 82.521632),
-          isNearby: true,
-          badgeLabel: 'Your Reported Location',
           date: item.date || 'Recently Reported',
           description: item.description
         }));
@@ -102,13 +93,9 @@ export default function Issues() {
             title: item.title,
             category: item.category,
             status: item.status || 'Reported',
-            priority: item.aiSeverity || 'High',
             location: item.location,
-            placeName: item.location ? item.location.split(',')[0].trim() : 'Local Ward Area',
             latitude: Number(item.latitude ?? item.locationCoords?.lat ?? 17.6868),
             longitude: Number(item.longitude ?? item.locationCoords?.lng ?? 83.2185),
-            isNearby: (item.location || '').toLowerCase().includes('anuru') || (item.location || '').toLowerCase().includes('thondangi'),
-            badgeLabel: (item.location || '').toLowerCase().includes('anuru') ? 'Nearby Location' : 'Reported Location',
             date: new Date(item.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
             description: item.description
           }));
@@ -136,37 +123,11 @@ export default function Issues() {
     loadRealReportedIssues();
   }, []);
 
-  // Extract unique place names dynamically from really reported issues
-  const uniquePlaces = Array.from(
-    new Set(allIssues.map(i => i.placeName).filter(Boolean))
-  );
-
-  // Filter & Sort Logic: Only really reported issues, nearby first!
-  const filteredAndSortedIssues = allIssues
-    .filter(issue => {
-      const locStr = (issue.location || '') + ' ' + (issue.placeName || '');
-      const matchesSearch = issue.title.toLowerCase().includes(searchTerm.toLowerCase()) || locStr.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || issue.category === selectedCategory;
-      const matchesStatus = selectedStatus === 'All' || issue.status === selectedStatus;
-      const matchesPriority = selectedPriority === 'All' || issue.priority === selectedPriority;
-      
-      let matchesLocationFilter = true;
-      if (selectedLocationFilter === 'Nearby') {
-        matchesLocationFilter = true; // Show all, sorted nearby first
-      } else if (selectedLocationFilter !== 'All') {
-        matchesLocationFilter = locStr.toLowerCase().includes(selectedLocationFilter.toLowerCase());
-      }
-
-      return matchesSearch && matchesCategory && matchesStatus && matchesPriority && matchesLocationFilter;
-    })
-    .sort((a, b) => {
-      // Prioritize nearby places first
-      if (selectedLocationFilter === 'Nearby') {
-        if (a.isNearby && !b.isNearby) return -1;
-        if (!a.isNearby && b.isNearby) return 1;
-      }
-      return 0;
-    });
+  // Filter issues based on search term
+  const filteredIssues = allIssues.filter(issue => {
+    const locStr = issue.location || '';
+    return issue.title.toLowerCase().includes(searchTerm.toLowerCase()) || locStr.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   const handleIssueSelect = (issue) => {
     setActiveSelectedId(issue.id || issue._id);
@@ -179,71 +140,31 @@ export default function Issues() {
     <div className="explore-issues-container">
       {/* HEADER */}
       <div className="explore-header">
-        <h1>Explore Reported Issues</h1>
+        <h1>Reported Issues</h1>
         <p className="explore-subtitle">
-          Real civic issues reported by citizens. Nearby reports are shown first.
+          Explore issues reported by citizens in your community.
         </p>
       </div>
 
-      {/* SEARCH BAR & FILTERS BAR */}
+      {/* CLEAN SIMPLE SEARCH BAR & VIEW TOGGLE */}
       <div className="explore-controls-card">
-        <div className="explore-search-bar">
-          <FiSearch className="search-icon" />
-          <input 
-            type="text" 
-            placeholder="Search real reported issues by title or location address..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-
-        <div className="explore-filters-group">
-          {/* LOCATION FILTER */}
-          <div className="filter-dropdown location-highlight-filter">
-            <select 
-              value={selectedLocationFilter} 
-              onChange={(e) => setSelectedLocationFilter(e.target.value)}
-            >
-              <option value="Nearby">📍 Nearby Places First</option>
-              <option value="All">All Reported Places</option>
-              {uniquePlaces.map((place, idx) => (
-                <option key={idx} value={place}>{place}</option>
-              ))}
-            </select>
+        <div className="explore-search-row">
+          <div className="explore-search-bar">
+            <FiSearch className="search-icon" />
+            <input 
+              type="text" 
+              placeholder="Search reported issues by title or location..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
 
-          <div className="filter-dropdown">
-            <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-              <option value="All">All Categories</option>
-              {categoriesList.filter(c => c !== 'All').map((cat, idx) => <option key={idx} value={cat}>{cat}</option>)}
-            </select>
-          </div>
-
-          <div className="filter-dropdown">
-            <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
-              <option value="All">All Statuses</option>
-              <option value="Reported">Reported</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
-            </select>
-          </div>
-
-          <div className="filter-dropdown">
-            <select value={selectedPriority} onChange={(e) => setSelectedPriority(e.target.value)}>
-              <option value="All">All Priorities</option>
-              <option value="High">High Priority</option>
-              <option value="Medium">Medium Priority</option>
-              <option value="Urgent">Urgent Priority</option>
-            </select>
-          </div>
-
-          {/* VIEW MODE TOGGLE (MAP VIEW / LIST VIEW) */}
           <div className="view-mode-toggle">
             <button 
               className={viewMode === 'map' ? 'toggle-btn active' : 'toggle-btn'} 
               onClick={() => setViewMode('map')}
             >
-              <FiMap /> Interactive Map View
+              <FiMap /> Map View
             </button>
             <button 
               className={viewMode === 'list' ? 'toggle-btn active' : 'toggle-btn'} 
@@ -258,13 +179,13 @@ export default function Issues() {
       {loading ? (
         <div className="explore-loading-card">
           <FiLoader className="spin-icon text-blue" />
-          <p>Loading real reported issues...</p>
+          <p>Loading reported issues...</p>
         </div>
-      ) : filteredAndSortedIssues.length === 0 ? (
+      ) : filteredIssues.length === 0 ? (
         <div className="no-issues-empty-state">
           <FiAlertCircle className="empty-icon" style={{ fontSize: '2.5rem', color: '#64748B' }} />
-          <h3>No Really Reported Issues Found</h3>
-          <p>There are no reported issues matching your filter. Be the first hero to report an issue!</p>
+          <h3>No Reported Issues Found</h3>
+          <p>There are no reported issues yet. Be the first hero to report an issue!</p>
           <button className="btn-primary-report" onClick={() => navigate('/report-issue')}>
             <FiPlusCircle /> Report An Issue Now
           </button>
@@ -288,8 +209,8 @@ export default function Issues() {
 
                 <MapController centerCoords={activeIssueCoords} />
 
-                {/* Render pins ONLY for real reported issues */}
-                {filteredAndSortedIssues.map((issue) => (
+                {/* Render pins for reported issues */}
+                {filteredIssues.map((issue) => (
                   <Marker
                     key={issue.id || issue._id}
                     position={[issue.latitude, issue.longitude]}
@@ -300,7 +221,6 @@ export default function Issues() {
                   >
                     <Popup>
                       <div className="explore-popup-card">
-                        {issue.isNearby && <span className="popup-nearby-badge">📍 {issue.badgeLabel}</span>}
                         <h4 style={{ margin: '4px 0', fontSize: '0.95rem', fontWeight: 800 }}>{issue.title}</h4>
                         <p style={{ margin: '2px 0 6px 0', fontSize: '0.8rem', color: '#64748B' }}>📍 {issue.location}</p>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -332,18 +252,17 @@ export default function Issues() {
             </div>
           </div>
 
-          {/* Side Issues List (Real Reported Issues - Nearby Places Displayed First!) */}
+          {/* Side Issues List */}
           <div className="map-side-panel">
             <div className="side-panel-header">
-              <h3>Reports ({filteredAndSortedIssues.length})</h3>
-              <span className="nearby-first-tag">📍 Nearby Places First</span>
+              <h3>Reported Issues ({filteredIssues.length})</h3>
             </div>
 
             <div className="side-issues-list">
-              {filteredAndSortedIssues.map((issue) => (
+              {filteredIssues.map((issue) => (
                 <div 
                   key={issue.id || issue._id} 
-                  className={`side-issue-item ${issue.isNearby ? 'is-nearby' : ''} ${activeSelectedId === (issue.id || issue._id) ? 'selected-card' : ''}`}
+                  className={`side-issue-item ${activeSelectedId === (issue.id || issue._id) ? 'selected-card' : ''}`}
                   onClick={() => handleIssueSelect(issue)}
                 >
                   <div className="side-item-top">
@@ -352,12 +271,6 @@ export default function Issues() {
                       {issue.status}
                     </span>
                   </div>
-
-                  {issue.isNearby && (
-                    <div className="nearby-distance-chip">
-                      📍 {issue.badgeLabel}
-                    </div>
-                  )}
 
                   <p className="side-item-loc">📍 {issue.location}</p>
 
@@ -375,13 +288,13 @@ export default function Issues() {
       ) : (
         /* LIST VIEW GRID */
         <div className="issues-grid-results">
-          {filteredAndSortedIssues.map((issue) => (
-            <div key={issue.id || issue._id} className={`issue-card-item ${issue.isNearby ? 'nearby-border' : ''}`}>
+          {filteredIssues.map((issue) => (
+            <div key={issue.id || issue._id} className="issue-card-item">
               <div className="card-top-row">
                 <span className={`status-pill ${issue.status ? issue.status.toLowerCase().replace(/\s+/g, '-') : 'reported'}`}>
                   {issue.status}
                 </span>
-                {issue.isNearby && <span className="nearby-flag">📍 {issue.badgeLabel}</span>}
+                <span className="category-tag">{issue.category}</span>
               </div>
 
               <h3>{issue.title}</h3>
@@ -393,7 +306,6 @@ export default function Issues() {
               </div>
 
               <div className="card-footer-flex">
-                <span className="category-tag">{issue.category}</span>
                 <Link to={`/track-report/${issue.id || issue._id}`} className="view-details-btn">
                   Track Report →
                 </Link>
