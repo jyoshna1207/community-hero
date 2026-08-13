@@ -157,6 +157,28 @@ export const AuthProvider = ({ children }) => {
   };
 
 
+  // Update Profile
+  const updateProfile = async (updatedData) => {
+    const newUser = { ...user, ...updatedData };
+    setUser(newUser);
+    localStorage.setItem("community_hero_user", JSON.stringify(newUser));
+
+    if (token) {
+      try {
+        const res = await axios.put(`${API_BASE_URL}/profile`, updatedData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.data) {
+          setUser(res.data);
+          localStorage.setItem("community_hero_user", JSON.stringify(res.data));
+        }
+      } catch (err) {
+        console.error("API update profile error:", err);
+      }
+    }
+    return { success: true, user: newUser };
+  };
+
   // Logout
   const logout = () => {
     setToken(null);
@@ -180,6 +202,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         register,
+        updateProfile,
         logout,
       }}
     >

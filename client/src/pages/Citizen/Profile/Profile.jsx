@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   FiUser, FiMail, FiShield, FiAward, FiCalendar, 
-  FiEdit, FiLock, FiLogOut, FiClipboard, FiCheckCircle 
+  FiEdit, FiLogOut, FiClipboard, FiCheckCircle, FiCheck, FiX, FiMapPin, FiPhone 
 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -9,14 +9,35 @@ import { useAuth } from '../../../context/AuthContext';
 import './Profile.css';
 
 export default function Profile() {
-  const { user, token, logout } = useAuth();
+  const { user, token, updateProfile, logout } = useAuth();
   const navigate = useNavigate();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  const [formData, setFormData] = useState({
+    name: user?.name || 'Medisetti Anusha',
+    email: user?.email || 'anusha@communityhero.org',
+    location: user?.location || 'Anuru, Thondangi, Kakinada, Andhra Pradesh',
+    phone: user?.phone || '+91 9876543210'
+  });
 
   const [stats, setStats] = useState({
     submitted: 0,
     resolved: 0,
     score: '100 XP'
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || 'Medisetti Anusha',
+        email: user.email || 'anusha@communityhero.org',
+        location: user.location || 'Anuru, Thondangi, Kakinada, Andhra Pradesh',
+        phone: user.phone || '+91 9876543210'
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     const loadUserStats = async () => {
@@ -62,13 +83,28 @@ export default function Profile() {
     loadUserStats();
   }, [token, user]);
 
+  const handleSaveProfile = async (e) => {
+    e.preventDefault();
+    if (updateProfile) {
+      await updateProfile({
+        name: formData.name,
+        email: formData.email,
+        location: formData.location,
+        phone: formData.phone
+      });
+    }
+    setIsEditing(false);
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 4000);
+  };
+
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
-  const displayName = user?.name || 'Medisetti Anusha';
-  const displayEmail = user?.email || 'anusha@communityhero.org';
+  const displayName = user?.name || formData.name;
+  const displayEmail = user?.email || formData.email;
   const displayRole = (user?.role || 'Citizen').toUpperCase() + ' HERO';
   const memberSince = user?.createdAt 
     ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
@@ -76,6 +112,13 @@ export default function Profile() {
 
   return (
     <div className="profile-page-container">
+      {/* Toast Notification on Success */}
+      {saveSuccess && (
+        <div className="profile-toast-success animate-fade-in">
+          <FiCheck className="check-icon" /> Profile details updated successfully!
+        </div>
+      )}
+
       {/* Profile Banner */}
       <div className="profile-header-banner">
         <div className="profile-avatar-large">
@@ -123,17 +166,87 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Account Actions */}
+      {/* Account Actions Box */}
       <div className="profile-actions-box">
-        <h3>Account Settings</h3>
-        <div className="profile-buttons-flex">
-          <button className="btn-primary" onClick={() => alert("Profile updated successfully")}>
-            <FiEdit /> Edit Profile
-          </button>
-          <button className="btn-danger-outline" onClick={handleLogout}>
-            <FiLogOut /> Logout
-          </button>
+        <div className="actions-header-row">
+          <h3>Account Details & Settings</h3>
+          {!isEditing && (
+            <button className="btn-primary" onClick={() => setIsEditing(true)}>
+              <FiEdit /> Edit Profile
+            </button>
+          )}
         </div>
+
+        {/* EDIT PROFILE FORM MODAL / CARD */}
+        {isEditing ? (
+          <form onSubmit={handleSaveProfile} className="edit-profile-form animate-fade-in">
+            <div className="edit-form-grid">
+              <div className="form-group">
+                <label><FiUser /> Full Name</label>
+                <input 
+                  type="text" 
+                  value={formData.name} 
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                  required 
+                />
+              </div>
+
+              <div className="form-group">
+                <label><FiMail /> Email Address</label>
+                <input 
+                  type="email" 
+                  value={formData.email} 
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
+                  required 
+                />
+              </div>
+
+              <div className="form-group">
+                <label><FiPhone /> Phone Number</label>
+                <input 
+                  type="text" 
+                  value={formData.phone} 
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })} 
+                />
+              </div>
+
+              <div className="form-group">
+                <label><FiMapPin /> Location / Ward Area</label>
+                <input 
+                  type="text" 
+                  value={formData.location} 
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })} 
+                />
+              </div>
+            </div>
+
+            <div className="edit-form-actions">
+              <button type="button" className="btn-secondary-outline" onClick={() => setIsEditing(false)}>
+                <FiX /> Cancel
+              </button>
+              <button type="submit" className="btn-save-profile">
+                <FiCheck /> Save Changes
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="profile-info-preview">
+            <div className="info-row">
+              <span className="info-label">Location:</span>
+              <span className="info-val">{formData.location}</span>
+            </div>
+            <div className="info-row">
+              <span className="info-label">Phone:</span>
+              <span className="info-val">{formData.phone}</span>
+            </div>
+
+            <div className="profile-buttons-flex" style={{ marginTop: '16px' }}>
+              <button className="btn-danger-outline" onClick={handleLogout}>
+                <FiLogOut /> Logout
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -126,4 +126,27 @@ router.get("/profile", protect, async (req, res) => {
   }
 });
 
+// @desc    Update user profile
+// @route   PUT /api/auth/profile
+// @access  Private
+router.put("/profile", protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (req.body.name) user.name = req.body.name;
+    if (req.body.email) user.email = req.body.email;
+    if (req.body.phone) user.phone = req.body.phone;
+    if (req.body.location) user.location = req.body.location;
+
+    await user.save();
+    res.json(formatUserResponse(user));
+  } catch (error) {
+    console.error("Profile Update Error:", error);
+    res.status(500).json({ message: "Server error updating profile", error: error.message });
+  }
+});
+
 module.exports = router;
