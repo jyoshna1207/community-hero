@@ -336,12 +336,17 @@ router.get("/my-reports", protect, async (req, res) => {
   }
 });
 
-// @desc    Get single issue by ID
+// @desc    Get single issue by ID (Increments views count)
 // @route   GET /api/issues/:id
 // @access  Public
 router.get("/:id", async (req, res) => {
   try {
-    const issue = await Issue.findById(req.params.id).populate("user", "name email points level title");
+    const issue = await Issue.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { views: 1 } },
+      { new: true }
+    ).populate("user", "name email points level title");
+
     if (!issue) {
       return res.status(404).json({ message: "Issue not found" });
     }
@@ -349,6 +354,66 @@ router.get("/:id", async (req, res) => {
   } catch (error) {
     console.error("Get Issue Error:", error);
     res.status(500).json({ message: "Server error fetching issue details", error: error.message });
+  }
+});
+
+// @desc    Toggle Like on issue report
+// @route   POST /api/issues/:id/like
+// @access  Private
+router.post("/:id/like", protect, async (req, res) => {
+  try {
+    const issue = await Issue.findById(req.params.id);
+    if (!issue) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
+    const userId = req.user._id.toString();
+    const existingIndex = issue.likes.findIndex((l) => l.user.toString() === userId);
+
+    let isLiked = false;
+    if (existingIndex > -1) {
+      issue.likes.splice(existingIndex, 1);
+      isLiked = false;
+    } else {
+      issue.likes.push({ user: req.user._id });
+      isLiked = true;
+    }
+
+    await issue.save();
+    res.json({ message: isLiked ? "Liked report!" : "Unliked report!", likesCount: issue.likes.length, isLiked });
+  } catch (error) {
+    console.error("Like error:", error);
+    res.status(500).json({ message: "Server error updating like status", error: error.message });
+  }
+});
+
+// @desc    Update issue status (Admin / Authority)
+// @route   PUT /api/issues/:id/status
+// @access  Public / Private
+router.put("/:id/status", async (req, res) => {
+  try {
+    const { status, note, updatedBy } = req.body;
+    const issue = await Issue.findById(req.params.id);
+    if (!issue) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
+    if (status) {
+      issue.status = status;
+      issue.timeline.push({
+        status: status,
+        note: note || `Status updated to ${status}`,
+        updatedBy: updatedBy || "Authority / Admin",
+        date: new Date(),
+      });
+    }
+
+    await issue.save();
+    const updated = await Issue.findById(req.params.id).populate("user", "name email points level title");
+    res.json(updated);
+  } catch (error) {
+    console.error("Update Status Error:", error);
+    res.status(500).json({ message: "Server error updating status", error: error.message });
   }
 });
 
@@ -362,6 +427,8 @@ router.post("/", protect, async (req, res) => {
       category,
       description,
       location,
+      latitude,
+      longitude,
       locationCoords,
       image,
       video,
@@ -375,12 +442,17 @@ router.post("/", protect, async (req, res) => {
       return res.status(400).json({ message: "Please fill in all required fields" });
     }
 
+    const latVal = latitude !== undefined ? Number(latitude) : (locationCoords?.lat || locationCoords?.latitude || 17.6868);
+    const lngVal = longitude !== undefined ? Number(longitude) : (locationCoords?.lng || locationCoords?.longitude || 83.2185);
+
     const issue = await Issue.create({
       title,
       category,
       description,
       location,
-      locationCoords: locationCoords || { lat: 17.6868 + (Math.random() - 0.5) * 0.1, lng: 83.2185 + (Math.random() - 0.5) * 0.1 },
+      latitude: latVal,
+      longitude: lngVal,
+      locationCoords: { lat: latVal, lng: lngVal },
       image: image || "https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=800&q=80",
       video: video || "",
       aiSeverity: aiSeverity || "Medium",

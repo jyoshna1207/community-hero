@@ -1,25 +1,43 @@
 /* ========================================================================== */
-/* COMMUNITY HERO – HYPERLOCAL PROBLEM SOLVER DESIGN SYSTEM                   */
+/* COMMUNITY HERO – REAL-WORLD CIVIC TECH DESIGN SYSTEM                      */
 /* ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
+  /* Brand Palette */
+  --primary: #155EEF;            /* Modern Blue */
+  --primary-hover: #175CD3;      /* Deep Modern Blue */
+  --primary-light: #EAF2FE;      /* Light Blue Tint */
+  --dark-navy: #0B1F44;          /* Deep Navy */
+  
+  /* Status Colors */
+  --status-green: #16A34A;
+  --status-green-bg: #F0FDF4;
+  --status-green-border: #BBF7D0;
 
-  --sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --bg: #0f172a;
-  --text: #f8fafc;
-  --text-muted: #94a3b8;
-  --border: rgba(255, 255, 255, 0.1);
-  --accent: #6366f1;
+  --status-orange: #F59E0B;
+  --status-orange-bg: #FEFCE8;
+  --status-orange-border: #FEF08A;
 
-  font-family: var(--sans);
-  color-scheme: dark;
-  color: var(--text);
-  background-color: var(--bg);
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --status-red: #EF4444;
+  --status-red-bg: #FEF2F2;
+  --status-red-border: #FECACA;
+  
+  /* Neutral Palette */
+  --bg-app: #F7F9FC;             /* Clean Light Background */
+  --surface: #FFFFFF;
+  --text-primary: #0F172A;       /* High-contrast Primary Text */
+  --text-secondary: #64748B;     /* Muted Secondary Text */
+  --border-color: #E2E8F0;       /* 1px Hairline Border */
+
+  /* Rounded Corners */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 *, *::before, *::after {
@@ -30,219 +48,135 @@
 
 html, body {
   width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  background-color: #0f172a;
+  height: 100%;
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
 #root {
-  width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  margin: 0;
-  padding: 0;
+  background-color: var(--bg-app);
 }
 
-.main-content {
-  flex: 1 0 auto;
-  width: 100%;
-  --primary: #10b981;          /* Emerald Green */
-  --primary-dark: #059669;
-  --primary-light: #34d399;
-  --secondary: #3b82f6;        /* Vibrant Blue */
-  --secondary-dark: #1d4ed8;
-  --accent: #14b8a6;           /* Teal */
-  --warning: #f59e0b;          /* Amber */
-  --danger: #ef4444;           /* Red */
-  --success: #10b981;          /* Green */
-  
-  --background: #f8fafc;       /* Very light neutral */
-  --surface: #ffffff;          /* White cards */
-  --surface-glass: rgba(255, 255, 255, 0.85);
-  
-  --text-primary: #1e293b;     /* Dark charcoal */
-  --text-secondary: #64748b;   /* Muted gray */
-  --text-light: #94a3b8;
-  
-  --border: #e2e8f0;
-  --border-focus: #10b981;
-  
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-full: 9999px;
-  
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 0.4s ease;
-}
-
-[data-theme="dark"] {
-  --background: #0f172a;
-  --surface: #1e293b;
-  --surface-glass: rgba(30, 41, 59, 0.85);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --border: #334155;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Poppins', 'Inter', sans-serif;
-}
-
-body {
-  background-color: var(--background);
+/* Typography Hierarchy Utilities */
+h1, .heading-xl {
+  font-size: 2.25rem; /* ~36px */
+  font-weight: 800;
+  line-height: 1.15;
   color: var(--text-primary);
-  line-height: 1.6;
-  font-size: 14px;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
+}
+
+h2, .heading-lg {
+  font-size: 1.35rem; /* ~22px */
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+h3, .heading-md {
+  font-size: 1rem; /* ~16px */
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+p, .body-text {
+  font-size: 0.925rem; /* ~14.5px */
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.text-meta {
+  font-size: 0.8rem; /* ~12.5px */
+  color: var(--text-secondary);
+}
+
+/* Card Utility */
+.ch-card, .card {
+  background-color: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Status Badges */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.status-pill.resolved, .status-pill.completed {
+  background: var(--status-green-bg);
+  color: var(--status-green);
+  border: 1px solid var(--status-green-border);
+}
+.status-pill.in-progress, .status-pill.investigating {
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid #BFDBFE;
+}
+.status-pill.pending, .status-pill.reported {
+  background: var(--status-orange-bg);
+  color: var(--status-orange);
+  border: 1px solid var(--status-orange-border);
+}
+.status-pill.critical, .status-pill.high {
+  background: var(--status-red-bg);
+  color: var(--status-red);
+  border: 1px solid var(--status-red-border);
+}
+
+/* Button Styling Rules */
+button, .btn {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--primary) !important;
+  color: #FFFFFF !important;
+  border: 1px solid var(--primary) !important;
+  padding: 10px 18px;
+}
+.btn-primary:hover {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+}
+
+.btn-secondary {
+  background-color: #FFFFFF !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  padding: 10px 18px;
+}
+.btn-secondary:hover {
+  background-color: #F1F5F9 !important;
+  border-color: #CBD5E1 !important;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: var(--bg-app);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: var(--radius-full);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-light);
-}
-
-/* Utility Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-}
-
-.animate-fade-in {
-  animation: fadeIn var(--transition-normal) forwards;
-}
-
-/* Modern Card Polish */
-.card, .stat-card, .issue-card, .dashboard-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
-}
-
-.card:hover, .issue-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--primary-light);
-}
-
-/* Buttons */
-button, .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 20px;
-  font-weight: 500;
-  font-size: 0.925rem;
-  border-radius: var(--radius-md);
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  text-decoration: none;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: white;
-  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
-}
-.btn-primary:hover {
-  filter: brightness(1.08);
-  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
-  transform: translateY(-1px);
-}
-
-.btn-secondary {
-  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
-  color: white;
-}
-.btn-secondary:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
-}
-
-.btn-outline {
-  background: transparent;
-  border-color: var(--border);
-  color: var(--text-primary);
-}
-.btn-outline:hover {
-  background: var(--background);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-/* Status Badges */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border-radius: var(--radius-full);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.badge-pending { background: rgba(245, 158, 11, 0.15); color: #d97706; }
-.badge-progress { background: rgba(59, 130, 246, 0.15); color: #2563eb; }
-.badge-resolved { background: rgba(16, 185, 129, 0.15); color: #059669; }
-.badge-urgent { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
-
-/* Empty State Styles */
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 24px;
-  text-align: center;
-  color: var(--text-secondary);
-  background: var(--surface);
-  border: 1px dashed var(--border);
-  border-radius: var(--radius-lg);
-}
-.empty-state svg {
-  font-size: 48px;
-  color: var(--text-light);
-  margin-bottom: 16px;
-}
-.empty-state h4 {
-  font-size: 1.1rem;
-  color: var(--text-primary);
-  margin-bottom: 8px;
+  background: var(--border-color);
+  border-radius: 8px;
 }

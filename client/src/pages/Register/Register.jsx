@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight, FiCheckCircle, FiMapPin, FiZap } from 'react-icons/fi';
-import { FcGoogle } from 'react-icons/fc';
 import { useAuth } from '../../context/AuthContext';
 import './Register.css';
 
@@ -87,15 +86,6 @@ const Register = () => {
     }
   };
 
-  const handleGoogleRegister = async () => {
-    setIsSubmitting(true);
-    const result = await register('Jyoshna Kosana', 'jyoshna@example.com', 'password123');
-    setIsSubmitting(false);
-    if (result.success) {
-      navigate('/profile');
-    }
-  };
-
   return (
     <div className="auth-page-wrapper">
       <div className="auth-split-card">
@@ -103,11 +93,11 @@ const Register = () => {
         <div className="auth-form-column">
           <div className="brand-header">
             <div className="brand-logo-icon">
-              <FiMapPin />
+              <FiMapPin style={{ fontSize: '1.35rem' }} />
             </div>
             <div className="brand-title-group">
               <span className="brand-name">Community Hero</span>
-              <span className="brand-tagline">Hyperlocal Problem Solver</span>
+              <span className="brand-tagline">Civic Resolution Portal</span>
             </div>
           </div>
 
@@ -223,16 +213,6 @@ const Register = () => {
             {/* Submit Register Button */}
             <button type="submit" className="auth-submit-btn" disabled={isSubmitting}>
               {isSubmitting ? 'Creating Account...' : 'Register'} <FiArrowRight className="btn-arrow-icon" />
-            </button>
-
-            {/* OR Divider */}
-            <div className="auth-divider">
-              <span>OR</span>
-            </div>
-
-            {/* Continue with Google */}
-            <button type="button" className="btn-google" onClick={handleGoogleRegister}>
-              <FcGoogle className="google-icon" /> Continue with Google
             </button>
           </form>
 

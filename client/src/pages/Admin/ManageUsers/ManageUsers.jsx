@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaSearch, FaEye, FaEdit, FaTrash, FaUserSlash } from 'react-icons/fa';
 import { dummyUsers } from '../../../services/dummyData';
-import { DeleteModal, EditUserModal } from '../../../components/common/Modals';
+import { DeleteModal, EditUserModal } from '../../../components/Common/Modals';
 
 export default function ManageUsers() {
   const [users, setUsers] = useState(dummyUsers);

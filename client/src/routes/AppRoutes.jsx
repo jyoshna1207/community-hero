@@ -26,6 +26,7 @@ import CitizenDashboard from '../pages/Citizen/Dashboard/Dashboard';
 import ReportIssue from '../pages/Citizen/ReportIssue/ReportIssue';
 import IssuesList from '../pages/Citizen/Issues/Issues';
 import IssueDetail from '../pages/Citizen/IssueDetails/IssueDetails';
+import TrackReport from '../pages/Citizen/TrackReport/TrackReport';
 import MyReports from '../pages/Citizen/MyReports/MyReports';
 import Profile from '../pages/Citizen/Profile/Profile';
 
@@ -50,16 +51,22 @@ import AssignedWork from '../pages/Department/AssignedWork/AssignedWork';
 import UpdateProgress from '../pages/Department/UpdateProgress/UpdateProgress';
 import CompletedWork from '../pages/Department/CompletedWork/CompletedWork';
 
+import MobileAppContainer from '../mobile/MobileAppContainer';
+
 const AppRoutes = () => {
   return (
       
         <Routes>
-          {/* Public & Authentication Routes */}
-          <Route path="/" element={<LoginPage />} />
+          {/* Public Web App Routes */}
+          <Route element={<CitizenLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+          </Route>
+
+          <Route path="/mobile" element={<MobileAppContainer />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 
           {/* Protected Citizen Routes */}
@@ -68,7 +75,8 @@ const AppRoutes = () => {
               <Route path="/dashboard" element={<CitizenDashboard />} />
               <Route path="/report-issue" element={<ReportIssue />} />
               <Route path="/issues" element={<IssuesList />} />
-              <Route path="/issues/:id" element={<IssueDetail />} />
+              <Route path="/issues/:id" element={<TrackReport />} />
+              <Route path="/track-report/:id" element={<TrackReport />} />
               <Route path="/my-reports" element={<MyReports />} />
               <Route path="/profile" element={<Profile />} />
             </Route>

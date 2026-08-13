@@ -5,8 +5,8 @@
 .app-container {
   display: flex;
   min-height: 100vh;
-  background-color: var(--background);
-  color: var(--text-primary);
+  background-color: #F8FAFC;
+  color: #111827;
 }
 
 .main-layout-wrapper {
@@ -14,7 +14,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  transition: margin-left var(--transition-normal);
+  transition: margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .page-content-area {

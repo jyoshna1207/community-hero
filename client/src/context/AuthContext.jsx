@@ -114,51 +114,44 @@ export const AuthProvider = ({ children }) => {
   }
 };
   // Register
-  const register = async (
-    name,
-    email,
-    password,
-    role = "citizen"
-  ) => {
+  const register = async (nameOrData, emailArg, passwordArg, roleArg = "citizen") => {
+    let name, email, password, role;
+    if (typeof nameOrData === "object" && nameOrData !== null) {
+      name = nameOrData.name || nameOrData.fullName;
+      email = nameOrData.email;
+      password = nameOrData.password;
+      role = nameOrData.role || "citizen";
+    } else {
+      name = nameOrData;
+      email = emailArg;
+      password = passwordArg;
+      role = roleArg || "citizen";
+    }
+
     try {
-      const res = await axios.post(
-        `${API_BASE_URL}/register`,
-        {
-          name,
-          email,
-          password,
-          role,
-        }
-      );
+      const res = await axios.post(`${API_BASE_URL}/register`, {
+        name,
+        email,
+        password,
+        role: (role || "citizen").toLowerCase(),
+      });
 
       const { token: jwtToken, ...userData } = res.data;
 
       setToken(jwtToken);
       setUser(userData);
 
-      localStorage.setItem(
-        "community_hero_token",
-        jwtToken
-      );
-
-      localStorage.setItem(
-        "community_hero_user",
-        JSON.stringify(userData)
-      );
-
+      localStorage.setItem("community_hero_token", jwtToken);
+      localStorage.setItem("community_hero_user", JSON.stringify(userData));
 
       return {
         success: true,
         user: userData,
       };
-
-    } catch(error){
-
+    } catch (error) {
       return {
-        success:false,
-        error:
-        error.response?.data?.message ||
-        "Registration failed"
+        success: false,
+        error: error.response?.data?.message || "Registration failed",
       };
     }
   };

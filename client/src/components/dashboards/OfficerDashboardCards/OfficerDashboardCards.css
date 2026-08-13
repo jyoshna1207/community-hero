@@ -8,21 +8,21 @@
   background: #ffffff;
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
+  box-shadow: none !important;
+  border: 1px solid #dbe3ec;
 }
 .dashboard-card h3 {
   font-size: 0.875rem;
-  color: #64748b;
+  color: #5c6474;
   margin: 0 0 0.5rem 0;
   text-transform: uppercase;
 }
 .card-value {
   font-size: 1.875rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #111827;
   margin: 0;
 }
-.card-value.success { color: #059669; }
-.card-value.warning { color: #d97706; }
-.card-value.danger { color: #dc2626; }
+.card-value.success { color: #1E3A8A; }
+.card-value.warning { color: #453204; }
+.card-value.danger { color: #DC2626; }

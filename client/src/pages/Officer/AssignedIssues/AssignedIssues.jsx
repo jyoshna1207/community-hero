@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaSearch, FaEye, FaSync, FaCheckDouble } from 'react-icons/fa';
 import { assignedIssuesData } from '../../../services/OfficerDummyData';
-import { ViewDetailsModal } from '../../../components/common/OfficerModals';
+import { ViewDetailsModal } from '../../../components/Common/OfficerModals';
 
 export default function AssignedIssues() {
   const [assigned, setAssigned] = useState(assignedIssuesData);

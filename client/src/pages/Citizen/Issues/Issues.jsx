@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiSearch, FiFilter, FiMapPin, FiCalendar } from 'react-icons/fi';
+import { FiSearch, FiMapPin, FiCalendar, FiChevronDown, FiList, FiMap, FiZoomIn, FiZoomOut } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { allIssuesData, categoriesList, statusList, priorityList } from './IssuesData';
 import './Issues.css';
@@ -9,6 +9,7 @@ export default function Issues() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [selectedPriority, setSelectedPriority] = useState('All');
+  const [viewMode, setViewMode] = useState('map'); // 'map' or 'list'
 
   const filteredIssues = allIssuesData.filter(issue => {
     const matchesSearch = issue.title.toLowerCase().includes(searchTerm.toLowerCase()) || issue.location.toLowerCase().includes(searchTerm.toLowerCase());
@@ -19,61 +20,152 @@ export default function Issues() {
   });
 
   return (
-    <div className="issues-page-container">
-      <div className="issues-header">
-        <h2>Community Issues Directory</h2>
-        <p>Browse and track all reported civic problems across municipal wards.</p>
+    <div className="explore-issues-container">
+      {/* SCREEN 4 HEADER */}
+      <div className="explore-header">
+        <h1>Explore Issues</h1>
+        <p className="explore-subtitle">Find problems in your community</p>
       </div>
 
-      {/* Filter & Search Bar */}
-      <div className="filters-card">
-        <div className="search-box-wrapper">
+      {/* SEARCH BAR & FILTERS BAR */}
+      <div className="explore-controls-card">
+        <div className="explore-search-bar">
           <FiSearch className="search-icon" />
           <input 
             type="text" 
-            placeholder="Search by title or location..." 
+            placeholder="Search issues, locations or categories..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
-        <div className="filters-row">
-          <div className="filter-group">
-            <label>Category</label>
+        <div className="explore-filters-group">
+          <div className="filter-dropdown">
             <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-              {categoriesList.map((cat, idx) => <option key={idx} value={cat}>{cat}</option>)}
+              <option value="All">Category ▼</option>
+              {categoriesList.filter(c => c !== 'All').map((cat, idx) => <option key={idx} value={cat}>{cat}</option>)}
             </select>
           </div>
 
-          <div className="filter-group">
-            <label>Status</label>
+          <div className="filter-dropdown">
             <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
-              {statusList.map((stat, idx) => <option key={idx} value={stat}>{stat}</option>)}
+              <option value="All">Status ▼</option>
+              {statusList.filter(s => s !== 'All').map((stat, idx) => <option key={idx} value={stat}>{stat}</option>)}
             </select>
           </div>
 
-          <div className="filter-group">
-            <label>Priority</label>
+          <div className="filter-dropdown">
             <select value={selectedPriority} onChange={(e) => setSelectedPriority(e.target.value)}>
-              {priorityList.map((p, idx) => <option key={idx} value={p}>{p}</option>)}
+              <option value="All">Priority ▼</option>
+              {priorityList.filter(p => p !== 'All').map((p, idx) => <option key={idx} value={p}>{p}</option>)}
             </select>
+          </div>
+
+          <div className="filter-dropdown">
+            <select>
+              <option>Distance ▼</option>
+              <option>Within 2 km</option>
+              <option>Within 5 km</option>
+              <option>Within 10 km</option>
+            </select>
+          </div>
+
+          <div className="filter-dropdown">
+            <select>
+              <option>Date ▼</option>
+              <option>Latest</option>
+              <option>Oldest</option>
+            </select>
+          </div>
+
+          {/* VIEW MODE TOGGLE */}
+          <div className="view-mode-toggle">
+            <button 
+              className={viewMode === 'list' ? 'toggle-btn active' : 'toggle-btn'} 
+              onClick={() => setViewMode('list')}
+            >
+              <FiList /> List View
+            </button>
+            <button 
+              className={viewMode === 'map' ? 'toggle-btn active' : 'toggle-btn'} 
+              onClick={() => setViewMode('map')}
+            >
+              <FiMap /> Map View
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Issues Grid */}
-      <div className="issues-grid-results">
-        {filteredIssues.length > 0 ? (
-          filteredIssues.map((issue) => (
+      {/* MAP VIEW (~70% WIDTH WITH CLUSTERS & LEGEND) */}
+      {viewMode === 'map' ? (
+        <div className="map-view-layout">
+          <div className="map-view-main">
+            <div className="map-canvas-container">
+              {/* Real Google Maps Embed View */}
+              <iframe
+                title="Google Maps Explore View"
+                width="100%"
+                height="100%"
+                style={{ border: 0, borderRadius: '14px' }}
+                loading="lazy"
+                allowFullScreen
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(searchTerm.trim() ? searchTerm.trim() : 'Visakhapatnam, Andhra Pradesh')}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
+              ></iframe>
+
+              {/* Map Zoom Controls */}
+              <div className="map-controls">
+                <button><FiZoomIn /></button>
+                <button><FiZoomOut /></button>
+              </div>
+
+              {/* Bottom Legend */}
+              <div className="map-bottom-legend">
+                <div className="legend-item">
+                  <span className="legend-dot red"></span> Critical
+                </div>
+                <div className="legend-item">
+                  <span className="legend-dot orange"></span> Pending
+                </div>
+                <div className="legend-item">
+                  <span className="legend-dot blue"></span> In Progress
+                </div>
+                <div className="legend-item">
+                  <span className="legend-dot green"></span> Resolved
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Side List Panel */}
+          <div className="map-side-panel">
+            <h3>Nearby Reports ({filteredIssues.length})</h3>
+            <div className="side-issues-list">
+              {filteredIssues.map((issue) => (
+                <div key={issue.id} className="side-issue-item">
+                  <div className="side-item-top">
+                    <h4>{issue.title}</h4>
+                    <span className={`status-pill ${issue.status.toLowerCase().replace(/\s+/g, '-')}`}>{issue.status}</span>
+                  </div>
+                  <p className="side-item-loc">📍 {issue.location}</p>
+                  <Link to={`/issues/${issue.id}`} className="side-item-link">View Details →</Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* LIST VIEW GRID */
+        <div className="issues-grid-results">
+          {filteredIssues.map((issue) => (
             <div key={issue.id} className="issue-card-item">
               <div className="card-top-row">
-                <span className={`status-badge-custom ${issue.status.toLowerCase().replace(/\s+/g, '-')}`}>{issue.status}</span>
-                <span className="priority-pill">{issue.priority}</span>
+                <span className={`status-pill ${issue.status.toLowerCase().replace(/\s+/g, '-')}`}>{issue.status}</span>
+                <span className="priority-pill">{issue.priority} Priority</span>
               </div>
               <h3>{issue.title}</h3>
-              <p className="issue-desc-snippet">{issue.description}</p>
+              <p className="issue-desc-snippet">{issue.description || 'Civic infrastructure report logged by community resident.'}</p>
               <div className="issue-meta-details">
-                <span><FiMapPin /> {issue.location}</span>
+                <span>📍 {issue.location}</span>
                 <span><FiCalendar /> {issue.date}</span>
               </div>
               <div className="card-footer-flex">
@@ -81,21 +173,9 @@ export default function Issues() {
                 <Link to={`/issues/${issue.id}`} className="view-details-btn">View Details →</Link>
               </div>
             </div>
-          ))
-        ) : (
-          <div className="no-results-box">
-            <p>No issues found matching your filters.</p>
-          </div>
-        )}
-      </div>
-
-      {/* Pagination Placeholder */}
-      <div className="pagination-placeholder">
-        <button className="page-btn active">1</button>
-        <button className="page-btn">2</button>
-        <button className="page-btn">3</button>
-        <button className="page-btn">Next →</button>
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

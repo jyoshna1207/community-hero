@@ -33,6 +33,14 @@ const issueSchema = new mongoose.Schema(
       required: [true, "Location is required"],
       trim: true,
     },
+    latitude: {
+      type: Number,
+      default: 17.6868,
+    },
+    longitude: {
+      type: Number,
+      default: 83.2185,
+    },
     locationCoords: {
       lat: { type: Number, default: 17.6868 },
       lng: { type: Number, default: 83.2185 },
@@ -50,6 +58,16 @@ const issueSchema = new mongoose.Schema(
       enum: ["Reported", "Under Review", "In Progress", "Resolved"],
       default: "Reported",
     },
+    views: {
+      type: Number,
+      default: 125,
+    },
+    likes: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
     aiSeverity: {
       type: String,
       enum: ["Low", "Medium", "High", "Critical"],

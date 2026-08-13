@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaSearch, FaEye, FaCheckCircle, FaPlay } from 'react-icons/fa';
 import { departmentAssignedWorks } from '../../../services/DepartmentDummyData';
-import { AcceptWorkModal, ViewDetailsModal } from '../../../components/common/DepartmentModals';
+import { AcceptWorkModal, ViewDetailsModal } from '../../../components/Common/DepartmentModals';
 
 export default function AssignedWork() {
   const [works, setWorks] = useState(departmentAssignedWorks);

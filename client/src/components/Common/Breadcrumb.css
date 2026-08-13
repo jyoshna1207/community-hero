@@ -2,7 +2,7 @@
 .hero-breadcrumb {
   padding: 12px 24px;
   background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #dbe3ec;
   font-size: 14px;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .breadcrumb-list a {
-  color: #2563eb;
+  color: #1E3A8A;
   text-decoration: none;
   font-weight: 500;
 }
@@ -26,12 +26,12 @@
 }
 
 .breadcrumb-separator {
-  color: #94a3b8;
+  color: #5c6474;
   margin-right: 8px;
   font-weight: bold;
 }
 
 .breadcrumb-item.active span {
-  color: #64748b;
+  color: #5c6474;
   font-weight: 600;
 }

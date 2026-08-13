@@ -1,7 +1,7 @@
 .hero-section {
-  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 50%, #eff6ff 100%);
+  background: #1E3A8A;
   padding: 5rem 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #dbe3ec;
 }
 
 .hero-container {
@@ -15,26 +15,28 @@
 
 .hero-badge {
   display: inline-block;
-  background-color: #d1fae5;
-  color: #047857;
+  background-color: #EFF6FF;
+  color: #1E3A8A;
   padding: 0.35rem 0.85rem;
-  border-radius: 50px;
+  border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 1.25rem;
+  border: 1px solid #dbe3ec;
 }
 
 .hero-title {
   font-size: 3rem;
   font-weight: 800;
-  color: #1e293b;
+  color: #FFFFFF;
   line-height: 1.2;
   margin-bottom: 1.25rem;
 }
 
 .hero-subtitle {
   font-size: 1.1rem;
-  color: #475569;
+  color: #F8FAFC;
+  opacity: 0.95;
   line-height: 1.6;
   margin-bottom: 2rem;
 }
@@ -51,14 +53,13 @@
 }
 
 .illustration-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 16px;
+  background: #FFFFFF;
+  border: 1px solid #dbe3ec;
+  border-radius: 12px;
   padding: 2.5rem;
   display: flex;
   gap: 2rem;
-  box-shadow: 0 20px 35px -10px rgba(5, 150, 105, 0.1);
+  box-shadow: none !important;
 }
 
 .mock-stat-box {
@@ -71,12 +72,12 @@
 .mock-number {
   font-size: 2.25rem;
   font-weight: 700;
-  color: #059669;
+  color: #1E3A8A;
 }
 
 .mock-label {
   font-size: 0.9rem;
-  color: #64748b;
+  color: #5c6474;
   font-weight: 500;
 }
 

@@ -10,21 +10,21 @@
 .reports-header h2 {
   font-size: 2rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #111827;
   margin: 0 0 0.5rem 0;
 }
 
 .reports-header p {
-  color: #64748b;
+  color: #5c6474;
   margin: 0;
 }
 
 .my-reports-table {
-  background: #ffffff;
-  border-radius: 16px;
+  background: #FFFFFF;
+  border-radius: 12px;
   overflow: hidden;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+  border: 1px solid #dbe3ec;
+  box-shadow: none !important;
 }
 
 .action-buttons-group {
@@ -33,18 +33,19 @@
 }
 
 .action-icon-btn {
-  background: #f8fafc;
-  border: 1px solid #cbd5e1;
+  background: #F8FAFC;
+  border: 1px solid #dbe3ec;
   padding: 0.5rem;
   border-radius: 8px;
   cursor: pointer;
-  color: #334155;
+  color: #111827;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: none !important;
 }
-.action-icon-btn.view:hover { background: #e0f2fe; color: #0284c7; border-color: #0284c7; }
-.action-icon-btn.edit:hover { background: #fef3c7; color: #d97706; border-color: #d97706; }
+.action-icon-btn.view:hover { background: #EFF6FF; color: #1E3A8A; border-color: #1E3A8A; }
+.action-icon-btn.edit:hover { background: #fefce8; color: #453204; border-color: #FBBF24; }
 .action-icon-btn.delete:hover { background: #fef2f2; color: #dc2626; border-color: #dc2626; }

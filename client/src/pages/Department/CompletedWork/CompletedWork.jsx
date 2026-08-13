@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaSearch, FaEye, FaDownload } from 'react-icons/fa';
 import { departmentCompletedWorks } from '../../../services/DepartmentDummyData';
-import { ViewDetailsModal } from '../../../components/common/DepartmentModals';
+import { ViewDetailsModal } from '../../../components/Common/DepartmentModals';
 
 export default function CompletedWork() {
   const [completed] = useState(departmentCompletedWorks);

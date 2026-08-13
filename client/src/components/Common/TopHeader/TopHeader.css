@@ -1,7 +1,7 @@
 .top-header {
   height: 70px;
   background-color: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #dbe3ec;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -23,7 +23,7 @@
   background: transparent;
   border: none;
   font-size: 1.35rem;
-  color: #475569;
+  color: #5c6474;
   cursor: pointer;
   display: none;
   align-items: center;
@@ -38,12 +38,12 @@
 .brand-title {
   font-weight: 700;
   font-size: 1.1rem;
-  color: #1e293b;
+  color: #1E3A8A;
 }
 
 .role-badge {
   font-size: 0.75rem;
-  color: #3b82f6;
+  color: #1E3A8A;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -57,7 +57,7 @@
 .page-main-title {
   font-size: 1.15rem;
   font-weight: 600;
-  color: #334155;
+  color: #111827;
   margin: 0;
 }
 
@@ -72,7 +72,7 @@
   border: none;
   position: relative;
   font-size: 1.2rem;
-  color: #64748b;
+  color: #5c6474;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -84,7 +84,7 @@
   right: 0;
   width: 8px;
   height: 8px;
-  background-color: #ef4444;
+  background-color: #DC2626;
   border-radius: 50%;
 }
 
@@ -96,7 +96,7 @@
 .avatar-placeholder {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  background: #1E3A8A;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -114,7 +114,7 @@
   color: #dc2626;
   border: none;
   padding: 0.5rem 0.85rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;

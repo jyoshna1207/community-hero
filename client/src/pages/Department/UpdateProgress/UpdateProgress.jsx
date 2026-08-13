@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaSearch, FaEdit, FaCheckCircle } from 'react-icons/fa';
 import { departmentAssignedWorks } from '../../../services/DepartmentDummyData';
-import { UpdateProgressModal, MarkCompletedModal } from '../../../components/common/DepartmentModals';
+import { UpdateProgressModal, MarkCompletedModal } from '../../../components/Common/DepartmentModals';
 
 export default function UpdateProgress() {
   const [works, setWorks] = useState(departmentAssignedWorks);

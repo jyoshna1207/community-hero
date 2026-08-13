@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth");
 const issueRoutes = require("./routes/issues");
 const eventRoutes = require("./routes/events");
+const leaderboardRoutes = require("./routes/leaderboard");
 
 // Connect to MongoDB
 connectDB();

@@ -1,16 +1,11 @@
 .issue-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: #FFFFFF;
+  border: 1px solid #dbe3ec;
   border-radius: 12px;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: none !important;
   display: flex;
   flex-direction: column;
-}
-
-.issue-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .issue-card-image-box {
@@ -30,25 +25,26 @@
   top: 12px;
   right: 12px;
   padding: 0.25rem 0.75rem;
-  border-radius: 50px;
+  border-radius: 8px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
+  border: 1px solid #dbe3ec;
 }
 
 .badge-pending {
-  background-color: #fef3c7;
-  color: #d97706;
+  background-color: #fefce8;
+  color: #453204;
 }
 
 .badge-progress {
-  background-color: #e0f2fe;
-  color: #0284c7;
+  background-color: #EFF6FF;
+  color: #1E3A8A;
 }
 
 .badge-resolved {
-  background-color: #d1fae5;
-  color: #059669;
+  background-color: #1E3A8A;
+  color: #FFFFFF;
 }
 
 .issue-card-body {
@@ -67,14 +63,15 @@
 
 .issue-category-tag {
   display: inline-block;
-  background-color: #f1f5f9;
-  color: #475569;
+  background-color: #EFF6FF;
+  color: #1E3A8A;
   padding: 0.2rem 0.6rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
   width: fit-content;
+  border: 1px solid #dbe3ec;
 }
 
 .issue-category-tag.inline {
@@ -84,7 +81,7 @@
 .issue-card-title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #111827;
   margin-bottom: 0.75rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -97,7 +94,7 @@
   flex-direction: column;
   gap: 0.4rem;
   font-size: 0.85rem;
-  color: #64748b;
+  color: #5c6474;
   margin-bottom: 1.25rem;
 }
 
@@ -113,5 +110,5 @@
   gap: 0.5rem;
   margin-top: auto;
   padding-top: 0.75rem;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid #dbe3ec;
 }

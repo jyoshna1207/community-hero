@@ -9,18 +9,18 @@
 .checkbox-row input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #10b981;
+  accent-color: #1E3A8A;
   cursor: pointer;
 }
 
 .checkbox-label {
   font-size: 0.82rem;
-  color: #cbd5e1;
+  color: #5c6474;
   font-weight: 500;
 }
 
 .legal-link {
-  color: #10b981;
+  color: #1E3A8A;
   font-weight: 700;
   text-decoration: none;
 }
@@ -43,15 +43,15 @@
   font-size: 0.75rem;
   font-weight: 800;
   padding: 6px 14px;
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px);
+  border-radius: 8px;
+  box-shadow: none !important;
   display: flex;
   align-items: center;
   gap: 6px;
+  border: 1px solid #dbe3ec;
 }
 
-.pill-reported { background: rgba(16, 185, 129, 0.9); color: #0f172a; }
-.pill-review { background: rgba(245, 158, 11, 0.9); color: #0f172a; }
-.pill-progress { background: rgba(56, 189, 248, 0.9); color: #0f172a; }
-.pill-resolved { background: rgba(168, 85, 247, 0.9); color: #0f172a; }
+.pill-reported { background: #EFF6FF; color: #1E3A8A; }
+.pill-review { background: #fefce8; color: #453204; }
+.pill-progress { background: #EFF6FF; color: #1E3A8A; }
+.pill-resolved { background: #EFF6FF; color: #1E3A8A; }

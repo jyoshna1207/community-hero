@@ -10,12 +10,11 @@
   border: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: none !important;
 }
 
 .common-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .common-btn:active:not(:disabled) {
@@ -28,36 +27,40 @@
   transform: none;
 }
 
-/* Variants using Emerald & Blue SaaS theme */
+/* Variants using Heroic Blue design system */
 .btn-primary {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  background: #1E3A8A;
   color: #ffffff;
+  border: 1px solid #1E3A8A;
 }
 
 .btn-secondary {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  color: #ffffff;
+  background: #EFF6FF;
+  color: #1E3A8A;
+  border: 1px solid #dbe3ec;
 }
 
 .btn-danger {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  background: #DC2626;
   color: #ffffff;
+  border: 1px solid #DC2626;
 }
 
 .btn-success {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: #1E3A8A;
   color: #ffffff;
+  border: 1px solid #1E3A8A;
 }
 
 .btn-outline {
   background: transparent;
-  border: 1px solid #cbd5e1;
-  color: #334155;
+  border: 1px solid #dbe3ec;
+  color: #111827;
 }
 
 .btn-outline:hover:not(:disabled) {
-  background: #f1f5f9;
-  border-color: #94a3b8;
+  background: #EFF6FF;
+  border-color: #1E3A8A;
 }
 
 /* Loading Spinner */

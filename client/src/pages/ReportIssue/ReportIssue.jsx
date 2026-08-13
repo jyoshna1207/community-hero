@@ -3,13 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { FaRobot, FaMapMarkerAlt, FaVideo, FaImage, FaBolt, FaCheckCircle } from 'react-icons/fa';
+import AddLocationPicker from '../../components/Common/AddLocationPicker/AddLocationPicker';
 import './ReportIssue.css';
 
 const INITIAL_FORM_STATE = {
   title: '',
   category: '',
   description: '',
-  location: '',
+  location: 'Duvvada, Visakhapatnam, Andhra Pradesh',
+  latitude: 17.6868,
+  longitude: 83.2185,
   locationCoords: { lat: 17.6868, lng: 83.2185 },
   image: null,
   video: null,
@@ -199,7 +202,9 @@ export default function ReportIssue() {
         category: formData.category,
         description: formData.description,
         location: formData.location,
-        locationCoords: formData.locationCoords,
+        latitude: formData.latitude,
+        longitude: formData.longitude,
+        locationCoords: { lat: formData.latitude, lng: formData.longitude },
         image: imagePreview || 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=800&q=80',
         video: videoPreview || '',
         aiSeverity: aiData?.aiSeverity || 'High',
@@ -334,23 +339,23 @@ export default function ReportIssue() {
             {errors.category && <span className="error-text">{errors.category}</span>}
           </div>
 
-          {/* Location & GPS Button */}
+          {/* Location & Leaflet OpenStreetMap Location Picker */}
           <div className="form-group">
-            <div className="location-label-row">
-              <label htmlFor="location" className="form-label">Location / Landmark <span className="required-star">*</span></label>
-              <button type="button" className="btn-gps" onClick={handleDetectGps} disabled={detectingGps}>
-                <FaMapMarkerAlt /> {detectingGps ? 'Locating...' : 'Detect GPS Location'}
-              </button>
-            </div>
-            <input
-              type="text"
-              id="location"
-              name="location"
-              className={`form-input ${errors.location ? 'input-error' : ''}`}
-              placeholder="e.g., Gajuwaka Main Road, near Community Center"
-              value={formData.location}
-              onChange={handleChange}
-              disabled={isSubmitting}
+            <label className="form-label">Problem Location & Map <span className="required-star">*</span></label>
+            <AddLocationPicker 
+              initialAddress={formData.location}
+              initialCoords={{ latitude: formData.latitude, longitude: formData.longitude }}
+              onLocationSelect={({ latitude, longitude, lat, lng, address }) => {
+                const selectedLat = latitude ?? lat;
+                const selectedLng = longitude ?? lng;
+                setFormData((prev) => ({
+                  ...prev,
+                  location: address,
+                  latitude: selectedLat,
+                  longitude: selectedLng,
+                  locationCoords: { lat: selectedLat, lng: selectedLng },
+                }));
+              }}
             />
             {errors.location && <span className="error-text">{errors.location}</span>}
           </div>

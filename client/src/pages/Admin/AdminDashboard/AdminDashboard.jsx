@@ -1,118 +1,309 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
-  FaUsers, FaUserShield, FaUserTie, FaExclamationCircle, 
-  FaClock, FaCheckCircle, FaTasks, FaTimesCircle, FaShieldAlt,
-  FaChartPie, FaChartBar, FaChartLine 
-} from 'react-icons/fa';
-import { dummyActivities, dummyIssues } from '../../../services/dummyData';
+  FiChevronDown, FiTrendingDown, FiPieChart, FiMapPin, FiBarChart2, 
+  FiClock, FiSearch, FiFilter, FiEye, FiArrowRight 
+} from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import './AdminDashboard.css';
 
 export default function AdminDashboard() {
-  const summaryCards = [
-    { title: "Total Users", count: "1,245", icon: <FaUsers />, color: "#4f46e5" },
-    { title: "Total Citizens", count: "1,120", icon: <FaUsers />, color: "#3b82f6" },
-    { title: "Ward Officers", count: "85", icon: <FaUserTie />, color: "#10b981" },
-    { title: "Department Officers", count: "40", icon: <FaUserShield />, color: "#8b5cf6" },
-    { title: "Total Issues", count: "3,420", icon: <FaExclamationCircle />, color: "#f59e0b" },
-    { title: "Pending Issues", count: "142", icon: <FaClock />, color: "#ef4444" },
-    { title: "Verified Issues", count: "210", icon: <FaShieldAlt />, color: "#6366f1" },
-    { title: "Assigned Issues", count: "350", icon: <FaTasks />, color: "#06b6d4" },
-    { title: "Resolved Issues", count: "2,540", icon: <FaCheckCircle />, color: "#10b981" },
-    { title: "Closed Issues", count: "178", icon: <FaTimesCircle />, color: "#64748b" },
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('All');
+
+  const adminIssuesList = [
+    {
+      id: 'CH-2026-00124',
+      title: 'Large Pothole Near Main Road',
+      category: 'Road Damage',
+      location: 'Duvvada',
+      priority: 'High',
+      priorityType: 'critical',
+      status: 'In Progress',
+      statusType: 'in-progress',
+      assignedTo: 'Roads Department',
+      date: '6 May',
+    },
+    {
+      id: 'CH-2026-00118',
+      title: 'Broken Streetlight at Sector 4',
+      category: 'Streetlight',
+      location: 'Gajuwaka',
+      priority: 'Medium',
+      priorityType: 'warning',
+      status: 'Pending',
+      statusType: 'pending',
+      assignedTo: 'Electrical Dept',
+      date: '5 May',
+    },
+    {
+      id: 'CH-2026-00102',
+      title: 'Garbage Dump Overflow near Park',
+      category: 'Garbage & Waste',
+      location: 'Ward 12',
+      priority: 'Low',
+      priorityType: 'success',
+      status: 'Resolved',
+      statusType: 'resolved',
+      assignedTo: 'Sanitation Dept',
+      date: '4 May',
+    },
+    {
+      id: 'CH-2026-00095',
+      title: 'Water Pipeline Leakage',
+      category: 'Water Leakage',
+      location: 'Main Market',
+      priority: 'High',
+      priorityType: 'critical',
+      status: 'Resolved',
+      statusType: 'resolved',
+      assignedTo: 'Water Works Dept',
+      date: '2 May',
+    },
+    {
+      id: 'CH-2026-00088',
+      title: 'Open Drainage Overflow',
+      category: 'Drainage',
+      location: 'Ward 8',
+      priority: 'High',
+      priorityType: 'critical',
+      status: 'Critical',
+      statusType: 'critical',
+      assignedTo: 'Public Health Dept',
+      date: '1 May',
+    }
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-      <div>
-        <h1 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#1e293b' }}>Administrator Dashboard</h1>
-        <p style={{ color: '#475569', fontSize: '0.9rem' }}>Real-time hyperlocal civic metrics and system overview.</p>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
-        {summaryCards.map((c, i) => (
-          <div key={i} className="card" style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ background: `${c.color}20`, color: c.color, width: '50px', height: '50px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>
-              {c.icon}
-            </div>
-            <div>
-              <div style={{ fontSize: '0.8rem', color: '#475569', fontWeight: 600 }}>{c.title}</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1e293b', marginTop: '4px' }}>{c.count}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
-        <div className="card" style={{ padding: '20px', height: '300px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>Issue Status Overview</h3>
-            <FaChartPie style={{ color: '#4f46e5', fontSize: '1.2rem' }} />
-          </div>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', borderRadius: '12px', border: '2px dashed #cbd5e1', color: '#475569' }}>
-            [Pie Chart Placeholder]
-          </div>
+    <div className="admin-operations-dashboard">
+      {/* MAIN HEADER (SCREEN 10) */}
+      <div className="admin-header-flex">
+        <div>
+          <h1>Dashboard</h1>
+          <p className="admin-subtitle">Overview of community issues</p>
         </div>
 
-        <div className="card" style={{ padding: '20px', height: '300px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>Department Performance</h3>
-            <FaChartBar style={{ color: '#10b981', fontSize: '1.2rem' }} />
-          </div>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', borderRadius: '12px', border: '2px dashed #cbd5e1', color: '#475569' }}>
-            [Bar Chart Placeholder]
-          </div>
-        </div>
-
-        <div className="card" style={{ padding: '20px', height: '300px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>Monthly Trend Line</h3>
-            <FaChartLine style={{ color: '#3b82f6', fontSize: '1.2rem' }} />
-          </div>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', borderRadius: '12px', border: '2px dashed #cbd5e1', color: '#475569' }}>
-            [Line Chart Placeholder]
-          </div>
+        <div className="admin-filter-select">
+          <span>This Month</span>
+          <FiChevronDown />
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
-        <div className="card" style={{ padding: '20px' }}>
-          <h3 style={{ fontSize: '1.1rem', marginBottom: '16px', fontWeight: 600 }}>Recent Complaints</h3>
-          <div className="table-container">
-            <table className="modern-table">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Category</th>
-                  <th>Ward</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dummyIssues.slice(0, 4).map(issue => (
-                  <tr key={issue.id}>
-                    <td><strong>{issue.title}</strong></td>
-                    <td>{issue.category}</td>
-                    <td>{issue.ward}</td>
-                    <td><span className={`badge badge-${issue.status.toLowerCase().replace(/\s+/g, '')}`}>{issue.status}</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      {/* KPI CARDS (5 CARDS) */}
+      <div className="admin-kpi-grid">
+        <div className="admin-kpi-card">
+          <span className="admin-kpi-num">248</span>
+          <span className="admin-kpi-label">Total Issues</span>
         </div>
 
-        <div className="card" style={{ padding: '20px' }}>
-          <h3 style={{ fontSize: '1.1rem', marginBottom: '16px', fontWeight: 600 }}>Recent Activities</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {dummyActivities.map(act => (
-              <div key={act.id} style={{ padding: '10px', background: '#f8fafc', borderRadius: '8px', fontSize: '0.85rem' }}>
-                <div style={{ fontWeight: 600, color: '#1e293b' }}>{act.action}</div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px', color: '#475569', fontSize: '0.75rem' }}>
-                  <span>By: {act.user}</span>
-                  <span>{act.time}</span>
-                </div>
+        <div className="admin-kpi-card">
+          <span className="admin-kpi-num text-orange">72</span>
+          <span className="admin-kpi-label">Pending</span>
+        </div>
+
+        <div className="admin-kpi-card">
+          <span className="admin-kpi-num text-blue">31</span>
+          <span className="admin-kpi-label">In Progress</span>
+        </div>
+
+        <div className="admin-kpi-card">
+          <span className="admin-kpi-num text-green">176</span>
+          <span className="admin-kpi-label">Resolved</span>
+        </div>
+
+        <div className="admin-kpi-card border-red">
+          <span className="admin-kpi-num text-red">12</span>
+          <span className="admin-kpi-label">Critical Issues</span>
+        </div>
+      </div>
+
+      {/* ANALYTICS 2-COLUMN LAYOUT */}
+      <div className="admin-analytics-grid">
+        {/* Left: Donut Chart Representation */}
+        <div className="analytics-card">
+          <div className="analytics-card-header">
+            <h2>Issues by Category</h2>
+            <FiPieChart className="card-icon" />
+          </div>
+
+          <div className="donut-chart-wrapper">
+            <div className="visual-donut-ring">
+              <div className="donut-center-stat">
+                <span className="stat-big">248</span>
+                <span className="stat-lbl">Total</span>
               </div>
-            ))}
+            </div>
+
+            <div className="donut-legend-list">
+              <div className="legend-row">
+                <span className="legend-color c-road"></span>
+                <span className="legend-name">Road Damage</span>
+                <span className="legend-pct">35%</span>
+              </div>
+              <div className="legend-row">
+                <span className="legend-color c-water"></span>
+                <span className="legend-name">Water Leakage</span>
+                <span className="legend-pct">25%</span>
+              </div>
+              <div className="legend-row">
+                <span className="legend-color c-garbage"></span>
+                <span className="legend-name">Garbage & Waste</span>
+                <span className="legend-pct">20%</span>
+              </div>
+              <div className="legend-row">
+                <span className="legend-color c-light"></span>
+                <span className="legend-name">Streetlight</span>
+                <span className="legend-pct">12%</span>
+              </div>
+              <div className="legend-row">
+                <span className="legend-color c-other"></span>
+                <span className="legend-name">Others</span>
+                <span className="legend-pct">8%</span>
+              </div>
+            </div>
           </div>
+        </div>
+
+        {/* Right: Map Heatmap Representation */}
+        <div className="analytics-card">
+          <div className="analytics-card-header">
+            <h2>Issues by Location</h2>
+            <FiMapPin className="card-icon" />
+          </div>
+
+          <div className="heatmap-container">
+            <div className="heatmap-canvas-bg">
+              <div className="heatmap-grid-overlay"></div>
+              <div className="heat-zone zone-high" style={{ top: '35%', left: '30%' }}>
+                <span>Duvvada (84)</span>
+              </div>
+              <div className="heat-zone zone-med" style={{ top: '60%', left: '60%' }}>
+                <span>Gajuwaka (52)</span>
+              </div>
+              <div className="heat-zone zone-low" style={{ top: '25%', left: '70%' }}>
+                <span>Ward 12 (38)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* BOTTOM ANALYTICS */}
+      <div className="admin-analytics-grid">
+        {/* Left: Resolution Trend */}
+        <div className="analytics-card">
+          <div className="analytics-card-header">
+            <h2>Resolution Trend</h2>
+            <FiBarChart2 className="card-icon" />
+          </div>
+
+          <div className="line-chart-container">
+            <div className="chart-bars-flex">
+              <div className="bar-column">
+                <div className="bar-fill resolved" style={{ height: '70%' }}></div>
+                <div className="bar-fill progress" style={{ height: '25%' }}></div>
+                <span>Jan</span>
+              </div>
+              <div className="bar-column">
+                <div className="bar-fill resolved" style={{ height: '80%' }}></div>
+                <div className="bar-fill progress" style={{ height: '20%' }}></div>
+                <span>Feb</span>
+              </div>
+              <div className="bar-column">
+                <div className="bar-fill resolved" style={{ height: '65%' }}></div>
+                <div className="bar-fill progress" style={{ height: '30%' }}></div>
+                <span>Mar</span>
+              </div>
+              <div className="bar-column">
+                <div className="bar-fill resolved" style={{ height: '85%' }}></div>
+                <div className="bar-fill progress" style={{ height: '15%' }}></div>
+                <span>Apr</span>
+              </div>
+              <div className="bar-column">
+                <div className="bar-fill resolved" style={{ height: '90%' }}></div>
+                <div className="bar-fill progress" style={{ height: '10%' }}></div>
+                <span>May</span>
+              </div>
+            </div>
+
+            <div className="chart-legend-row">
+              <span className="dot green"></span> Resolved Issues
+              <span className="dot blue"></span> In Progress
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Average Resolution Time */}
+        <div className="analytics-card flex-center">
+          <div className="analytics-card-header">
+            <h2>Average Resolution Time</h2>
+            <FiClock className="card-icon" />
+          </div>
+
+          <div className="res-time-box">
+            <span className="time-big">4.2 days</span>
+            <p className="trend-good">
+              <FiTrendingDown /> ↓ 1.2 days vs last month
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* SCREEN 11 — ADMIN ISSUE DATA TABLE */}
+      <div className="admin-table-card">
+        <div className="table-header-flex">
+          <h2>All Issue Reports</h2>
+          <div className="table-search-box">
+            <FiSearch />
+            <input 
+              type="text" 
+              placeholder="Search issues, locations..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="table-responsive">
+          <table className="admin-data-table">
+            <thead>
+              <tr>
+                <th>Issue</th>
+                <th>Category</th>
+                <th>Location</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Assigned To</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {adminIssuesList.map((row) => (
+                <tr key={row.id}>
+                  <td><strong>{row.title}</strong></td>
+                  <td>{row.category}</td>
+                  <td>📍 {row.location}</td>
+                  <td>
+                    <span className={`priority-badge ${row.priorityType}`}>
+                      {row.priority}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={`status-pill ${row.statusType}`}>
+                      {row.status}
+                    </span>
+                  </td>
+                  <td>{row.assignedTo}</td>
+                  <td>{row.date}</td>
+                  <td>
+                    <Link to={`/issues/${row.id}`} className="btn-table-action">
+                      View →
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

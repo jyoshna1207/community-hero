@@ -1,16 +1,17 @@
 .department-dashboard-page {
   padding: 1.5rem;
-  background-color: #f8fafc;
+  background-color: #F8FAFC;
   min-height: 100vh;
 }
 
 .department-header-banner {
-  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  background: #1E3A8A;
   color: #ffffff;
   padding: 1.75rem 2rem;
   border-radius: 12px;
   margin-bottom: 1.5rem;
-  box-shadow: 0 10px 25px -5px rgba(234, 88, 12, 0.2);
+  box-shadow: none !important;
+  border: 1px solid #dbe3ec;
 }
 
 .department-header-banner h2 {

@@ -1,39 +1,325 @@
+/* ====================================================================
+   PREMIUM CENTERED HEROIC LOGIN CARD DESIGN
+   ==================================================================== */
+
 .authLayout {
-  display: flex;
   min-height: 100vh;
-  width: 100vw;
-  background: #f8fafc;
-  font-family: 'Inter', sans-serif;
+  width: 100%;
+  background: radial-gradient(circle at 50% 15%, #E0F2FE 0%, #F1F5F9 50%, #F8FAFC 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 16px;
   box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  position: relative;
 }
-.formSection {
-  flex: 1;
+
+.topHeaderWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.topBrandHeader {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  background: #F8FAFC;
+  padding: 6px 16px 6px 8px;
+  border-radius: 40px;
+  border: 1px solid #E2E8F0;
+  transition: all 0.2s ease;
+}
+
+.topBrandHeader:hover {
+  background: #EFF6FF;
+  border-color: #2563EB;
+}
+
+.brandShieldIcon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  background: #ffffff;
+  color: #FBBF24;
+  font-size: 1.2rem;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 2px 6px rgba(30, 58, 138, 0.2) !important;
+  flex-shrink: 0;
 }
-.form { display: flex; flex-direction: column; width: 100%; }
-.eyeBtn { background: transparent; border: none; cursor: pointer; color: #9ca3af; font-size: 18px; display: flex; align-items: center; transition: color 0.2s; }
-.eyeBtn:hover { color: #374151; }
-.optionsRow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-.checkboxLabel { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #4b5563; cursor: pointer; }
-.checkboxLabel input { width: 16px; height: 16px; accent-color: #10b981; cursor: pointer; }
-.forgotLink { font-size: 13px; font-weight: 600; color: #10b981; text-decoration: none; transition: color 0.2s; }
-.forgotLink:hover { color: #047857; text-decoration: underline; }
-.submitBtn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px; background: #10b981; color: #ffffff; border: none; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25); }
-.submitBtn:hover:not(:disabled) { background: #059669; }
-.submitBtn:active:not(:disabled) { transform: scale(0.99); }
-.submitBtn:disabled { background: #6ee7b7; cursor: not-allowed; }
-.divider { display: flex; align-items: center; text-align: center; margin: 24px 0; color: #9ca3af; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
-.divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #e5e7eb; }
-.divider span { padding: 0 12px; }
-.socialGrid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-.footerText { text-align: center; font-size: 14px; color: #6b7280; margin: 0; }
-.link { color: #10b981; font-weight: 600; text-decoration: none; }
-.link:hover { text-decoration: underline; }
 
-@media (max-width: 1024px) {
-  .formSection { padding: 20px; }
+.brandTextGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.brandTitle {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1E3A8A;
+  letter-spacing: -0.3px;
+  line-height: 1.1;
+}
+
+.brandTagline {
+  font-size: 0.65rem;
+  color: #2563EB;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  padding: 1px 6px;
+  border-radius: 6px;
+  margin-top: 2px;
+  display: inline-block;
+}
+
+/* Centered Card */
+.heroicCard {
+  width: 100%;
+  max-width: 460px;
+  background: #FFFFFF;
+  border: 1px solid #dbe3ec;
+  border-radius: 12px;
+  padding: 36px;
+  box-sizing: border-box;
+  box-shadow: none !important;
+}
+
+.cardHeader {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.cardTitle {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.3px;
+}
+
+.cardSubtitle {
+  font-size: 0.9rem;
+  color: #5c6474;
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* Role Selector Tabs */
+.roleSelectorBox {
+  background: #F8FAFC;
+  border: 1px solid #dbe3ec;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 24px;
+}
+
+.roleSelectorLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #5c6474;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.roleActiveBadge {
+  font-size: 0.7rem;
+  background: #FBBF24;
+  color: #453204;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-weight: 800;
+}
+
+.roleTabsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.roleTabBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #5c6474;
+  background: #FFFFFF;
+  border: 1px solid #dbe3ec;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.roleTabBtn:hover {
+  background: #EFF6FF;
+  color: #1E3A8A;
+  border-color: #1E3A8A;
+}
+
+.roleTabBtn.activeRole {
+  background: #1E3A8A;
+  color: #FFFFFF;
+  border-color: #1E3A8A;
+  font-weight: 700;
+}
+
+/* Form layout */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.optionsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: -4px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #5c6474;
+  cursor: pointer;
+
+}
+
+.checkboxLabel input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #1E3A8A;
+  cursor: pointer;
+}
+
+.forgotLink {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1E3A8A;
+  text-decoration: none;
+}
+
+.forgotLink:hover {
+  text-decoration: underline;
+}
+
+.eyeBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #5c6474;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.eyeBtn:hover {
+  color: #1E3A8A;
+}
+
+.submitBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 13px;
+  background: #1E3A8A;
+  color: #FFFFFF;
+  border: 1px solid #1E3A8A;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: none !important;
+  margin-top: 4px;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #1e40af;
+}
+
+.submitBtn:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 22px 0 18px 0;
+  color: #5c6474;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #dbe3ec;
+}
+
+.divider span {
+  padding: 0 12px;
+}
+
+.socialGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.footerText {
+  text-align: center;
+  font-size: 0.88rem;
+  color: #5c6474;
+  margin: 0;
+}
+
+.link {
+  color: #1E3A8A;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .heroicCard {
+    padding: 24px 20px;
+  }
+  .roleTabsGrid {
+    grid-template-columns: 1fr;
+  }
 }

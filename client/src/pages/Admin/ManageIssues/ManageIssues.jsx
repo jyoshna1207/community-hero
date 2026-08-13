@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaSearch, FaEye, FaUserCheck, FaTrash, FaCheckDouble } from 'react-icons/fa';
 import { dummyIssues } from '../../../services/dummyData';
-import { DeleteModal, AssignOfficerModal, ViewDetailsModal } from '../../../components/common/Modals';
+import { DeleteModal, AssignOfficerModal, ViewDetailsModal } from '../../../components/Common/Modals';
 
 export default function ManageIssues() {
   const [issues, setIssues] = useState(dummyIssues);

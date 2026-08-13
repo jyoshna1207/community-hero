@@ -10,19 +10,22 @@
 
 .sidebar {
   width: 260px;
-  background-color: #1e1b4b; /* Deep unified portal theme color */
-  color: white;
+  background-color: #F8F9FB;
+  color: #0F172A;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 20px 10px;
+  border-right: 1px solid #E2E8F0;
+  box-shadow: none !important;
 }
 
 .sidebarBrand {
   font-size: 1.25rem;
-  font-weight: bold;
+  font-weight: 800;
+  color: #0F172A;
   padding: 0 15px 20px 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid #E2E8F0;
 }
 
 .navLinks {
@@ -36,15 +39,23 @@
   padding: 12px 15px;
   margin-bottom: 5px;
   border-radius: 8px;
-  color: #cbd5e1;
+  color: #64748B;
   text-decoration: none;
   display: block;
-  transition: all 0.2s ease;
+  font-weight: 500;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
-.navItem:hover, .activeNavLink {
-  background-color: #312e81;
-  color: white;
+.navItem:hover {
+  background-color: #F1F5F9;
+  color: #0F172A;
+}
+
+.activeNavLink {
+  background-color: #EAF2FE !important;
+  color: #1E3A8A !important;
+  font-weight: 700 !important;
+  border: 1px solid #BFDBFE;
 }
 
 .mainContentArea {

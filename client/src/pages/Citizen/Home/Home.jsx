@@ -1,127 +1,171 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FiPlusCircle, FiList, FiCheckCircle, FiClock, FiUsers, FiAlertTriangle, FiShield, FiTrendingUp } from 'react-icons/fi';
-import { homeStats, featureCards, latestIssues, successStories } from './HomeData';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { 
+  FiMapPin, FiArrowRight, FiPlusCircle, FiCheckCircle, FiClock, FiUsers, 
+  FiAlertTriangle, FiCheck, FiArrowUpRight, FiSearch, FiLayers, FiZap, FiTarget, FiHeart, FiZoomIn, FiZoomOut
+} from 'react-icons/fi';
 import './Home.css';
 
 export default function Home() {
+  const navigate = useNavigate();
+  const [activeMarker, setActiveMarker] = useState('marker-1');
+
   return (
     <div className="citizen-home-container">
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-content">
-          <span className="hero-badge"><FiShield /> Hyperlocal Problem Solver</span>
-          <h1>Transform Your Community Together</h1>
-          <p>Report civic issues instantly, track resolution progress in real-time, and collaborate with local authorities to build cleaner, safer neighborhoods.</p>
-          <div className="hero-buttons">
-            <Link to="/report-issue" className="btn-primary">
-              <FiPlusCircle /> Report Issue
-            </Link>
-            <Link to="/issues" className="btn-secondary">
-              <FiList /> View Issues
-            </Link>
-          </div>
-        </div>
-        <div className="hero-stats-preview">
-          <div className="preview-stat-card">
-            <h3>{homeStats.resolvedCount}</h3>
-            <span>Issues Resolved</span>
-          </div>
-          <div className="preview-stat-card">
-            <h3>{homeStats.responseRate}</h3>
-            <span>Response Rate</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Statistics Cards Section */}
-      <section className="stats-grid-section">
-        <div className="stat-card-item">
-          <FiAlertTriangle className="stat-icon warning" />
-          <div>
-            <h3>{homeStats.totalIssues}</h3>
-            <p>Total Issues</p>
-          </div>
-        </div>
-        <div className="stat-card-item">
-          <FiCheckCircle className="stat-icon success" />
-          <div>
-            <h3>{homeStats.resolved}</h3>
-            <p>Resolved</p>
-          </div>
-        </div>
-        <div className="stat-card-item">
-          <FiClock className="stat-icon pending" />
-          <div>
-            <h3>{homeStats.pending}</h3>
-            <p>Pending</p>
-          </div>
-        </div>
-        <div className="stat-card-item">
-          <FiUsers className="stat-icon users" />
-          <div>
-            <h3>{homeStats.citizens}</h3>
-            <p>Active Citizens</p>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="how-it-works-section">
-        <h2>How Community Hero Works</h2>
-        <p className="section-subtitle">Empowering citizens to drive neighborhood improvements in 3 simple steps</p>
-        <div className="features-grid">
-          {featureCards.map((feat) => (
-            <div key={feat.id} className="feature-card">
-              <div className="feat-icon-wrapper">{feat.icon}</div>
-              <h3>{feat.title}</h3>
-              <p>{feat.description}</p>
+      {/* SCREEN 1 — TWO-COLUMN HERO SECTION */}
+      <section className="hero-landing-section">
+        <div className="hero-grid-container">
+          {/* Left Column ~42% width */}
+          <div className="hero-text-column">
+            <div className="hero-badge-tag">
+              <FiMapPin className="pin-badge" /> Hyperlocal Resolution Portal
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Latest Community Issues */}
-      <section className="latest-issues-section">
-        <div className="section-header-flex">
-          <h2>Latest Community Issues</h2>
-          <Link to="/issues" className="view-all-link">View All Issues →</Link>
-        </div>
-        <div className="issues-mini-grid">
-          {latestIssues.map((issue) => (
-            <div key={issue.id} className="mini-issue-card">
-              <span className={`status-pill ${issue.status.toLowerCase().replace(/\s+/g, '-')}`}>{issue.status}</span>
-              <h4>{issue.title}</h4>
-              <p className="mini-location">📍 {issue.location}</p>
-              <Link to={`/issues/${issue.id}`} className="details-link">View Details</Link>
+            <h1 className="hero-main-title">
+              Make Your <br />
+              <span className="title-highlight">Community Better.</span>
+            </h1>
+            <p className="hero-support-text">
+              Report local problems, track their progress, and see real change happen in your neighborhood.
+            </p>
+            <div className="hero-cta-group">
+              <Link to="/report-issue" className="btn-hero-primary">
+                Report an Issue
+              </Link>
+              <Link to="/issues" className="btn-hero-outline">
+                Explore Issues
+              </Link>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
 
-      {/* Success Stories */}
-      <section className="success-stories-section">
-        <h2>Community Success Stories</h2>
-        <div className="stories-grid">
-          {successStories.map((story) => (
-            <div key={story.id} className="story-card">
-              <img src={story.image} alt={story.title} />
-              <div className="story-content">
-                <h4>{story.title}</h4>
-                <p>{story.description}</p>
-                <span className="story-ward">Ward: {story.ward}</span>
+          {/* Right Column ~58% width: Interactive Community Map */}
+          <div className="hero-map-column">
+            <div className="interactive-map-frame">
+              {/* Map SVG background graphic */}
+              <div className="map-vector-bg">
+                <div className="map-grid-overlay"></div>
+                <div className="road-path-1"></div>
+                <div className="road-path-2"></div>
+                <div className="ward-zone zone-a">Duvvada Ward 12</div>
+                <div className="ward-zone zone-b">Gajuwaka Ward 4</div>
+
+                {/* Map Status Markers */}
+                <div className="map-marker marker-critical" style={{ top: '22%', left: '30%' }}>
+                  <span className="marker-dot red"></span>
+                  <span className="marker-pulse red"></span>
+                </div>
+
+                <div className="map-marker marker-pending" style={{ top: '65%', left: '24%' }}>
+                  <span className="marker-dot orange"></span>
+                </div>
+
+                <div className="map-marker marker-resolved" style={{ top: '75%', left: '72%' }}>
+                  <span className="marker-dot green"></span>
+                </div>
+
+                {/* Active Selected Marker */}
+                <div className="map-marker marker-active-blue" style={{ top: '38%', left: '55%' }}>
+                  <span className="marker-dot blue"></span>
+                  <span className="marker-pulse blue"></span>
+
+                  {/* Floating Issue Card */}
+                  <div className="floating-issue-card">
+                    <div className="floating-card-header">
+                      <h4>Broken Streetlight</h4>
+                      <span className="status-pill in-progress">🔵 In Progress</span>
+                    </div>
+                    <p className="floating-card-location">📍 Duvvada Main Road</p>
+                    <div className="floating-card-footer">
+                      <div className="affected-avatars">
+                        <div className="avatar-stack">
+                          <span className="avatar-chip a1">A</span>
+                          <span className="avatar-chip a2">M</span>
+                          <span className="avatar-chip a3">R</span>
+                        </div>
+                        <span className="affected-count">32 people affected</span>
+                      </div>
+                      <Link to="/issues/1" className="floating-card-link">
+                        View Issue →
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Map Zoom Controls */}
+              <div className="map-zoom-controls">
+                <button aria-label="Zoom in"><FiZoomIn /></button>
+                <div className="zoom-divider"></div>
+                <button aria-label="Zoom out"><FiZoomOut /></button>
               </div>
             </div>
-          ))}
+          </div>
         </div>
+
       </section>
 
-      {/* Call To Action */}
-      <section className="cta-section">
-        <div className="cta-box">
-          <h2>Ready to Make a Difference?</h2>
-          <p>Join thousands of active citizens reporting problems and transforming their communities today.</p>
-          <Link to="/report-issue" className="btn-primary-large">Report an Issue Now</Link>
+      {/* SCREEN 2 — HOW IT WORKS (DARK NAVY SECTION) */}
+      <section className="how-it-works-dark-section" id="how-it-works">
+        <div className="dark-section-container">
+          <div className="dark-header">
+            <h2>How Community Hero Works</h2>
+            <p>Transparent 5-step workflow turning citizen reports into verified community resolutions.</p>
+          </div>
+
+          <div className="steps-flow-grid">
+            {/* Step 1 */}
+            <div className="step-card">
+              <div className="step-icon-circle">
+                <FiPlusCircle />
+              </div>
+              <span className="step-num-badge">01</span>
+              <h3>REPORT</h3>
+              <p>Spot an issue and submit a report.</p>
+            </div>
+            <div className="step-arrow">→</div>
+
+            {/* Step 2 */}
+            <div className="step-card">
+              <div className="step-icon-circle">
+                <FiCheckCircle />
+              </div>
+              <span className="step-num-badge">02</span>
+              <h3>VERIFY</h3>
+              <p>We verify and validate the issue.</p>
+            </div>
+            <div className="step-arrow">→</div>
+
+            {/* Step 3 */}
+            <div className="step-card">
+              <div className="step-icon-circle">
+                <FiZap />
+              </div>
+              <span className="step-num-badge">03</span>
+              <h3>ASSIGN</h3>
+              <p>Assign it to the right department.</p>
+            </div>
+            <div className="step-arrow">→</div>
+
+            {/* Step 4 */}
+            <div className="step-card">
+              <div className="step-icon-circle">
+                <FiTarget />
+              </div>
+              <span className="step-num-badge">04</span>
+              <h3>RESOLVE</h3>
+              <p>Work gets done to resolve the issue.</p>
+            </div>
+            <div className="step-arrow">→</div>
+
+            {/* Step 5 */}
+            <div className="step-card">
+              <div className="step-icon-circle">
+                <FiHeart />
+              </div>
+              <span className="step-num-badge">05</span>
+              <h3>IMPACT</h3>
+              <p>The community sees real change.</p>
+            </div>
+          </div>
         </div>
       </section>
     </div>

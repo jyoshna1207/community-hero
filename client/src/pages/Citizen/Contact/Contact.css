@@ -10,12 +10,12 @@
 .contact-header h2 {
   font-size: 2rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #111827;
   margin: 0 0 0.5rem 0;
 }
 
 .contact-header p {
-  color: #64748b;
+  color: #5c6474;
   margin: 0;
 }
 
@@ -34,9 +34,9 @@
 .contact-info-card, .contact-form-card {
   background: #ffffff;
   padding: 2rem;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+  border-radius: 12px;
+  border: 1px solid #dbe3ec;
+  box-shadow: none !important;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -44,7 +44,7 @@
 
 .contact-info-card h3, .contact-form-card h3 {
   margin: 0;
-  color: #0f172a;
+  color: #111827;
   font-size: 1.25rem;
 }
 
@@ -56,21 +56,22 @@
 
 .c-icon {
   font-size: 1.5rem;
-  color: #059669;
-  background: #ecfdf5;
+  color: #1E3A8A;
+  background: #EFF6FF;
   padding: 0.75rem;
-  border-radius: 12px;
+  border-radius: 8px;
+  border: 1px solid #dbe3ec;
 }
 
 .contact-info-item strong {
   display: block;
-  color: #0f172a;
+  color: #111827;
   font-size: 0.95rem;
 }
 
 .contact-info-item p {
   margin: 0.2rem 0 0 0;
-  color: #64748b;
+  color: #5c6474;
   font-size: 0.9rem;
 }
 
@@ -90,10 +91,10 @@
 }
 .success-feedback h4 {
   margin: 0;
-  color: #0f172a;
+  color: #111827;
   font-size: 1.25rem;
 }
 .success-feedback p {
   margin: 0;
-  color: #64748b;
+  color: #5c6474;
 }
