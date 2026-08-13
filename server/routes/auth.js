@@ -138,8 +138,7 @@ router.put("/profile", protect, async (req, res) => {
 
     if (req.body.name) user.name = req.body.name;
     if (req.body.email) user.email = req.body.email;
-    if (req.body.phone) user.phone = req.body.phone;
-    if (req.body.location) user.location = req.body.location;
+    if (req.body.password && req.body.password.trim().length > 0) user.password = req.body.password;
 
     await user.save();
     res.json(formatUserResponse(user));

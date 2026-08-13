@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  FiUser, FiMail, FiShield, FiAward, FiCalendar, 
-  FiEdit, FiLogOut, FiClipboard, FiCheckCircle, FiCheck, FiX, FiMapPin, FiPhone 
+  FiUser, FiMail, FiLock, FiAward, FiCalendar, 
+  FiEdit, FiLogOut, FiClipboard, FiCheckCircle, FiCheck, FiX 
 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -18,8 +18,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({
     name: user?.name || 'Medisetti Anusha',
     email: user?.email || 'anusha@communityhero.org',
-    location: user?.location || 'Anuru, Thondangi, Kakinada, Andhra Pradesh',
-    phone: user?.phone || '+91 9876543210'
+    password: ''
   });
 
   const [stats, setStats] = useState({
@@ -33,8 +32,7 @@ export default function Profile() {
       setFormData({
         name: user.name || 'Medisetti Anusha',
         email: user.email || 'anusha@communityhero.org',
-        location: user.location || 'Anuru, Thondangi, Kakinada, Andhra Pradesh',
-        phone: user.phone || '+91 9876543210'
+        password: ''
       });
     }
   }, [user]);
@@ -86,13 +84,17 @@ export default function Profile() {
   const handleSaveProfile = async (e) => {
     e.preventDefault();
     if (updateProfile) {
-      await updateProfile({
+      const updateData = {
         name: formData.name,
-        email: formData.email,
-        location: formData.location,
-        phone: formData.phone
-      });
+        email: formData.email
+      };
+      if (formData.password && formData.password.trim().length > 0) {
+        updateData.password = formData.password;
+      }
+      await updateProfile(updateData);
     }
+
+    setFormData(prev => ({ ...prev, password: '' }));
     setIsEditing(false);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 4000);
@@ -115,7 +117,7 @@ export default function Profile() {
       {/* Toast Notification on Success */}
       {saveSuccess && (
         <div className="profile-toast-success animate-fade-in">
-          <FiCheck className="check-icon" /> Profile details updated successfully!
+          <FiCheck className="check-icon" /> Profile details saved successfully!
         </div>
       )}
 
@@ -170,7 +172,7 @@ export default function Profile() {
       <div className="profile-actions-box">
         <h3>Account Settings</h3>
 
-        {/* EDIT PROFILE FORM MODAL / CARD */}
+        {/* EDIT PROFILE FORM MODAL / CARD (FULL NAME, EMAIL, PASSWORD ONLY) */}
         {isEditing ? (
           <form onSubmit={handleSaveProfile} className="edit-profile-form animate-fade-in">
             <div className="edit-form-grid">
@@ -180,6 +182,7 @@ export default function Profile() {
                   type="text" 
                   value={formData.name} 
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                  placeholder="Enter full name"
                   required 
                 />
               </div>
@@ -190,27 +193,18 @@ export default function Profile() {
                   type="email" 
                   value={formData.email} 
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
+                  placeholder="Enter email address"
                   required 
                 />
               </div>
 
-              <div className="form-group">
-                <label><FiPhone /> Phone Number</label>
+              <div className="form-group full-width-group">
+                <label><FiLock /> New Password</label>
                 <input 
-                  type="text" 
-                  value={formData.phone} 
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })} 
-                  placeholder="Enter phone number"
-                />
-              </div>
-
-              <div className="form-group">
-                <label><FiMapPin /> Location / Ward Area</label>
-                <input 
-                  type="text" 
-                  value={formData.location} 
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })} 
-                  placeholder="Enter location or ward"
+                  type="password" 
+                  value={formData.password} 
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })} 
+                  placeholder="Leave blank to keep current password"
                 />
               </div>
             </div>
