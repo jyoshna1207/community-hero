@@ -44,9 +44,6 @@ export default function Navbar() {
           <NavLink to="/dashboard" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
             Community
           </NavLink>
-          <NavLink to="/about" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
-            About Us
-          </NavLink>
         </nav>
 
         {/* User Actions & Auth Buttons */}

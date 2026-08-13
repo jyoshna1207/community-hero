@@ -20,7 +20,6 @@ import NotFound from '../pages/NotFound';
 
 // Public & Citizen Pages
 import Home from '../pages/Citizen/Home/Home';
-import About from '../pages/Citizen/About/About';
 import Contact from '../pages/Citizen/Contact/Contact';
 import CitizenDashboard from '../pages/Citizen/Dashboard/Dashboard';
 import ReportIssue from '../pages/Citizen/ReportIssue/ReportIssue';
@@ -60,7 +59,6 @@ const AppRoutes = () => {
           {/* Public Web App Routes */}
           <Route element={<CitizenLayout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
           </Route>
 
