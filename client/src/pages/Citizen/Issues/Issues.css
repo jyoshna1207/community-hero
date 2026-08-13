@@ -9,6 +9,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* Header */
@@ -28,11 +29,12 @@
 .explore-controls-card {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
 }
 
 .explore-search-bar {
@@ -40,14 +42,20 @@
   align-items: center;
   gap: 10px;
   background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  padding: 10px 14px;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 11px 16px;
+  transition: border-color 0.15s ease;
+}
+
+.explore-search-bar:focus-within {
+  border-color: #155EEF;
+  background: #FFFFFF;
 }
 
 .explore-search-bar .search-icon {
-  color: #64748B;
-  font-size: 1.1rem;
+  color: #155EEF;
+  font-size: 1.15rem;
 }
 
 .explore-search-bar input {
@@ -56,6 +64,7 @@
   background: transparent;
   outline: none;
   font-size: 0.925rem;
+  font-weight: 500;
   color: #0F172A;
 }
 
@@ -68,7 +77,7 @@
 }
 
 .filter-dropdown select {
-  padding: 8px 12px;
+  padding: 9px 14px;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 8px;
@@ -77,6 +86,13 @@
   color: #0F172A;
   cursor: pointer;
   outline: none;
+}
+
+.location-highlight-filter select {
+  background: #EAF2FE;
+  border-color: #BFDBFE;
+  color: #155EEF;
+  font-weight: 700;
 }
 
 /* View Mode Toggle */
@@ -93,7 +109,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 7px 14px;
   border: none;
   background: transparent;
   color: #64748B;
@@ -101,19 +117,21 @@
   font-weight: 600;
   cursor: pointer;
   border-radius: 6px;
+  transition: all 0.15s ease;
 }
 
 .toggle-btn.active {
   background: #FFFFFF;
   color: #155EEF;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
 /* Map View Layout (~70% map, ~30% side list) */
 .map-view-layout {
   display: flex;
   gap: 20px;
-  height: 580px;
+  height: 620px;
 }
 
 .map-view-main {
@@ -131,60 +149,28 @@
   overflow: hidden;
 }
 
-.map-canvas-bg {
-  position: absolute;
-  inset: 0;
+/* Custom Marker Styling */
+.explore-custom-marker {
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer;
 }
 
-.map-grid-dots {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(#CBD5E1 1.2px, transparent 1.2px);
-  background-size: 24px 24px;
-  opacity: 0.5;
+.explore-popup-card {
+  font-family: 'Inter', sans-serif;
+  padding: 4px;
 }
 
-.canvas-road {
-  position: absolute;
-  background: #FFFFFF;
-  border: 1px solid #CBD5E1;
-}
-.canvas-road.r1 { top: 45%; left: 0; width: 100%; height: 16px; transform: rotate(-3deg); }
-.canvas-road.r2 { top: 0; left: 40%; width: 16px; height: 100%; transform: rotate(8deg); }
-
-/* Cluster Badges */
-.cluster-badge {
-  position: absolute;
-  padding: 6px 12px;
-  background: #FFFFFF;
-  border-radius: 20px;
-  font-size: 0.85rem;
+.popup-nearby-badge {
+  display: inline-block;
+  background: #F0FDF4;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
   font-weight: 800;
-  border: 1px solid #E2E8F0;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
-  cursor: pointer;
-}
-
-.map-controls {
-  position: absolute;
-  right: 14px;
-  top: 14px;
-  display: flex;
-  flex-direction: column;
-  background: #FFFFFF;
-  border-radius: 8px;
-  border: 1px solid #E2E8F0;
-}
-.map-controls button {
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: transparent;
-  color: #0F172A;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  margin-bottom: 4px;
 }
 
 /* Bottom Legend */
@@ -194,11 +180,13 @@
   left: 16px;
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid #E2E8F0;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 8px 14px;
   display: flex;
   align-items: center;
   gap: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 400;
 }
 
 .legend-item {
@@ -206,7 +194,7 @@
   align-items: center;
   gap: 6px;
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #0F172A;
 }
 
@@ -217,7 +205,6 @@
 }
 .legend-dot.red { background: #EF4444; }
 .legend-dot.orange { background: #F59E0B; }
-.legend-dot.blue { background: #155EEF; }
 .legend-dot.green { background: #16A34A; }
 
 /* Side Panel List */
@@ -233,12 +220,27 @@
   overflow-y: auto;
 }
 
-.map-side-panel h3 {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #0F172A;
+.side-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding-bottom: 8px;
   border-bottom: 1px solid #E2E8F0;
+}
+
+.side-panel-header h3 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.nearby-first-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #155EEF;
+  background: #EAF2FE;
+  padding: 3px 8px;
+  border-radius: 12px;
 }
 
 .side-issues-list {
@@ -248,23 +250,54 @@
 }
 
 .side-issue-item {
-  padding: 12px;
+  padding: 14px;
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
-  border-radius: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.side-issue-item:hover {
+  border-color: #BFDBFE;
+  background: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(21, 94, 239, 0.06);
+}
+
+.side-issue-item.is-nearby {
+  border-left: 4px solid #16A34A;
+}
+
+.side-issue-item.selected-card {
+  border-color: #155EEF;
+  background: #EAF2FE;
 }
 
 .side-item-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 4px;
+  gap: 8px;
+  margin-bottom: 6px;
 }
 
 .side-item-top h4 {
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: #0F172A;
+  line-height: 1.3;
+}
+
+.nearby-distance-chip {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #166534;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-bottom: 6px;
 }
 
 .side-item-loc {
@@ -273,12 +306,38 @@
   margin-bottom: 8px;
 }
 
+.side-item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 6px;
+  border-top: 1px solid #F1F5F9;
+}
+
+.category-mini-chip {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #155EEF;
+}
+
 .side-item-link {
   font-size: 0.78rem;
   color: #155EEF;
   font-weight: 700;
   text-decoration: none;
 }
+
+/* Status Pills */
+.status-pill {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.status-pill.reported { background: #FEF2F2; color: #EF4444; border: 1px solid #FECACA; }
+.status-pill.in-progress { background: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; }
+.status-pill.resolved { background: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; }
 
 /* List View Grid Results */
 .issues-grid-results {
@@ -297,16 +356,24 @@
   gap: 10px;
 }
 
+.issue-card-item.nearby-border {
+  border-top: 4px solid #16A34A;
+}
+
 .card-top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.priority-pill {
-  font-size: 0.75rem;
-  color: #64748B;
-  font-weight: 600;
+.nearby-flag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #166534;
+  background: #F0FDF4;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid #BBF7D0;
 }
 
 .issue-card-item h3 {
