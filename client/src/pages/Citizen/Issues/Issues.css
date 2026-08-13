@@ -420,6 +420,60 @@
   text-decoration: none;
 }
 
+/* Loading & Empty State */
+.explore-loading-card,
+.no-issues-empty-state {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.explore-loading-card .spin-icon {
+  font-size: 2.2rem;
+  color: #155EEF;
+  animation: spin 0.9s linear infinite;
+}
+
+.no-issues-empty-state h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+}
+
+.no-issues-empty-state p {
+  font-size: 0.9rem;
+  color: #64748B;
+  margin: 0;
+  max-width: 450px;
+}
+
+.btn-primary-report {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #155EEF;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background 0.15s ease;
+}
+
+.btn-primary-report:hover {
+  background: #124BBD;
+}
+
 @media (max-width: 900px) {
   .map-view-layout {
     flex-direction: column;
