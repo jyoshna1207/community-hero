@@ -96,9 +96,9 @@ const AppRoutes = () => {
 
           {/* Protected Ward Officer Routes */}
           <Route element={<ProtectedRoute allowedRole="officer" />}>
-            <Route path="/ward-dashboard" element={<WardDashboard />} />
             <Route element={<OfficerLayout />}>
-              <Route path="/officer/dashboard" element={<WardDashboard />} />
+              <Route path="/ward-dashboard" element={<OfficerDashboard />} />
+              <Route path="/officer/dashboard" element={<OfficerDashboard />} />
               <Route path="/officer/verify-issues" element={<VerifyIssues />} />
               <Route path="/officer/assigned-issues" element={<AssignedIssues />} />
               <Route path="/officer/history" element={<OfficerHistory />} />

@@ -1,0 +1,633 @@
+/* src/pages/Officer/Dashboard/OfficerDashboard.css */
+
+.officer-dashboard-page {
+  padding: 32px;
+  background-color: #F7F9FC;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ====================================================================
+   DASHBOARD HEADER
+   ==================================================================== */
+
+.officer-top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.officer-header-left h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 4px;
+}
+
+.officer-subtitle {
+  font-size: 0.95rem;
+  color: #64748B;
+}
+
+.officer-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ward-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #EAF2FE;
+  border: 1px solid #BFDBFE;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #155EEF;
+}
+
+.realtime-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #166534;
+}
+
+.pulse-green-dot {
+  width: 8px;
+  height: 8px;
+  background: #16A34A;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7);
+  animation: pulseGreen 1.6s infinite;
+}
+
+@keyframes pulseGreen {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+}
+
+/* Toast */
+.officer-toast-success {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #166534;
+  color: #FFFFFF;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 2000;
+}
+
+/* ====================================================================
+   SEARCH & FILTERS CONTROL BAR
+   ==================================================================== */
+
+.officer-controls-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.officer-search-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.officer-search-bar {
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.officer-search-bar input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.9rem;
+  width: 100%;
+  color: #0F172A;
+  font-family: inherit;
+}
+
+.officer-search-bar .search-icon {
+  color: #64748B;
+  font-size: 1.1rem;
+}
+
+.officer-filter-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-pill-btn {
+  padding: 6px 14px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-pill-btn:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.filter-pill-btn.active {
+  background: #155EEF;
+  border-color: #155EEF;
+  color: #FFFFFF;
+}
+
+.filter-select {
+  padding: 7px 12px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #334155;
+  outline: none;
+  cursor: pointer;
+}
+
+/* ====================================================================
+   REPORTS QUEUE LIST (MATCHING CITIZEN RECENT REPORTS)
+   ==================================================================== */
+
+.officer-reports-section {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.officer-reports-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.officer-reports-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.officer-issue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.horizontal-issue-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.horizontal-issue-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.issue-img-wrapper {
+  width: 120px;
+  height: 90px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid #E2E8F0;
+}
+
+.issue-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.issue-details-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.issue-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.issue-title-row h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.issue-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.report-id-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: monospace;
+  background: #F1F5F9;
+  color: #475569;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #E2E8F0;
+}
+
+.status-pill.resolved { background: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; }
+.status-pill.in-progress { background: #EAF2FE; color: #155EEF; border: 1px solid #BFDBFE; }
+.status-pill.under-review { background: #FEFCE8; color: #D97706; border: 1px solid #FEF08A; }
+.status-pill.unsolved, .status-pill.reported { background: #FEF2F2; color: #EF4444; border: 1px solid #FECACA; }
+
+.priority-pill {
+  background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #E2E8F0;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.priority-pill.critical, .priority-pill.high { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+.priority-pill.medium { background: #FFFBEB; color: #D97706; border-color: #FDE68A; }
+.priority-pill.low { background: #F0FDF4; color: #16A34A; border-color: #BBF7D0; }
+
+.issue-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.825rem;
+  color: #64748B;
+  flex-wrap: wrap;
+}
+
+.meta-dot {
+  color: #CBD5E1;
+}
+
+.officer-remarks-badge {
+  font-size: 0.8rem;
+  color: #0F172A;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.issue-progress-bar-row {
+  margin-top: 4px;
+}
+
+.progress-label-flex {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #64748B;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.progress-pct {
+  color: #155EEF;
+  font-weight: 700;
+}
+
+.progress-track {
+  width: 100%;
+  height: 6px;
+  background: #E2E8F0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #155EEF;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.issue-action-side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.btn-manage-action {
+  padding: 9px 18px;
+  background: #155EEF;
+  border: 1px solid #155EEF;
+  color: #FFFFFF;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-manage-action:hover {
+  background: #175CD3;
+  border-color: #175CD3;
+}
+
+.btn-track-link {
+  padding: 6px 12px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  color: #64748B;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.btn-track-link:hover {
+  color: #0F172A;
+  background: #F1F5F9;
+}
+
+/* ====================================================================
+   ISSUE MANAGEMENT MODAL / DRAWER
+   ==================================================================== */
+
+.officer-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  padding: 20px;
+}
+
+.officer-modal-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-card-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.modal-card-header h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin-top: 4px;
+}
+
+.btn-close-modal {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+.btn-close-modal:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.modal-card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal-overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.modal-overview-item {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.modal-overview-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.modal-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.modal-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal-form-group.full-width {
+  grid-column: span 2;
+}
+
+.modal-form-group label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.modal-form-group input,
+.modal-form-group select,
+.modal-form-group textarea {
+  padding: 10px 14px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #0F172A;
+  font-family: inherit;
+  outline: none;
+}
+
+.modal-form-group input:focus,
+.modal-form-group select:focus,
+.modal-form-group textarea:focus {
+  border-color: #155EEF;
+  box-shadow: 0 0 0 3px rgba(21, 94, 239, 0.12);
+}
+
+.modal-resolution-proof {
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.modal-resolution-proof h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #166534;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.modal-card-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-modal-cancel {
+  padding: 10px 18px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  color: #475569;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-modal-save {
+  padding: 10px 20px;
+  background: #155EEF;
+  border: 1px solid #155EEF;
+  color: #FFFFFF;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-modal-save:hover {
+  background: #175CD3;
+}
+
+@media (max-width: 768px) {
+  .officer-dashboard-page {
+    padding: 16px;
+  }
+  .modal-form-grid, .modal-overview-grid {
+    grid-template-columns: 1fr;
+  }
+  .modal-form-group.full-width {
+    grid-column: span 1;
+  }
+  .horizontal-issue-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .issue-img-wrapper {
+    width: 100%;
+    height: 140px;
+  }
+  .issue-action-side {
+    width: 100%;
+    align-items: stretch;
+  }
+}
