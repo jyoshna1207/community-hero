@@ -1,28 +1,79 @@
-.officer-dashboard-cards-container {
+/* OfficerDashboardCards.css - Citizen Design Language */
+
+.officer-kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  padding: 1.5rem 0;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  width: 100%;
 }
-.dashboard-card {
-  background: #ffffff;
-  padding: 1.5rem;
+
+.officer-kpi-grid .kpi-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
   border-radius: 12px;
-  box-shadow: none !important;
-  border: 1px solid #dbe3ec;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.dashboard-card h3 {
-  font-size: 0.875rem;
-  color: #5c6474;
-  margin: 0 0 0.5rem 0;
-  text-transform: uppercase;
+
+.officer-kpi-grid .kpi-card:hover {
+  border-color: #CBD5E1;
 }
-.card-value {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: #111827;
-  margin: 0;
+
+.officer-kpi-grid .kpi-val-group {
+  margin-bottom: 10px;
 }
-.card-value.success { color: #1E3A8A; }
-.card-value.warning { color: #453204; }
-.card-value.danger { color: #DC2626; }
+
+.officer-kpi-grid .kpi-num {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1.1;
+  display: block;
+}
+
+.officer-kpi-grid .kpi-label {
+  font-size: 0.85rem;
+  color: #64748B;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.officer-kpi-grid .kpi-trend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.officer-kpi-grid .trend-blue {
+  color: #155EEF;
+}
+
+.officer-kpi-grid .trend-orange {
+  color: #D97706;
+}
+
+.officer-kpi-grid .trend-up {
+  color: #16A34A;
+}
+
+.officer-kpi-grid .trend-red {
+  color: #EF4444;
+}
+
+@media (max-width: 1024px) {
+  .officer-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .officer-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
