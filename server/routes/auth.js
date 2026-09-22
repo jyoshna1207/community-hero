@@ -166,4 +166,62 @@ router.put("/profile", protect, async (req, res) => {
   }
 });
 
+// @desc    Get all users (for Admin Manage Users)
+// @route   GET /api/auth/users
+// @access  Public / Admin
+router.get("/users", async (req, res) => {
+  try {
+    await seedDemoUsers();
+    const users = await User.find().select("-password").sort({ createdAt: -1 });
+    res.json(users);
+  } catch (error) {
+    console.error("Get Users Error:", error);
+    res.status(500).json({ message: "Server error fetching users", error: error.message });
+  }
+});
+
+// @desc    Update user details/role/status (for Admin Manage Users)
+// @route   PUT /api/auth/users/:id
+// @access  Public / Admin
+router.put("/users/:id", async (req, res) => {
+  try {
+    const { name, email, role, departmentName, wardName, phone } = req.body;
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (role) user.role = role;
+    if (departmentName) user.departmentName = departmentName;
+    if (wardName) user.wardName = wardName;
+    if (phone !== undefined) user.phone = phone;
+
+    await user.save();
+    res.json(formatUserResponse(user));
+  } catch (error) {
+    console.error("Admin Update User Error:", error);
+    res.status(500).json({ message: "Server error updating user", error: error.message });
+  }
+});
+
+// @desc    Delete user account (for Admin Manage Users)
+// @route   DELETE /api/auth/users/:id
+// @access  Public / Admin
+router.delete("/users/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ message: "User removed successfully", id: req.params.id });
+  } catch (error) {
+    console.error("Admin Delete User Error:", error);
+    res.status(500).json({ message: "Server error deleting user", error: error.message });
+  }
+});
+
 module.exports = router;

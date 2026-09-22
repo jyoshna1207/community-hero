@@ -78,6 +78,7 @@ export const AuthProvider = ({ children }) => {
       JSON.stringify(userData)
     );
 
+    let redirectPath = "/dashboard";
     const userRole = (userData.role || "").toLowerCase().trim();
     if (userRole === "admin" || userRole === "administrator") {
       redirectPath = "/admin/dashboard";

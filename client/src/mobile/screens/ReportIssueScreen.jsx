@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Camera, Sparkles, MapPin, AlertTriangle, CheckCircle2, RefreshCw, Upload, Image as ImageIcon, X, ArrowLeft } from 'lucide-react';
+import axios from 'axios';
 
 const SEVERITIES = [
   { id: "Low", label: "Low", color: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border-blue-300" },
@@ -17,57 +18,146 @@ const MOCK_PHOTOS = [
 const ReportIssueScreen = ({ onSubmitSuccess, onBack }) => {
   const [capturedPhoto, setCapturedPhoto] = useState(MOCK_PHOTOS[0]);
   const [isAiDetecting, setIsAiDetecting] = useState(false);
-  const [detectedCategory, setDetectedCategory] = useState("Pothole & Road Hazard");
-  const [aiConfidence, setAiConfidence] = useState(98);
+  const [detectedCategory, setDetectedCategory] = useState("Roads");
+  const [aiConfidence, setAiConfidence] = useState(96);
   const [severity, setSeverity] = useState("Critical");
   const [title, setTitle] = useState("Severe Pothole on 5th Ave");
   const [description, setDescription] = useState("Deep crater near pedestrian crosswalk causing vehicular alignment damage and lane obstruction.");
-  const [address, setAddress] = useState("5th Ave & 42nd St, Ward 14, Central Metro");
+  const [address, setAddress] = useState("Duvvada, Visakhapatnam, Andhra Pradesh");
+  const [coords, setCoords] = useState({ lat: 17.6868, lng: 83.2185 });
   const [isLocating, setIsLocating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [ticketId, setTicketId] = useState("CH-8922");
+  const fileInputRef = useRef(null);
+
+  // Trigger real AI analysis from image
+  const runAiAnalysis = async (imgData, issueTitle, issueDesc) => {
+    setIsAiDetecting(true);
+    try {
+      const res = await axios.post('http://localhost:5000/api/issues/ai-analyze', {
+        title: issueTitle || title,
+        description: issueDesc || description,
+        image: imgData || capturedPhoto,
+      });
+
+      if (res.data) {
+        setDetectedCategory(res.data.category || "Roads");
+        setSeverity(res.data.aiSeverity || "High");
+        setAiConfidence(res.data.aiPriorityScore || 95);
+      }
+    } catch (err) {
+      console.warn("Mobile AI analysis fallback:", err);
+    } finally {
+      setIsAiDetecting(false);
+    }
+  };
 
   const handleSnapPhoto = () => {
-    setIsAiDetecting(true);
     const nextIdx = (MOCK_PHOTOS.indexOf(capturedPhoto) + 1) % MOCK_PHOTOS.length;
-    setCapturedPhoto(MOCK_PHOTOS[nextIdx]);
+    const nextPhoto = MOCK_PHOTOS[nextIdx];
+    setCapturedPhoto(nextPhoto);
 
-    setTimeout(() => {
-      setIsAiDetecting(false);
-      if (nextIdx === 1) {
-        setDetectedCategory("Water Pipe Burst");
-        setAiConfidence(96);
-        setSeverity("High");
-        setTitle("Water Leakage at Oak Street");
-      } else if (nextIdx === 2) {
-        setDetectedCategory("Broken Streetlight");
-        setAiConfidence(94);
-        setSeverity("Medium");
-        setTitle("Streetlight Pole Damaged");
-      } else {
-        setDetectedCategory("Pothole & Road Hazard");
-        setAiConfidence(98);
-        setSeverity("Critical");
-        setTitle("Severe Pothole on 5th Ave");
-      }
-    }, 700);
+    let nextTitle = "Severe Pothole on 5th Ave";
+    let nextDesc = "Deep crater near pedestrian crosswalk causing vehicular alignment damage.";
+    if (nextIdx === 1) {
+      nextTitle = "Water Leakage at Oak Street";
+      nextDesc = "Continuous municipal water supply pipe burst leaking clean water onto road.";
+    } else if (nextIdx === 2) {
+      nextTitle = "Streetlight Pole Damaged";
+      nextDesc = "Dark corridor due to broken lighting causing nighttime safety hazard.";
+    }
+
+    setTitle(nextTitle);
+    setDescription(nextDesc);
+    runAiAnalysis(nextPhoto, nextTitle, nextDesc);
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result;
+        setCapturedPhoto(result);
+        runAiAnalysis(result, title, description);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleAutoGPS = () => {
     setIsLocating(true);
-    setTimeout(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const { latitude, longitude } = pos.coords;
+          setCoords({ lat: latitude, lng: longitude });
+          setAddress(`GPS: ${latitude.toFixed(4)}° N, ${longitude.toFixed(4)}° E (Detected)`);
+          setIsLocating(false);
+        },
+        () => {
+          setAddress("MVP Colony 5th Lane, Visakhapatnam, Andhra Pradesh");
+          setCoords({ lat: 17.7412, lng: 83.3312 });
+          setIsLocating(false);
+        }
+      );
+    } else {
+      setAddress("MVP Colony 5th Lane, Visakhapatnam, Andhra Pradesh");
       setIsLocating(false);
-      setAddress("42nd St Cross, Ward #14 GPS: 40.7589° N, 73.9851° W");
-    }, 500);
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
+    const newId = `CH-${Math.floor(10000 + Math.random() * 90000)}`;
+
+    const payload = {
+      title,
+      category: detectedCategory === 'Pothole & Road Hazard' ? 'Roads' : detectedCategory,
+      description,
+      location: address,
+      latitude: coords.lat,
+      longitude: coords.lng,
+      locationCoords: coords,
+      image: capturedPhoto,
+      status: 'Reported',
+      priority: severity,
+      aiSeverity: severity,
+      aiPriorityScore: aiConfidence,
+      aiEstimatedDays: severity === 'Critical' ? 1 : 3,
+      aiTags: ['#MobileReport', `#${detectedCategory.replace(/\s+/g, '')}`],
+    };
+
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const token = localStorage.getItem('token');
+      if (token) {
+        const res = await axios.post('http://localhost:5000/api/issues', payload, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.data?._id) {
+          setTicketId(res.data._id);
+        } else {
+          setTicketId(newId);
+        }
+      } else {
+        setTicketId(newId);
+      }
+    } catch (err) {
+      console.warn("Mobile submit error:", err);
+      setTicketId(newId);
+    } finally {
+      try {
+        const local = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
+        localStorage.setItem('my_submitted_reports', JSON.stringify([{ id: newId, ...payload }, ...local]));
+      } catch (err) {
+        console.error(err);
+      }
       setIsSubmitting(false);
       setShowSuccessModal(true);
-    }, 800);
+    }
   };
 
   return (
@@ -98,13 +188,29 @@ const ReportIssueScreen = ({ onSubmitSuccess, onBack }) => {
             <span className="px-2.5 py-1 bg-red-600 text-white rounded-full text-[10px] font-extrabold flex items-center gap-1">
               <span className="w-2 h-2 bg-white rounded-full animate-ping" /> LIVE CAMERA HUD
             </span>
-            <button
-              type="button"
-              onClick={handleSnapPhoto}
-              className="p-2 bg-slate-900/80 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold backdrop-blur-md flex items-center gap-1"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${isAiDetecting ? 'animate-spin' : ''}`} /> Retake
-            </button>
+            <div className="flex gap-1.5">
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                accept="image/*,video/*" 
+                onChange={handleFileUpload} 
+                style={{ display: 'none' }} 
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="p-2 bg-slate-900/80 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold backdrop-blur-md flex items-center gap-1"
+              >
+                <Upload className="w-3.5 h-3.5" /> Upload
+              </button>
+              <button
+                type="button"
+                onClick={handleSnapPhoto}
+                className="p-2 bg-slate-900/80 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold backdrop-blur-md flex items-center gap-1"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isAiDetecting ? 'animate-spin' : ''}`} /> Retake
+              </button>
+            </div>
           </div>
 
           {/* AI Category Detection Badge */}
@@ -226,7 +332,7 @@ const ReportIssueScreen = ({ onSubmitSuccess, onBack }) => {
             <div className="space-y-1">
               <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">Report Submitted!</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Ticket <span className="font-bold text-blue-600">#CH-8922</span> generated. Ward Officer Patel will verify within 2 hours.
+                Ticket <span className="font-bold text-blue-600">#{ticketId}</span> generated. Ward Officer Patel will verify within 2 hours.
               </p>
             </div>
             <div className="bg-blue-50 dark:bg-blue-950/60 p-3 rounded-2xl border border-blue-200 dark:border-blue-900 text-xs font-bold text-blue-700 dark:text-blue-300">

@@ -303,134 +303,152 @@
   border-color: #0F172A;
 }
 
-/* DATA TABLE */
-.ward-table-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  overflow: hidden;
+/* NEW PREMIUM CARDS LIST */
+.officer-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.ward-data-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-.ward-data-table th {
-  background: #F8FAFC;
-  padding: 14px 18px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #64748B;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid #E2E8F0;
-}
-
-.ward-data-table td {
-  padding: 16px 18px;
-  border-bottom: 1px solid #F1F5F9;
-  vertical-align: middle;
-}
-
-.report-id-badge {
-  font-family: monospace;
-  font-weight: 800;
-  font-size: 0.85rem;
-  color: #155EEF;
-  background: #EAF2FE;
-  padding: 3px 8px;
-  border-radius: 6px;
-  display: inline-block;
-}
-
-.issue-row-flex {
+.officer-issue-card {
   display: flex;
   align-items: center;
-  gap: 12px;
-  max-width: 320px;
+  gap: 20px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 16px 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  transition: all 0.3s ease;
 }
 
-.issue-row-thumb {
-  width: 54px;
-  height: 54px;
-  border-radius: 8px;
-  object-fit: cover;
+.officer-issue-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 12px 24px -6px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
+}
+
+.officer-card-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+  overflow: hidden;
   flex-shrink: 0;
   border: 1px solid #E2E8F0;
 }
 
-.issue-row-title {
-  font-size: 0.925rem;
-  color: #0F172A;
-  display: block;
-  line-height: 1.3;
+.officer-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.issue-row-desc {
-  font-size: 0.78rem;
-  color: #64748B;
-  margin: 2px 0 0 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.officer-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.category-pill {
-  padding: 4px 10px;
-  background: #F1F5F9;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #475569;
-}
-
-.priority-badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.priority-badge.critical { background: #FEF2F2; color: #991B1B; border: 1px solid #FCA5A5; }
-.priority-badge.high { background: #FFFBEB; color: #B45309; border: 1px solid #FCD34D; }
-.priority-badge.medium { background: #EFF6FF; color: #1D4ED8; border: 1px solid #93C5FD; }
-.priority-badge.low { background: #F0FDF4; color: #15803D; border: 1px solid #86EFAC; }
-
-.officer-status-badge {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  font-weight: 800;
-  display: inline-block;
-}
-
-.officer-status-badge.unsolved, .officer-status-badge.reported { background: #FEF2F2; color: #EF4444; border: 1px solid #FECACA; }
-.officer-status-badge.under-review { background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A; }
-.officer-status-badge.in-progress { background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; }
-.officer-status-badge.solved, .officer-status-badge.resolved { background: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; }
-
-.btn-manage-issue {
-  padding: 8px 14px;
-  background: #155EEF;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.825rem;
-  font-weight: 700;
-  cursor: pointer;
+.officer-card-header {
   display: flex;
   align-items: center;
-  gap: 6px;
-  transition: background 0.15s ease;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.btn-manage-issue:hover {
+.officer-card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+}
+
+.officer-badge-cluster {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.officer-status-pill, .officer-priority-pill {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.officer-status-pill.unsolved, .officer-status-pill.reported { background: #FEF2F2; color: #EF4444; border: 1px solid #FECACA; }
+.officer-status-pill.under-review { background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A; }
+.officer-status-pill.in-progress { background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; }
+.officer-status-pill.solved, .officer-status-pill.resolved { background: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; }
+
+.officer-priority-pill.critical { background: #FEF2F2; color: #991B1B; border: 1px solid #FCA5A5; }
+.officer-priority-pill.high { background: #FFFBEB; color: #B45309; border: 1px solid #FCD34D; }
+.officer-priority-pill.medium { background: #EFF6FF; color: #1D4ED8; border: 1px solid #93C5FD; }
+.officer-priority-pill.low { background: #F0FDF4; color: #15803D; border: 1px solid #86EFAC; }
+
+.officer-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #64748B;
+}
+
+.officer-category-badge {
+  background: #F1F5F9;
+  color: #475569;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.officer-location-text {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #334155;
+  font-weight: 500;
+}
+
+.officer-card-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.btn-manage-action {
+  padding: 8px 18px;
+  background: #155EEF;
+  border: 1px solid #155EEF;
+  color: #FFFFFF;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-manage-action:hover {
   background: #124BBD;
+  border-color: #124BBD;
+  transform: translateY(-1px);
+}
+
+.officer-empty-box {
+  background: #FFFFFF;
+  border: 1.5px dashed #CBD5E1;
+  border-radius: 18px;
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #64748B;
 }
 
 /* ISSUE MANAGEMENT DRAWER MODAL */

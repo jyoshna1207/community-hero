@@ -111,7 +111,7 @@ export default function VerifyIssues() {
               location: item.location || 'Duvvada, Visakhapatnam',
               latitude: item.latitude || item.locationCoords?.lat || 17.6868,
               longitude: item.longitude || item.locationCoords?.lng || 83.2185,
-              image: item.image || item.imageUrl || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
+              image: item.image || item.imageUrl || `https://picsum.photos/seed/${item.id || item._id || idx}/400/300`,
               status: item.status || 'UNSOLVED',
               priority: item.priority || item.aiSeverity || 'High',
               reporterName: item.reporterName || item.user?.name || 'Verified Resident',
@@ -426,7 +426,7 @@ export default function VerifyIssues() {
         </div>
       </div>
 
-      {/* VERIFICATION CARDS GRID */}
+      {/* VERIFICATION CARDS LIST */}
       {loading ? (
         <div className="verify-empty-card">
           <FiLoader className="spin-icon text-blue" style={{ fontSize: '2rem', color: '#155EEF' }} />
@@ -439,81 +439,57 @@ export default function VerifyIssues() {
           <p>All citizen reports in {wardName} have been inspected and verified.</p>
         </div>
       ) : (
-        <div className="verification-cards-grid">
+        <div className="officer-cards-list">
           {filteredQueue.map((item) => (
-            <div key={item.id || item._id} className="verification-card">
-              {/* Media Preview */}
-              <div className="v-card-media">
+            <div key={item.id || item._id} className="officer-issue-card">
+              <div className="officer-card-img">
                 <img src={item.image} alt={item.title} />
-                <div className="v-card-tags-overlay" style={{ justifyContent: 'flex-end' }}>
-                  <span className={`priority-badge-overlay ${(item.priority || 'Medium').toLowerCase()}`}>
-                    {item.priority} Priority
+              </div>
+
+              <div className="officer-card-body">
+                <div className="officer-card-header">
+                  <h3>{item.title}</h3>
+                  <div className="officer-badge-cluster">
+                    <span className={`officer-status-pill ${(item.status || 'UNSOLVED').toLowerCase().replace(/\s+/g, '-')}`}>
+                      {item.status || 'UNSOLVED'}
+                    </span>
+                    <span className={`officer-priority-pill ${(item.priority || 'Medium').toLowerCase()}`}>
+                      {item.priority || 'Medium'} Priority
+                    </span>
+                  </div>
+                </div>
+
+                <div className="officer-meta-row">
+                  <span className="officer-category-badge">{item.category}</span>
+                  <span className="meta-sep">•</span>
+                  <span>{item.date}</span>
+                  <span className="meta-sep">•</span>
+                  <span className="officer-location-text">
+                    <FiMapPin style={{ color: '#EF4444', marginRight: '4px' }} />
+                    {item.location}
                   </span>
                 </div>
               </div>
 
-              {/* Card Body */}
-              <div className="v-card-body">
-                <div className="v-card-title-row">
-                  <h3>{item.title}</h3>
-                  <span className="category-chip">{item.category}</span>
-                </div>
-
-                <p className="v-card-desc">{item.description}</p>
-
-                <div className="v-card-meta-list">
-                  <div className="meta-item-line">
-                    <FiMapPin style={{ color: '#EF4444' }} />
-                    <span><strong>Location:</strong> {item.location}</span>
-                  </div>
-                  <div className="meta-item-line">
-                    <FiUser style={{ color: '#155EEF' }} />
-                    <span><strong>Reporter:</strong> {item.reporterName}</span>
-                  </div>
-                  <div className="meta-item-line">
-                    <FiClock style={{ color: '#64748B' }} />
-                    <span><strong>Submitted:</strong> {item.date}</span>
-                  </div>
-                </div>
-
-                {/* Card Action Buttons */}
-                <div className="v-card-actions">
-                  <button 
-                    className="btn-v-action btn-v-view"
-                    onClick={() => { setActiveIssue(item); setModalMode('view'); }}
-                  >
-                    <FiEye /> View
-                  </button>
-
-                  <button 
-                    className="btn-v-action btn-v-verify"
-                    onClick={() => { 
-                      setActiveIssue(item); 
-                      setVerifyRemarks(`Issue verified on-site by ${officerName}. Inspection confirmed.`);
-                      setModalMode('verify'); 
-                    }}
-                  >
-                    <FiCheckCircle /> Verify
-                  </button>
-
-                  <button 
-                    className="btn-v-action btn-v-assign"
-                    onClick={() => { 
-                      setActiveIssue(item); 
-                      setAssignPriority(item.priority || 'High');
-                      setModalMode('assign'); 
-                    }}
-                  >
-                    <FiShare2 /> Assign
-                  </button>
-
-                  <button 
-                    className="btn-v-action btn-v-reject"
-                    onClick={() => { setActiveIssue(item); setRejectReason(''); setModalMode('reject'); }}
-                  >
-                    <FiXCircle /> Reject
-                  </button>
-                </div>
+              {/* Specific Actions for Verify View */}
+              <div className="officer-card-actions" style={{ gap: '8px' }}>
+                <button 
+                  className="btn-manage-action"
+                  onClick={() => { 
+                    setActiveIssue(item); 
+                    setVerifyRemarks(`Issue verified on-site by ${officerName}. Inspection confirmed.`);
+                    setModalMode('verify'); 
+                  }}
+                >
+                  <FiCheckCircle /> Verify
+                </button>
+                <button 
+                  className="btn-manage-action"
+                  style={{ background: '#FFFFFF', color: '#155EEF', border: '1px solid #E2E8F0' }}
+                  onClick={() => { setActiveIssue(item); setModalMode('view'); }}
+                >
+                  <FiEye />
+                </button>
               </div>
             </div>
           ))}
@@ -621,7 +597,7 @@ export default function VerifyIssues() {
                     style={{ padding: '10px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.9rem' }}
                   >
                     <option value="Roads & Infrastructure Department">Roads & Infrastructure Department</option>
-                    <option value="GVMC Sanitation & Waste Board">GVMC Sanitation & Waste Board</option>
+                    <option value="State Sanitation & Waste Board">State Sanitation & Waste Board</option>
                     <option value="Electrical Maintenance Wing">Electrical Maintenance Wing</option>
                     <option value="Water Supply & Sewerage Board">Water Supply & Sewerage Board</option>
                     <option value="Drainage & Stormwater Department">Drainage & Stormwater Department</option>

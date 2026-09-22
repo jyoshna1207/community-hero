@@ -103,7 +103,7 @@ export default function WardDashboard() {
             location: item.location || 'Duvvada, Visakhapatnam',
             latitude: item.latitude || item.locationCoords?.lat || 17.6868,
             longitude: item.longitude || item.locationCoords?.lng || 83.2185,
-            image: item.image || item.imageUrl || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
+            image: item.image || item.imageUrl || `https://picsum.photos/seed/${key}/400/300`,
             status: item.status || 'UNSOLVED',
             priority: item.priority || 'High',
             views: item.views || 142,
@@ -289,13 +289,34 @@ export default function WardDashboard() {
         </div>
       )}
 
+      {/* WARD OFFICER PORTAL PURPOSE BANNER */}
+      <div className="portal-purpose-banner officer-theme">
+        <div className="banner-left-content">
+          <div className="banner-role-tag">
+            <FiShield /> Ward Officer Command Console
+          </div>
+          <h1>Ward Inspection, Verification & Department Dispatch</h1>
+          <p>
+            Verify citizen grievance reports on-site in {wardName}, assign tickets to municipal engineering departments, set expected completion targets, and track local resolution metrics.
+          </p>
+        </div>
+        <div className="banner-actions">
+          <button className="banner-btn-primary" onClick={() => setActiveTab('reports')}>
+            <FiClipboard /> Manage Reports ({totalReports})
+          </button>
+          <button className="banner-btn-secondary" onClick={() => setActiveTab('map')}>
+            <FiMapPin /> Ward Issue Map
+          </button>
+        </div>
+      </div>
+
       {/* TOP OFFICER HEADER */}
       <header className="ward-top-header">
         <div className="ward-header-left">
           <div className="ward-badge-pill">
             <FiShield /> {wardId} • {wardName}
           </div>
-          <h1>Ward Officer Dashboard</h1>
+          <h2>Ward Operations Overview</h2>
           <p className="ward-subtitle">{municipality} • Hyperlocal Issue Management</p>
         </div>
 
@@ -445,90 +466,52 @@ export default function WardDashboard() {
             </div>
           </div>
 
-          {/* REPORTS TABLE */}
-          <div className="ward-table-card">
-            <div className="table-responsive">
-              <table className="ward-data-table">
-                <thead>
-                  <tr>
-                    <th>Report ID</th>
-                    <th>Issue Details & Image</th>
-                    <th>Category</th>
-                    <th>Location</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                    <th>Views / Likes</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredIssues.length > 0 ? (
-                    filteredIssues.map((item) => (
-                      <tr key={item.id || item._id}>
-                        <td>
-                          <span className="report-id-badge">{item.id || item._id}</span>
-                          <div style={{ fontSize: '0.75rem', color: '#64748B', marginTop: '2px' }}>{item.date}</div>
-                        </td>
+          {/* REPORTS CARDS */}
+          <div className="officer-cards-list">
+            {filteredIssues.length > 0 ? (
+              filteredIssues.map((item) => (
+                <div key={item.id || item._id} className="officer-issue-card">
+                  <div className="officer-card-img">
+                    <img src={item.image} alt={item.title} />
+                  </div>
+                  
+                  <div className="officer-card-body">
+                    <div className="officer-card-header">
+                      <h3>{item.title}</h3>
+                      <div className="officer-badge-cluster">
+                        <span className={`officer-status-pill ${(item.status || 'UNSOLVED').toLowerCase().replace(/\s+/g, '-')}`}>
+                          {item.status || 'UNSOLVED'}
+                        </span>
+                        <span className={`officer-priority-pill ${(item.priority || 'High').toLowerCase()}`}>
+                          {item.priority || 'High'} Priority
+                        </span>
+                      </div>
+                    </div>
 
-                        <td>
-                          <div className="issue-row-flex">
-                            <img src={item.image} alt={item.title} className="issue-row-thumb" />
-                            <div>
-                              <strong className="issue-row-title">{item.title}</strong>
-                              <p className="issue-row-desc">{item.description}</p>
-                            </div>
-                          </div>
-                        </td>
+                    <div className="officer-meta-row">
+                      <span className="officer-category-badge">{item.category}</span>
+                      <span className="meta-sep">•</span>
+                      <span>{item.date}</span>
+                      <span className="meta-sep">•</span>
+                      <span className="officer-location-text">
+                        <FiMapPin style={{ color: '#EF4444', marginRight: '4px' }} />
+                        {item.location}
+                      </span>
+                    </div>
+                  </div>
 
-                        <td>
-                          <span className="category-pill">{item.category}</span>
-                        </td>
-
-                        <td>
-                          <div style={{ fontSize: '0.85rem', color: '#0F172A', fontWeight: 600 }}>
-                            <FiMapPin style={{ color: '#EF4444', marginRight: '4px' }} />
-                            {item.location}
-                          </div>
-                          <div style={{ fontSize: '0.75rem', color: '#155EEF', fontFamily: 'monospace' }}>
-                            Lat: {Number(item.latitude).toFixed(4)} | Lng: {Number(item.longitude).toFixed(4)}
-                          </div>
-                        </td>
-
-                        <td>
-                          <span className={`priority-badge ${(item.priority || 'High').toLowerCase()}`}>
-                            {item.priority || 'High'}
-                          </span>
-                        </td>
-
-                        <td>
-                          <span className={`officer-status-badge ${(item.status || 'UNSOLVED').toLowerCase().replace(/\s+/g, '-')}`}>
-                            {item.status || 'UNSOLVED'}
-                          </span>
-                        </td>
-
-                        <td>
-                          <div style={{ fontSize: '0.8rem', color: '#64748B' }}>
-                            👀 {item.views || 0} views • ❤️ {item.likes || 0} likes
-                          </div>
-                        </td>
-
-                        <td>
-                          <button className="btn-manage-issue" onClick={() => handleOpenIssue(item)}>
-                            <FiEdit3 /> Manage Issue
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="8" style={{ textAlign: 'center', padding: '40px', color: '#64748B' }}>
-                        No reports matching your search or filters.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                  <div className="officer-card-actions">
+                    <button className="btn-manage-action" onClick={() => handleOpenIssue(item)}>
+                      Manage Issue
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="officer-empty-box">
+                <p>No reports matching your search or filters.</p>
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -728,7 +711,7 @@ export default function WardDashboard() {
                       onChange={(e) => setUpdateForm({ ...updateForm, assignedDepartment: e.target.value })}
                     >
                       <option value="Roads Department">Roads & Infrastructure Department</option>
-                      <option value="Sanitation Department">GVMC Sanitation & Waste Board</option>
+                      <option value="Sanitation Department">State Sanitation & Waste Board</option>
                       <option value="Electrical Department">Electrical Maintenance Wing</option>
                       <option value="Water Department">Water Supply & Sewerage Board</option>
                       <option value="Drainage Department">Drainage & Stormwater Department</option>

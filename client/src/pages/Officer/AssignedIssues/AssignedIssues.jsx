@@ -164,7 +164,7 @@ export default function AssignedIssues() {
           location:           item.location || '—',
           latitude:           item.latitude  || item.locationCoords?.lat || 17.6868,
           longitude:          item.longitude || item.locationCoords?.lng || 83.2185,
-          image:              item.image || item.imageUrl || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
+          image:              item.image || item.imageUrl || `https://picsum.photos/seed/${key}/400/300`,
           status:             item.status || 'UNSOLVED',
           priority:           item.priority || item.aiSeverity || 'High',
           assignedDept:       dept,
@@ -494,121 +494,61 @@ export default function AssignedIssues() {
           </p>
         </div>
       ) : (
-        <div className="assigned-cards-grid">
+        <div className="officer-cards-list">
           {filteredIssues.map((issue) => {
             const statusCfg = getStatusConfig(issue.status);
-            const pct       = statusProgress(issue.status);
-            const pColor    = progressColor(pct);
             const overdue   = isOverdue(issue.expectedResolutionDate, issue.status);
-            const hasProof  = !!issue.resolutionImage;
 
             return (
-              <div key={issue._id || issue.id} className="assigned-card">
-
-                {/* Thumbnail */}
-                <div className="ac-media">
+              <div key={issue._id || issue.id} className="officer-issue-card">
+                <div className="officer-card-img">
                   <img src={issue.image} alt={issue.title} />
-                  <div className="ac-overlay-tags">
-                    <span className={`priority-badge-overlay ${(issue.priority || 'medium').toLowerCase()}`}>
-                      {issue.priority} Priority
+                </div>
+
+                <div className="officer-card-body">
+                  <div className="officer-card-header">
+                    <h3>{issue.title}</h3>
+                    <div className="officer-badge-cluster">
+                      <span className={`officer-status-pill ${statusCfg.cls}`}>
+                        {statusCfg.label}
+                      </span>
+                      <span className={`officer-priority-pill ${(issue.priority || 'medium').toLowerCase()}`}>
+                        {issue.priority} Priority
+                      </span>
+                      {overdue && (
+                        <span className="officer-priority-pill critical">
+                          ⚠ Overdue
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="officer-meta-row">
+                    <span className="officer-category-badge">{issue.category}</span>
+                    <span className="meta-sep">•</span>
+                    <span>{issue.date}</span>
+                    <span className="meta-sep">•</span>
+                    <span className="officer-location-text">
+                      <FiBriefcase style={{ color: '#155EEF', marginRight: '4px' }} />
+                      {issue.assignedDept}
                     </span>
-                    {overdue && (
-                      <span className="overdue-badge-overlay">⚠ Overdue</span>
-                    )}
                   </div>
                 </div>
 
-                {/* Body */}
-                <div className="ac-body">
-                  {/* Title + Category */}
-                  <div className="ac-title-row">
-                    <h3>{issue.title}</h3>
-                    <span className="category-chip">{issue.category}</span>
-                  </div>
-
-                  {/* Status pill */}
-                  <div className="ac-status-row">
-                    <span className={`status-pill ${statusCfg.cls}`}>
-                      {statusCfg.label}
-                    </span>
-                  </div>
-
-                  {/* Description excerpt */}
-                  <p className="ac-desc">{issue.description}</p>
-
-                  {/* Meta info */}
-                  <div className="ac-meta-list">
-                    <div className="meta-item-line">
-                      <FiMapPin style={{ color: '#EF4444', flexShrink: 0 }} />
-                      <span><strong>Location:</strong> {issue.location}</span>
-                    </div>
-                    <div className="meta-item-line">
-                      <FiBriefcase style={{ color: '#155EEF', flexShrink: 0 }} />
-                      <span><strong>Department:</strong> {issue.assignedDept}</span>
-                    </div>
-                    {issue.expectedResolutionDate && (
-                      <div className="meta-item-line">
-                        <FiCalendar style={{ color: overdue ? '#DC2626' : '#64748B', flexShrink: 0 }} />
-                        <span style={{ color: overdue ? '#DC2626' : undefined }}>
-                          <strong>Due:</strong> {fmtDate(issue.expectedResolutionDate)}
-                          {overdue && ' (Overdue)'}
-                        </span>
-                      </div>
-                    )}
-                    <div className="meta-item-line">
-                      <FiUser style={{ color: '#64748B', flexShrink: 0 }} />
-                      <span><strong>Reporter:</strong> {issue.reporterName}</span>
-                    </div>
-                    <div className="meta-item-line">
-                      <FiClock style={{ color: '#64748B', flexShrink: 0 }} />
-                      <span><strong>Submitted:</strong> {issue.date}</span>
-                    </div>
-                  </div>
-
-                  {/* Progress bar */}
-                  <div className="ac-progress-section">
-                    <div className="ac-progress-label-row">
-                      <span>Progress</span>
-                      <span>{pct}%</span>
-                    </div>
-                    <div className="ac-progress-track">
-                      <div
-                        className={`ac-progress-fill ${pColor}`}
-                        style={{ width: `${pct}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Action buttons */}
-                  <div className="ac-actions">
-                    <button
-                      className="btn-ac btn-ac-manage"
-                      onClick={() => openManageModal(issue)}
-                    >
-                      <FiEdit3 /> Manage
-                    </button>
-
-                    <button
-                      className="btn-ac btn-ac-view"
-                      onClick={() => { setActiveIssue(issue); setModalMode('view'); }}
-                    >
-                      <FiEye /> Details
-                    </button>
-
-                    <button
-                      className="btn-ac btn-ac-timeline"
-                      onClick={() => { setActiveIssue(issue); setModalMode('timeline'); }}
-                    >
-                      <FiList /> Timeline
-                    </button>
-
-                    <button
-                      className={`btn-ac ${hasProof ? 'btn-ac-proof' : 'btn-ac-view'}`}
-                      onClick={() => { setActiveIssue(issue); setModalMode('proof'); }}
-                    >
-                      <FiImage /> {hasProof ? 'Proof' : 'Resolution'}
-                    </button>
-                  </div>
+                <div className="officer-card-actions" style={{ gap: '8px' }}>
+                  <button 
+                    className="btn-manage-action"
+                    onClick={() => openManageModal(issue)}
+                  >
+                    <FiEdit3 /> Manage
+                  </button>
+                  <button 
+                    className="btn-manage-action"
+                    style={{ background: '#FFFFFF', color: '#155EEF', border: '1px solid #E2E8F0' }}
+                    onClick={() => { setActiveIssue(issue); setModalMode('view'); }}
+                  >
+                    <FiEye /> Details
+                  </button>
                 </div>
               </div>
             );

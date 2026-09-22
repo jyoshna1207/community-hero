@@ -99,105 +99,124 @@ const SAMPLE_ISSUES = [
   },
 ];
 
-// Helper to seed sample data if DB is empty
+// Helper to seed sample data if DB is empty (Disabled to allow clean fresh issue testing)
 const seedSampleIssuesIfEmpty = async () => {
-  try {
-    const count = await Issue.countDocuments();
-    if (count === 0) {
-      let demoUser = await User.findOne({ email: "jyoshna@example.com" });
-      if (!demoUser) {
-        demoUser = await User.create({
-          name: "Jyoshna Kosana",
-          email: "jyoshna@example.com",
-          password: "password123",
-          points: 450,
-          level: 3,
-          title: "Gold Community Guardian",
-          streakDays: 7,
-          badges: [
-            { id: "b1", name: "First Reporter", icon: "🏆", description: "Reported first civic issue" },
-            { id: "b2", name: "Pothole Patrol", icon: "🛡️", description: "Verified 5 road hazards" },
-            { id: "b3", name: "Eco Guardian", icon: "🌿", description: "Reported waste management concerns" },
-          ],
-        });
-      }
-
-      const seeded = SAMPLE_ISSUES.map((issue) => ({
-        ...issue,
-        user: demoUser._id,
-        timeline: [
-          { status: "Reported", note: "Issue submitted by citizen hero", updatedBy: demoUser.name, date: issue.reportedDate },
-          { status: "AI Analyzed", note: `Automated AI classified severity as ${issue.aiSeverity} (Priority Score: ${issue.aiPriorityScore})`, updatedBy: "AI Hyper Bot", date: issue.reportedDate },
-        ],
-      }));
-      await Issue.insertMany(seeded);
-    }
-  } catch (err) {
-    console.error("Seed error:", err);
-  }
+  // Disabled auto-seeding to keep database fresh and clean as requested by user
+  return;
 };
 
-// @desc    AI Intelligent Analysis endpoint
+// @desc    Purge/Delete all issues from database
+// @route   DELETE /api/issues/purge-all
+// @access  Public
+router.delete("/purge-all", async (req, res) => {
+  try {
+    const result = await Issue.deleteMany({});
+    res.json({ message: "All issues removed successfully", deletedCount: result.deletedCount });
+  } catch (error) {
+    res.status(500).json({ message: "Error clearing issues", error: error.message });
+  }
+});
+
+// @desc    AI Intelligent Analysis endpoint using Google Gemini
 // @route   POST /api/issues/ai-analyze
 // @access  Public
-router.post("/ai-analyze", (req, res) => {
+const { GoogleGenAI } = require("@google/genai");
+
+router.post("/ai-analyze", async (req, res) => {
   try {
-    const { title = "", description = "" } = req.body;
-    const text = `${title} ${description}`.toLowerCase();
+    const { title = "", description = "", image = "" } = req.body;
 
-    let category = "Other";
-    let aiSeverity = "Medium";
-    let aiPriorityScore = 65;
-    let aiEstimatedDays = 3;
-    let aiTags = ["#CommunityReport"];
+    if (!process.env.GEMINI_API_KEY) {
+      console.warn("GEMINI_API_KEY not found in .env, falling back to mock analysis");
+      // Fallback mock logic if no API key is provided
+      const text = `${title} ${description}`.toLowerCase();
+      let category = "Other";
+      let aiSeverity = "Medium";
+      let aiPriorityScore = 65;
+      let aiEstimatedDays = 3;
+      let aiTags = ["#CommunityReport"];
 
-    if (text.includes("pothole") || text.includes("road") || text.includes("crack") || text.includes("asphalt")) {
-      category = "Roads";
-      aiSeverity = text.includes("deep") || text.includes("severe") || text.includes("accident") ? "Critical" : "High";
-      aiPriorityScore = aiSeverity === "Critical" ? 94 : 82;
-      aiEstimatedDays = 2;
-      aiTags = ["#RoadHazard", "#TrafficSafety", "#PotholeAlert"];
-    } else if (text.includes("garbage") || text.includes("waste") || text.includes("trash") || text.includes("dump")) {
-      category = "Waste Management";
-      aiSeverity = text.includes("toxic") || text.includes("school") || text.includes("odor") ? "High" : "Medium";
-      aiPriorityScore = 80;
-      aiEstimatedDays = 1;
-      aiTags = ["#CleanNeighborhood", "#Sanitation", "#WasteRemoval"];
-    } else if (text.includes("water") || text.includes("leak") || text.includes("pipe") || text.includes("burst")) {
-      category = "Water Supply";
-      aiSeverity = text.includes("burst") || text.includes("drinking") ? "Critical" : "High";
-      aiPriorityScore = 90;
-      aiEstimatedDays = 1;
-      aiTags = ["#WaterConservation", "#PipeBurst", "#CivicResource"];
-    } else if (text.includes("light") || text.includes("lamp") || text.includes("dark") || text.includes("electric")) {
-      category = "Street Lights";
-      aiSeverity = "Medium";
-      aiPriorityScore = 72;
-      aiEstimatedDays = 2;
-      aiTags = ["#NightVision", "#SafetyCorridor", "#Illumination"];
-    } else if (text.includes("drain") || text.includes("sewer") || text.includes("overflow") || text.includes("flood")) {
-      category = "Drainage";
-      aiSeverity = "Critical";
-      aiPriorityScore = 93;
-      aiEstimatedDays = 2;
-      aiTags = ["#DrainageBlock", "#FloodRisk", "#SanitationEmergency"];
-    } else if (text.includes("fire") || text.includes("burn") || text.includes("manhole") || text.includes("danger")) {
-      category = "Public Safety";
-      aiSeverity = "Critical";
-      aiPriorityScore = 98;
-      aiEstimatedDays = 1;
-      aiTags = ["#UrgentHazard", "#PublicSafety", "#ImmediateAction"];
+      if (text.includes("pothole") || text.includes("road") || text.includes("crack") || text.includes("asphalt")) {
+        category = "Roads";
+        aiSeverity = text.includes("deep") || text.includes("severe") || text.includes("accident") ? "Critical" : "High";
+        aiPriorityScore = aiSeverity === "Critical" ? 94 : 82;
+        aiEstimatedDays = 2;
+        aiTags = ["#RoadHazard", "#TrafficSafety", "#PotholeAlert"];
+      } else if (text.includes("garbage") || text.includes("waste") || text.includes("trash") || text.includes("dump")) {
+        category = "Waste Management";
+        aiSeverity = text.includes("toxic") || text.includes("school") || text.includes("odor") ? "High" : "Medium";
+        aiPriorityScore = 80;
+        aiEstimatedDays = 1;
+        aiTags = ["#CleanNeighborhood", "#Sanitation", "#WasteRemoval"];
+      } else if (text.includes("water") || text.includes("leak") || text.includes("pipe") || text.includes("burst")) {
+        category = "Water Supply";
+        aiSeverity = text.includes("burst") || text.includes("drinking") ? "Critical" : "High";
+        aiPriorityScore = 90;
+        aiEstimatedDays = 1;
+        aiTags = ["#WaterConservation", "#PipeBurst", "#CivicResource"];
+      }
+      return res.json({
+        category,
+        aiSeverity,
+        aiPriorityScore,
+        aiEstimatedDays,
+        aiTags,
+        suggestedDept: `GVMC ${category} Task Force`,
+      });
     }
 
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    
+    let parts = [];
+    parts.push({
+        text: `Analyze this community issue report.
+Title: ${title}
+Description: ${description}
+
+Classify the issue strictly into one of these categories: "Waste Management", "Roads", "Water Supply", "Electricity", "Street Lights", "Drainage", "Public Safety", "Parks", "Other".
+Determine Severity ("Low", "Medium", "High", "Critical").
+Estimate Priority Score (0 to 100).
+Estimate Fix Days (integer).
+Provide 3 relevant hashtag tags.
+
+Return ONLY a valid JSON object matching this exact structure:
+{
+  "category": "String",
+  "aiSeverity": "String",
+  "aiPriorityScore": Number,
+  "aiEstimatedDays": Number,
+  "aiTags": ["String", "String", "String"]
+}`
+    });
+
+    if (image && image.startsWith("data:image/")) {
+      // Extract base64 and mime type
+      const mimeTypeMatch = image.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
+      const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : "image/jpeg";
+      const base64Data = image.split(",")[1];
+      
+      parts.push({
+        inlineData: {
+          data: base64Data,
+          mimeType: mimeType
+        }
+      });
+    }
+
+    const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: parts
+    });
+
+    const responseText = response.text().replace(/```json/g, "").replace(/```/g, "").trim();
+    const parsed = JSON.parse(responseText);
+
     res.json({
-      category,
-      aiSeverity,
-      aiPriorityScore,
-      aiEstimatedDays,
-      aiTags,
-      suggestedDept: `GVMC ${category} Task Force`,
+      ...parsed,
+      suggestedDept: `GVMC ${parsed.category} Task Force`,
     });
   } catch (error) {
+    console.error("AI analysis failed:", error);
     res.status(500).json({ message: "AI analysis failed", error: error.message });
   }
 });
@@ -605,10 +624,80 @@ router.post("/:id/verify", protect, async (req, res) => {
   }
 });
 
-// @desc    Delete issue
+// @desc    Update issue progress by Department (Accept, Progress %, Resolve)
+// @route   PUT /api/issues/:id/department-progress
+// @access  Public / Private
+router.put("/:id/department-progress", async (req, res) => {
+  try {
+    const { action, progress, remarks, resolutionImage, updatedBy } = req.body;
+    const issue = await Issue.findById(req.params.id);
+
+    if (!issue) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
+    const officerName = updatedBy || "Department Field Team";
+
+    if (action === "accept") {
+      issue.status = "In Progress";
+      issue.timeline.push({
+        status: "In Progress",
+        note: remarks || "Work order accepted by Municipal Department. Dispatch authorized.",
+        updatedBy: officerName,
+        date: new Date(),
+      });
+    } else if (action === "start") {
+      issue.status = "In Progress";
+      issue.timeline.push({
+        status: "In Progress",
+        note: remarks || "Field crew deployed on site with repair equipment.",
+        updatedBy: officerName,
+        date: new Date(),
+      });
+    } else if (action === "progress") {
+      issue.status = "In Progress";
+      issue.actionTaken = remarks || issue.actionTaken;
+      issue.timeline.push({
+        status: "In Progress",
+        note: `Progress Milestone: ${progress || 50}% completed. Note: ${remarks || "Work proceeding as scheduled."}`,
+        updatedBy: officerName,
+        date: new Date(),
+      });
+    } else if (action === "complete" || action === "resolve") {
+      issue.status = "Resolved";
+      if (resolutionImage) issue.resolutionImage = resolutionImage;
+      issue.resolutionNote = remarks || "Municipal repair completed. Before & after evidence logged.";
+      issue.timeline.push({
+        status: "Resolved",
+        note: remarks || "Issue resolved on site. Ready for citizen verification.",
+        updatedBy: officerName,
+        date: new Date(),
+      });
+    } else {
+      if (remarks) issue.officerRemarks = remarks;
+      if (progress) {
+        issue.timeline.push({
+          status: issue.status,
+          note: `Progress updated to ${progress}%: ${remarks || ""}`,
+          updatedBy: officerName,
+          date: new Date(),
+        });
+      }
+    }
+
+    await issue.save();
+    const updated = await Issue.findById(req.params.id).populate("user", "name email points level");
+    res.json(updated);
+  } catch (error) {
+    console.error("Department progress error:", error);
+    res.status(500).json({ message: "Error updating department progress", error: error.message });
+  }
+});
+
+// @desc    Delete issue report (Citizen, Officer, or Admin)
 // @route   DELETE /api/issues/:id
-// @access  Private
-router.delete("/:id", protect, async (req, res) => {
+// @access  Public / Private
+router.delete("/:id", async (req, res) => {
   try {
     const issue = await Issue.findById(req.params.id);
 
@@ -616,12 +705,8 @@ router.delete("/:id", protect, async (req, res) => {
       return res.status(404).json({ message: "Issue not found" });
     }
 
-    if (issue.user.toString() !== req.user._id.toString()) {
-      return res.status(401).json({ message: "Not authorized to delete this report" });
-    }
-
-    await issue.deleteOne();
-    res.json({ message: "Issue report removed successfully" });
+    await Issue.findByIdAndDelete(req.params.id);
+    res.json({ message: "Issue report removed successfully", id: req.params.id });
   } catch (error) {
     console.error("Delete Issue Error:", error);
     res.status(500).json({ message: "Server error deleting issue", error: error.message });

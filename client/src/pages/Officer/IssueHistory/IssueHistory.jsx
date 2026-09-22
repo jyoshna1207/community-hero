@@ -147,7 +147,7 @@ export default function IssueHistory() {
           location:               item.location || '—',
           latitude:               item.latitude  || item.locationCoords?.lat || 17.6868,
           longitude:              item.longitude || item.locationCoords?.lng || 83.2185,
-          image:                  item.image || item.imageUrl || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
+          image:                  item.image || item.imageUrl || `https://picsum.photos/seed/${key}/400/300`,
           status:                 item.status || 'UNSOLVED',
           priority:               item.priority || item.aiSeverity || 'High',
           assignedDept:           dept || '—',
@@ -377,98 +377,55 @@ export default function IssueHistory() {
           </p>
         </div>
       ) : (
-        <div className="history-cards-grid">
+        <div className="officer-cards-list">
           {filteredIssues.map((issue) => {
             const statusCfg = getStatusConfig(issue.status);
-            const hasResolutionImage = !!issue.resolutionImage;
 
             return (
-              <div key={issue._id || issue.id} className="history-card">
+              <div key={issue._id || issue.id} className="officer-issue-card">
+                <div className="officer-card-img">
+                  <img src={issue.image} alt={issue.title} />
+                </div>
 
-                {/* Before / After image pair */}
-                <div className="hc-images-row">
-                  {/* Before — citizen report */}
-                  <div className="hc-img-col">
-                    <img src={issue.image} alt="Before" />
-                    <span className="hc-img-label before">Before</span>
-                    <span className={`hc-priority-badge ${(issue.priority || 'medium').toLowerCase()}`}>
-                      {issue.priority}
-                    </span>
+                <div className="officer-card-body">
+                  <div className="officer-card-header">
+                    <h3>{issue.title}</h3>
+                    <div className="officer-badge-cluster">
+                      <span className={`officer-status-pill ${statusCfg.cls}`}>
+                        {statusCfg.label}
+                      </span>
+                      <span className={`officer-priority-pill ${(issue.priority || 'medium').toLowerCase()}`}>
+                        {issue.priority} Priority
+                      </span>
+                    </div>
                   </div>
-                  {/* After — resolution proof */}
-                  <div className="hc-img-col">
-                    {hasResolutionImage ? (
-                      <>
-                        <img src={issue.resolutionImage} alt="After" />
-                        <span className="hc-img-label after">After</span>
-                      </>
-                    ) : (
-                      <>
-                        <div className="hc-no-image">
-                          <FiImage style={{ fontSize: '1.3rem' }} />
-                          <span>No proof yet</span>
-                        </div>
-                        <span className="hc-img-label no-proof">Pending</span>
-                      </>
-                    )}
+
+                  <div className="officer-meta-row">
+                    <span className="officer-category-badge">{issue.category}</span>
+                    <span className="meta-sep">•</span>
+                    <span>{issue.date}</span>
+                    <span className="meta-sep">•</span>
+                    <span className="officer-location-text">
+                      <FiBriefcase style={{ color: '#155EEF', marginRight: '4px' }} />
+                      {issue.assignedDept}
+                    </span>
                   </div>
                 </div>
 
-                {/* Body */}
-                <div className="hc-body">
-                  <div className="hc-title-row">
-                    <h3>{issue.title}</h3>
-                    <span className="category-chip">{issue.category}</span>
-                  </div>
-
-                  <div className="hc-status-row">
-                    <span className={`status-pill ${statusCfg.cls}`}>
-                      {statusCfg.label}
-                    </span>
-                  </div>
-
-                  <div className="hc-meta-list">
-                    <div className="meta-item-line">
-                      <FiMapPin style={{ color: '#EF4444', flexShrink: 0 }} />
-                      <span><strong>Location:</strong> {issue.location}</span>
-                    </div>
-                    <div className="meta-item-line">
-                      <FiBriefcase style={{ color: '#155EEF', flexShrink: 0 }} />
-                      <span><strong>Department:</strong> {issue.assignedDept}</span>
-                    </div>
-                    {issue.expectedResolutionDate && (
-                      <div className="meta-item-line">
-                        <FiCalendar style={{ color: '#64748B', flexShrink: 0 }} />
-                        <span><strong>Due:</strong> {fmtDate(issue.expectedResolutionDate)}</span>
-                      </div>
-                    )}
-                    <div className="meta-item-line">
-                      <FiClock style={{ color: '#64748B', flexShrink: 0 }} />
-                      <span><strong>Submitted:</strong> {issue.date}</span>
-                    </div>
-                  </div>
-
-                  {issue.officerRemarks && (
-                    <div className="hc-remarks-preview">
-                      {issue.officerRemarks}
-                    </div>
-                  )}
-
-                  {/* Action buttons */}
-                  <div className="hc-actions">
-                    <button
-                      className="btn-hc btn-hc-details"
-                      onClick={() => { setActiveIssue(issue); setModalMode('details'); }}
-                    >
-                      <FiEye /> Full Details
-                    </button>
-                    <button
-                      className="btn-hc btn-hc-timeline"
-                      onClick={() => { setActiveIssue(issue); setModalMode('timeline'); }}
-                    >
-                      <FiList /> Audit Timeline
-                    </button>
-                  </div>
+                <div className="officer-card-actions" style={{ gap: '8px' }}>
+                  <button 
+                    className="btn-manage-action"
+                    onClick={() => { setActiveIssue(issue); setModalMode('timeline'); }}
+                  >
+                    <FiList /> Logs
+                  </button>
+                  <button 
+                    className="btn-manage-action"
+                    style={{ background: '#FFFFFF', color: '#155EEF', border: '1px solid #E2E8F0' }}
+                    onClick={() => { setActiveIssue(issue); setModalMode('details'); }}
+                  >
+                    <FiEye /> Details
+                  </button>
                 </div>
               </div>
             );

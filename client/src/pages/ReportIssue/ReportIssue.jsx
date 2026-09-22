@@ -112,6 +112,7 @@ export default function ReportIssue() {
       const res = await axios.post('http://localhost:5000/api/issues/ai-analyze', {
         title: formData.title,
         description: formData.description,
+        image: imagePreview || '',
       });
 
       setAiData(res.data);

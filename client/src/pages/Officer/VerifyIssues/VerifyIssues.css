@@ -225,214 +225,144 @@
   cursor: pointer;
 }
 
-/* ====================================================================
-   VERIFICATION CARDS GRID
+/* /* ====================================================================
+   VERIFICATION CARDS LIST (PREMIUM)
    ==================================================================== */
-
-.verification-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 20px;
-}
-
-.verification-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  overflow: hidden;
+.officer-cards-list {
   display: flex;
   flex-direction: column;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  gap: 16px;
 }
 
-.verification-card:hover {
+.officer-issue-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 16px 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  transition: all 0.3s ease;
+}
+
+.officer-issue-card:hover {
   border-color: #CBD5E1;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 12px 24px -6px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
 }
 
-.v-card-media {
-  position: relative;
-  width: 100%;
-  height: 180px;
-  background: #F1F5F9;
+.officer-card-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid #E2E8F0;
 }
 
-.v-card-media img {
+.officer-card-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.v-card-tags-overlay {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  right: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.report-id-pill {
-  font-size: 0.72rem;
-  font-weight: 700;
-  font-family: monospace;
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(4px);
-  color: #FFFFFF;
-  padding: 3px 8px;
-  border-radius: 6px;
-}
-
-.priority-badge-overlay {
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 6px;
-}
-
-.priority-badge-overlay.critical,
-.priority-badge-overlay.high {
-  background: #DC2626;
-  color: #FFFFFF;
-}
-
-.priority-badge-overlay.medium {
-  background: #D97706;
-  color: #FFFFFF;
-}
-
-.priority-badge-overlay.low {
-  background: #16A34A;
-  color: #FFFFFF;
-}
-
-.v-card-body {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.officer-card-body {
   flex: 1;
-}
-
-.v-card-title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.v-card-title-row h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #0F172A;
-  line-height: 1.3;
-}
-
-.category-chip {
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: #F1F5F9;
-  color: #475569;
-  padding: 3px 8px;
-  border-radius: 6px;
-  border: 1px solid #E2E8F0;
-  white-space: nowrap;
-}
-
-.v-card-desc {
-  font-size: 0.88rem;
-  color: #475569;
-  line-height: 1.45;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.v-card-meta-list {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 10px 12px;
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
+}
+
+.officer-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.officer-card-header h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+}
+
+.officer-badge-cluster {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.officer-status-pill, .officer-priority-pill {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.officer-status-pill.unsolved, .officer-status-pill.reported { background: #FEF2F2; color: #EF4444; border: 1px solid #FECACA; }
+.officer-status-pill.under-review { background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A; }
+.officer-status-pill.in-progress { background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; }
+.officer-status-pill.solved, .officer-status-pill.resolved { background: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; }
+
+.officer-priority-pill.critical { background: #FEF2F2; color: #991B1B; border: 1px solid #FCA5A5; }
+.officer-priority-pill.high { background: #FFFBEB; color: #B45309; border: 1px solid #FCD34D; }
+.officer-priority-pill.medium { background: #EFF6FF; color: #1D4ED8; border: 1px solid #93C5FD; }
+.officer-priority-pill.low { background: #F0FDF4; color: #15803D; border: 1px solid #86EFAC; }
+
+.officer-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 0.8rem;
   color: #64748B;
 }
 
-.meta-item-line {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.meta-item-line strong {
-  color: #0F172A;
-}
-
-.v-card-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid #E2E8F0;
-}
-
-.btn-v-action {
-  padding: 9px 12px;
-  font-size: 0.825rem;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: all 0.15s ease;
-}
-
-.btn-v-verify {
-  background: #16A34A;
-  color: #FFFFFF;
-  border: 1px solid #16A34A;
-}
-.btn-v-verify:hover {
-  background: #15803D;
-  border-color: #15803D;
-}
-
-.btn-v-assign {
-  background: #155EEF;
-  color: #FFFFFF;
-  border: 1px solid #155EEF;
-}
-.btn-v-assign:hover {
-  background: #175CD3;
-  border-color: #175CD3;
-}
-
-.btn-v-reject {
-  background: #FFFFFF;
-  color: #DC2626;
-  border: 1px solid #FCA5A5;
-}
-.btn-v-reject:hover {
-  background: #FEF2F2;
-  border-color: #DC2626;
-}
-
-.btn-v-view {
-  background: #FFFFFF;
-  color: #475569;
-  border: 1px solid #CBD5E1;
-}
-.btn-v-view:hover {
+.officer-category-badge {
   background: #F1F5F9;
-  color: #0F172A;
+  color: #475569;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.officer-location-text {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #334155;
+  font-weight: 500;
+}
+
+.officer-card-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.btn-manage-action {
+  padding: 8px 18px;
+  background: #155EEF;
+  border: 1px solid #155EEF;
+  color: #FFFFFF;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-manage-action:hover {
+  background: #124BBD;
+  border-color: #124BBD;
+  transform: translateY(-1px);
 }
 
 /* Empty State */

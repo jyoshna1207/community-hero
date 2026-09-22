@@ -220,201 +220,121 @@
   color: #0F172A;
 }
 
-.officer-issue-list {
+/* NEW PREMIUM CARDS LIST */
+.officer-cards-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.horizontal-issue-card {
+.officer-issue-card {
   display: flex;
   align-items: center;
   gap: 20px;
-  background: #F8FAFC;
+  background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  padding: 16px 20px;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  border-radius: 20px;
+  padding: 16px 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  transition: all 0.3s ease;
 }
 
-.horizontal-issue-card:hover {
+.officer-issue-card:hover {
   border-color: #CBD5E1;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 12px 24px -6px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
 }
 
-.issue-img-wrapper {
-  width: 120px;
-  height: 90px;
-  border-radius: 8px;
+.officer-card-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
   overflow: hidden;
   flex-shrink: 0;
   border: 1px solid #E2E8F0;
 }
 
-.issue-img-wrapper img {
+.officer-card-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.issue-details-main {
+.officer-card-body {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.issue-title-row {
+.officer-card-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
 }
 
-.issue-title-row h3 {
+.officer-card-header h3 {
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 800;
   color: #0F172A;
+  margin: 0;
 }
 
-.issue-badge-group {
+.officer-badge-cluster {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
-.report-id-pill {
-  font-size: 0.72rem;
-  font-weight: 700;
-  font-family: monospace;
-  background: #F1F5F9;
-  color: #475569;
-  padding: 2px 8px;
-  border-radius: 6px;
-  border: 1px solid #E2E8F0;
-}
-
-.status-pill.resolved { background: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; }
-.status-pill.in-progress { background: #EAF2FE; color: #155EEF; border: 1px solid #BFDBFE; }
-.status-pill.under-review { background: #FEFCE8; color: #D97706; border: 1px solid #FEF08A; }
-.status-pill.unsolved, .status-pill.reported { background: #FEF2F2; color: #EF4444; border: 1px solid #FECACA; }
-
-.priority-pill {
-  background: #F1F5F9;
-  color: #475569;
-  border: 1px solid #E2E8F0;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.72rem;
-  font-weight: 700;
-}
-.priority-pill.critical, .priority-pill.high { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
-.priority-pill.medium { background: #FFFBEB; color: #D97706; border-color: #FDE68A; }
-.priority-pill.low { background: #F0FDF4; color: #16A34A; border-color: #BBF7D0; }
-
-.issue-meta-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.825rem;
-  color: #64748B;
-  flex-wrap: wrap;
-}
-
-.meta-dot {
-  color: #CBD5E1;
-}
-
-.officer-remarks-badge {
-  font-size: 0.8rem;
-  color: #0F172A;
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  padding: 4px 10px;
-  border-radius: 6px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 2px;
-}
-
-.issue-progress-bar-row {
-  margin-top: 4px;
-}
-
-.progress-label-flex {
-  display: flex;
-  justify-content: space-between;
+.officer-status-pill, .officer-priority-pill {
+  padding: 3px 10px;
+  border-radius: 20px;
   font-size: 0.75rem;
-  color: #64748B;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.progress-pct {
-  color: #155EEF;
   font-weight: 700;
-}
-
-.progress-track {
-  width: 100%;
-  height: 6px;
-  background: #E2E8F0;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: #155EEF;
-  border-radius: 10px;
-  transition: width 0.3s ease;
-}
-
-.issue-action-side {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: flex-end;
-}
-
-.btn-manage-action {
-  padding: 9px 18px;
-  background: #155EEF;
-  border: 1px solid #155EEF;
-  color: #FFFFFF;
-  font-size: 0.85rem;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.15s ease;
   white-space: nowrap;
 }
 
-.btn-manage-action:hover {
-  background: #175CD3;
-  border-color: #175CD3;
-}
+.officer-status-pill.unsolved, .officer-status-pill.reported { background: #FEF2F2; color: #EF4444; border: 1px solid #FECACA; }
+.officer-status-pill.under-review { background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A; }
+.officer-status-pill.in-progress { background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; }
+.officer-status-pill.solved, .officer-status-pill.resolved { background: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; }
 
-.btn-track-link {
-  padding: 6px 12px;
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
+.officer-priority-pill.critical { background: #FEF2F2; color: #991B1B; border: 1px solid #FCA5A5; }
+.officer-priority-pill.high { background: #FFFBEB; color: #B45309; border: 1px solid #FCD34D; }
+.officer-priority-pill.medium { background: #EFF6FF; color: #1D4ED8; border: 1px solid #93C5FD; }
+.officer-priority-pill.low { background: #F0FDF4; color: #15803D; border: 1px solid #86EFAC; }
+
+.officer-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
   color: #64748B;
-  font-size: 0.78rem;
-  font-weight: 600;
-  border-radius: 6px;
-  text-decoration: none;
-  transition: all 0.15s ease;
 }
 
-.btn-track-link:hover {
-  color: #0F172A;
+.officer-category-badge {
   background: #F1F5F9;
+  color: #475569;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.officer-location-text {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #334155;
+  font-weight: 500;
+}
+
+.officer-card-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 }
 
 /* ====================================================================

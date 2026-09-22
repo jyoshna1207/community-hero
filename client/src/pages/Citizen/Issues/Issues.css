@@ -490,3 +490,105 @@
     height: 380px;
   }
 }
+
+/* Andhra Pradesh State Overview Controls */
+.ap-districts-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 10px 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.districts-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.districts-scroll-list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.district-pill {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.district-pill:hover {
+  background: #EFF6FF;
+  border-color: #BFDBFE;
+  color: #155EEF;
+}
+
+.district-pill.active {
+  background: #155EEF;
+  border-color: #155EEF;
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(21, 94, 239, 0.25);
+}
+
+.map-top-control-bar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-reset-ap {
+  background: #0F172A;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-reset-ap:hover {
+  background: #1E293B;
+  transform: translateY(-1px);
+}
+
+.ap-state-badge {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0F172A;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.ap-civic-pin {
+  background: transparent !important;
+  border: none !important;
+}

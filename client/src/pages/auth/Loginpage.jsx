@@ -76,8 +76,126 @@ const LoginPage = () => {
         <div className={styles.cardHeader}>
           <h1 className={styles.cardTitle}>Welcome Back</h1>
           <p className={styles.cardSubtitle}>
-            Sign in to log issues, track ward progress, and earn impact points
+            Sign in to log issues, track ward progress, and manage civic resolutions.
           </p>
+        </div>
+
+        {/* Quick Role Switcher Buttons */}
+        <div style={{
+          background: '#f8fafc',
+          border: '1px solid #e2e8f0',
+          borderRadius: '12px',
+          padding: '12px 14px',
+          marginBottom: '20px'
+        }}>
+          <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px' }}>
+            ⚡ Instant Demo Login (Click Any Role)
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+            <button
+              type="button"
+              onClick={() => handleLoginSubmit('citizen@hero.com', 'password123')}
+              disabled={isSubmitting}
+              style={{
+                padding: '8px 10px',
+                background: '#ffffff',
+                border: '1px solid #cbd5e1',
+                borderRadius: '8px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                color: '#1e293b',
+                cursor: 'pointer',
+                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <span>👤</span>
+              <div>
+                <div>Citizen</div>
+                <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 500 }}>Report & Track</div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleLoginSubmit('officer@hero.com', 'password123')}
+              disabled={isSubmitting}
+              style={{
+                padding: '8px 10px',
+                background: '#ffffff',
+                border: '1px solid #fde68a',
+                borderRadius: '8px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                color: '#92400e',
+                cursor: 'pointer',
+                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <span>🛡️</span>
+              <div>
+                <div>Ward Officer</div>
+                <div style={{ fontSize: '0.68rem', color: '#b45309', fontWeight: 500 }}>Verify & Assign</div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleLoginSubmit('dept@hero.com', 'password123')}
+              disabled={isSubmitting}
+              style={{
+                padding: '8px 10px',
+                background: '#ffffff',
+                border: '1px solid #bfdbfe',
+                borderRadius: '8px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                color: '#1e40af',
+                cursor: 'pointer',
+                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <span>🏗️</span>
+              <div>
+                <div>Department</div>
+                <div style={{ fontSize: '0.68rem', color: '#3b82f6', fontWeight: 500 }}>Deploy & Resolve</div>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleLoginSubmit('admin@hero.com', 'password123')}
+              disabled={isSubmitting}
+              style={{
+                padding: '8px 10px',
+                background: '#ffffff',
+                border: '1px solid #fecaca',
+                borderRadius: '8px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                color: '#991b1b',
+                cursor: 'pointer',
+                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <span>⚙️</span>
+              <div>
+                <div>Admin</div>
+                <div style={{ fontSize: '0.68rem', color: '#ef4444', fontWeight: 500 }}>Full Governance</div>
+              </div>
+            </button>
+          </div>
         </div>
 
         {/* Login Form */}

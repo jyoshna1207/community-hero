@@ -20,7 +20,7 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Quick Links</h4>
           <ul className="footer-links">
-            <li><Link to="/">Home</Link></li>
+            <li><Link to="/dashboard">Citizen Dashboard</Link></li>
             <li><Link to="/issues">Browse Issues</Link></li>
             <li><Link to="/report-issue">Report Problem</Link></li>
           </ul>

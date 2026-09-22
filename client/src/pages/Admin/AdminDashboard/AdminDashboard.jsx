@@ -1,309 +1,270 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   FiChevronDown, FiTrendingDown, FiPieChart, FiMapPin, FiBarChart2, 
-  FiClock, FiSearch, FiFilter, FiEye, FiArrowRight 
+  FiClock, FiSearch, FiFilter, FiEye, FiArrowRight, FiCheckCircle, FiActivity, FiRefreshCw 
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { FaBuilding, FaUsers } from 'react-icons/fa';
+import axios from 'axios';
 import './AdminDashboard.css';
 
 export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('All');
+  const [issues, setIssues] = useState([]);
+  const [stats, setStats] = useState({
+    total: 0,
+    pending: 0,
+    inProgress: 0,
+    resolved: 0,
+    critical: 0,
+  });
+  const [loading, setLoading] = useState(true);
 
-  const adminIssuesList = [
-    {
-      id: 'CH-2026-00124',
-      title: 'Large Pothole Near Main Road',
-      category: 'Road Damage',
-      location: 'Duvvada',
-      priority: 'High',
-      priorityType: 'critical',
-      status: 'In Progress',
-      statusType: 'in-progress',
-      assignedTo: 'Roads Department',
-      date: '6 May',
-    },
-    {
-      id: 'CH-2026-00118',
-      title: 'Broken Streetlight at Sector 4',
-      category: 'Streetlight',
-      location: 'Gajuwaka',
-      priority: 'Medium',
-      priorityType: 'warning',
-      status: 'Pending',
-      statusType: 'pending',
-      assignedTo: 'Electrical Dept',
-      date: '5 May',
-    },
-    {
-      id: 'CH-2026-00102',
-      title: 'Garbage Dump Overflow near Park',
-      category: 'Garbage & Waste',
-      location: 'Ward 12',
-      priority: 'Low',
-      priorityType: 'success',
-      status: 'Resolved',
-      statusType: 'resolved',
-      assignedTo: 'Sanitation Dept',
-      date: '4 May',
-    },
-    {
-      id: 'CH-2026-00095',
-      title: 'Water Pipeline Leakage',
-      category: 'Water Leakage',
-      location: 'Main Market',
-      priority: 'High',
-      priorityType: 'critical',
-      status: 'Resolved',
-      statusType: 'resolved',
-      assignedTo: 'Water Works Dept',
-      date: '2 May',
-    },
-    {
-      id: 'CH-2026-00088',
-      title: 'Open Drainage Overflow',
-      category: 'Drainage',
-      location: 'Ward 8',
-      priority: 'High',
-      priorityType: 'critical',
-      status: 'Critical',
-      statusType: 'critical',
-      assignedTo: 'Public Health Dept',
-      date: '1 May',
+  const loadAdminDashboardData = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get('http://localhost:5000/api/issues');
+      const all = Array.isArray(res.data) ? res.data : [];
+
+      const mapped = all.map(item => {
+        const status = item.status || 'Reported';
+        let statusType = 'pending';
+        const sUpper = status.toUpperCase();
+        if (sUpper === 'RESOLVED' || sUpper === 'SOLVED') statusType = 'resolved';
+        else if (sUpper === 'IN PROGRESS') statusType = 'in-progress';
+        else if (sUpper === 'CRITICAL') statusType = 'critical';
+
+        let priorityType = 'normal';
+        const pUpper = (item.priority || item.aiSeverity || '').toUpperCase();
+        if (pUpper === 'CRITICAL') priorityType = 'critical';
+        else if (pUpper === 'HIGH') priorityType = 'warning';
+        else if (pUpper === 'LOW') priorityType = 'success';
+
+        return {
+          id: item._id || item.id,
+          _id: item._id || item.id,
+          title: item.title,
+          category: item.category || 'Roads',
+          location: item.location || 'Visakhapatnam',
+          priority: item.priority || item.aiSeverity || 'High',
+          priorityType,
+          status,
+          statusType,
+          assignedTo: item.assignedDept || 'Municipal Task Force',
+          date: new Date(item.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        };
+      });
+
+      setIssues(mapped);
+
+      const total = mapped.length;
+      const inProg = mapped.filter(i => i.status.toUpperCase() === 'IN PROGRESS').length;
+      const resCount = mapped.filter(i => i.status.toUpperCase() === 'RESOLVED' || i.status.toUpperCase() === 'SOLVED').length;
+      const critCount = mapped.filter(i => (i.priority || '').toUpperCase() === 'CRITICAL').length;
+      const pend = total - inProg - resCount;
+
+      setStats({
+        total,
+        pending: Math.max(0, pend),
+        inProgress: inProg,
+        resolved: resCount,
+        critical: critCount,
+      });
+    } catch (err) {
+      console.error('Admin dashboard fetch error:', err);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  useEffect(() => {
+    loadAdminDashboardData();
+  }, []);
+
+  const filteredIssues = issues.filter(issue => {
+    const matchesSearch = issue.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          issue.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          issue.category.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = selectedStatus === 'All' || issue.status.toLowerCase().includes(selectedStatus.toLowerCase());
+    return matchesSearch && matchesStatus;
+  });
 
   return (
     <div className="admin-operations-dashboard">
-      {/* MAIN HEADER (SCREEN 10) */}
+      {/* PURPOSE HERO BANNER */}
+      <div className="portal-purpose-banner admin-theme">
+        <div className="banner-left-content">
+          <div className="banner-role-tag">
+            <FaBuilding /> Central Municipal Administration Control
+          </div>
+          <h1>City-Wide Governance & Operational Integrity</h1>
+          <p>
+            Oversee all municipal wards, audit user credentials & roles, track department workload balance, re-route unresolved emergencies, and monitor city-level SLA compliance in real time.
+          </p>
+        </div>
+        <div className="banner-actions">
+          <Link to="/admin/manage-issues" className="banner-btn-primary">
+            Manage All Issues
+          </Link>
+          <Link to="/admin/manage-users" className="banner-btn-secondary">
+            <FaUsers /> Manage Users
+          </Link>
+        </div>
+      </div>
+
+      {/* MAIN HEADER */}
       <div className="admin-header-flex">
         <div>
-          <h1>Dashboard</h1>
-          <p className="admin-subtitle">Overview of community issues</p>
+          <h2>City Operations Overview</h2>
+          <p className="admin-subtitle">Live city-wide municipal operations, cross-department tracking, and KPI analytics.</p>
         </div>
 
-        <div className="admin-filter-select">
-          <span>This Month</span>
-          <FiChevronDown />
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <button 
+            onClick={loadAdminDashboardData} 
+            style={{ padding: '8px 14px', background: '#FFFFFF', border: '1px solid #CBD5E1', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 600 }}
+          >
+            <FiRefreshCw className={loading ? 'animate-spin' : ''} /> Refresh
+          </button>
+          <div className="admin-filter-select">
+            <span>All Wards & Zones</span>
+            <FiChevronDown />
+          </div>
         </div>
       </div>
 
       {/* KPI CARDS (5 CARDS) */}
       <div className="admin-kpi-grid">
         <div className="admin-kpi-card">
-          <span className="admin-kpi-num">248</span>
+          <span className="admin-kpi-num">{loading ? '...' : stats.total}</span>
           <span className="admin-kpi-label">Total Issues</span>
         </div>
 
         <div className="admin-kpi-card">
-          <span className="admin-kpi-num text-orange">72</span>
-          <span className="admin-kpi-label">Pending</span>
+          <span className="admin-kpi-num text-orange">{loading ? '...' : stats.pending}</span>
+          <span className="admin-kpi-label">Pending Verification</span>
         </div>
 
         <div className="admin-kpi-card">
-          <span className="admin-kpi-num text-blue">31</span>
+          <span className="admin-kpi-num text-blue">{loading ? '...' : stats.inProgress}</span>
           <span className="admin-kpi-label">In Progress</span>
         </div>
 
         <div className="admin-kpi-card">
-          <span className="admin-kpi-num text-green">176</span>
-          <span className="admin-kpi-label">Resolved</span>
+          <span className="admin-kpi-num text-green">{loading ? '...' : stats.resolved}</span>
+          <span className="admin-kpi-label">Resolved Issues</span>
         </div>
 
         <div className="admin-kpi-card border-red">
-          <span className="admin-kpi-num text-red">12</span>
-          <span className="admin-kpi-label">Critical Issues</span>
+          <span className="admin-kpi-num text-red">{loading ? '...' : stats.critical}</span>
+          <span className="admin-kpi-label">Critical Urgency</span>
         </div>
       </div>
 
-      {/* ANALYTICS 2-COLUMN LAYOUT */}
-      <div className="admin-analytics-grid">
-        {/* Left: Donut Chart Representation */}
-        <div className="analytics-card">
-          <div className="analytics-card-header">
-            <h2>Issues by Category</h2>
-            <FiPieChart className="card-icon" />
+      {/* RECENT ISSUES TABLE WITH LIVE SEARCH & FILTERS */}
+      <div className="admin-table-section">
+        <div className="table-header-controls">
+          <div className="table-heading-group">
+            <h2>Recent Community Reports</h2>
+            <span className="table-subtitle">Showing live issues across municipal wards</span>
           </div>
 
-          <div className="donut-chart-wrapper">
-            <div className="visual-donut-ring">
-              <div className="donut-center-stat">
-                <span className="stat-big">248</span>
-                <span className="stat-lbl">Total</span>
-              </div>
+          <div className="table-actions-group">
+            {/* Search Input */}
+            <div className="admin-search-box">
+              <FiSearch className="search-icon" />
+              <input 
+                type="text" 
+                placeholder="Search issues, location..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
 
-            <div className="donut-legend-list">
-              <div className="legend-row">
-                <span className="legend-color c-road"></span>
-                <span className="legend-name">Road Damage</span>
-                <span className="legend-pct">35%</span>
-              </div>
-              <div className="legend-row">
-                <span className="legend-color c-water"></span>
-                <span className="legend-name">Water Leakage</span>
-                <span className="legend-pct">25%</span>
-              </div>
-              <div className="legend-row">
-                <span className="legend-color c-garbage"></span>
-                <span className="legend-name">Garbage & Waste</span>
-                <span className="legend-pct">20%</span>
-              </div>
-              <div className="legend-row">
-                <span className="legend-color c-light"></span>
-                <span className="legend-name">Streetlight</span>
-                <span className="legend-pct">12%</span>
-              </div>
-              <div className="legend-row">
-                <span className="legend-color c-other"></span>
-                <span className="legend-name">Others</span>
-                <span className="legend-pct">8%</span>
-              </div>
+            {/* Status Filter Dropdown */}
+            <div className="status-filter-wrapper">
+              <select 
+                value={selectedStatus} 
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="admin-status-dropdown"
+              >
+                <option value="All">All Statuses</option>
+                <option value="Reported">Reported</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+              </select>
             </div>
           </div>
         </div>
 
-        {/* Right: Map Heatmap Representation */}
-        <div className="analytics-card">
-          <div className="analytics-card-header">
-            <h2>Issues by Location</h2>
-            <FiMapPin className="card-icon" />
-          </div>
-
-          <div className="heatmap-container">
-            <div className="heatmap-canvas-bg">
-              <div className="heatmap-grid-overlay"></div>
-              <div className="heat-zone zone-high" style={{ top: '35%', left: '30%' }}>
-                <span>Duvvada (84)</span>
-              </div>
-              <div className="heat-zone zone-med" style={{ top: '60%', left: '60%' }}>
-                <span>Gajuwaka (52)</span>
-              </div>
-              <div className="heat-zone zone-low" style={{ top: '25%', left: '70%' }}>
-                <span>Ward 12 (38)</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* BOTTOM ANALYTICS */}
-      <div className="admin-analytics-grid">
-        {/* Left: Resolution Trend */}
-        <div className="analytics-card">
-          <div className="analytics-card-header">
-            <h2>Resolution Trend</h2>
-            <FiBarChart2 className="card-icon" />
-          </div>
-
-          <div className="line-chart-container">
-            <div className="chart-bars-flex">
-              <div className="bar-column">
-                <div className="bar-fill resolved" style={{ height: '70%' }}></div>
-                <div className="bar-fill progress" style={{ height: '25%' }}></div>
-                <span>Jan</span>
-              </div>
-              <div className="bar-column">
-                <div className="bar-fill resolved" style={{ height: '80%' }}></div>
-                <div className="bar-fill progress" style={{ height: '20%' }}></div>
-                <span>Feb</span>
-              </div>
-              <div className="bar-column">
-                <div className="bar-fill resolved" style={{ height: '65%' }}></div>
-                <div className="bar-fill progress" style={{ height: '30%' }}></div>
-                <span>Mar</span>
-              </div>
-              <div className="bar-column">
-                <div className="bar-fill resolved" style={{ height: '85%' }}></div>
-                <div className="bar-fill progress" style={{ height: '15%' }}></div>
-                <span>Apr</span>
-              </div>
-              <div className="bar-column">
-                <div className="bar-fill resolved" style={{ height: '90%' }}></div>
-                <div className="bar-fill progress" style={{ height: '10%' }}></div>
-                <span>May</span>
-              </div>
-            </div>
-
-            <div className="chart-legend-row">
-              <span className="dot green"></span> Resolved Issues
-              <span className="dot blue"></span> In Progress
-            </div>
-          </div>
-        </div>
-
-        {/* Right: Average Resolution Time */}
-        <div className="analytics-card flex-center">
-          <div className="analytics-card-header">
-            <h2>Average Resolution Time</h2>
-            <FiClock className="card-icon" />
-          </div>
-
-          <div className="res-time-box">
-            <span className="time-big">4.2 days</span>
-            <p className="trend-good">
-              <FiTrendingDown /> ↓ 1.2 days vs last month
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* SCREEN 11 — ADMIN ISSUE DATA TABLE */}
-      <div className="admin-table-card">
-        <div className="table-header-flex">
-          <h2>All Issue Reports</h2>
-          <div className="table-search-box">
-            <FiSearch />
-            <input 
-              type="text" 
-              placeholder="Search issues, locations..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <div className="table-responsive">
+        {/* Dynamic Responsive Table */}
+        <div className="table-responsive-wrapper">
           <table className="admin-data-table">
             <thead>
               <tr>
-                <th>Issue</th>
-                <th>Category</th>
-                <th>Location</th>
-                <th>Priority</th>
-                <th>Status</th>
-                <th>Assigned To</th>
-                <th>Date</th>
-                <th>Actions</th>
+                <th>ISSUE ID</th>
+                <th>TITLE</th>
+                <th>CATEGORY</th>
+                <th>LOCATION</th>
+                <th>PRIORITY</th>
+                <th>STATUS</th>
+                <th>ASSIGNED TO</th>
+                <th>REPORTED</th>
+                <th>ACTION</th>
               </tr>
             </thead>
             <tbody>
-              {adminIssuesList.map((row) => (
-                <tr key={row.id}>
-                  <td><strong>{row.title}</strong></td>
-                  <td>{row.category}</td>
-                  <td>📍 {row.location}</td>
-                  <td>
-                    <span className={`priority-badge ${row.priorityType}`}>
-                      {row.priority}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`status-pill ${row.statusType}`}>
-                      {row.status}
-                    </span>
-                  </td>
-                  <td>{row.assignedTo}</td>
-                  <td>{row.date}</td>
-                  <td>
-                    <Link to={`/issues/${row.id}`} className="btn-table-action">
-                      View →
-                    </Link>
+              {loading ? (
+                <tr>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '40px', color: '#64748B' }}>
+                    Loading database records...
                   </td>
                 </tr>
-              ))}
+              ) : filteredIssues.length === 0 ? (
+                <tr>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '40px', color: '#64748B' }}>
+                    No reports match the current filter.
+                  </td>
+                </tr>
+              ) : (
+                filteredIssues.map((item) => (
+                  <tr key={item.id}>
+                    <td className="font-medium text-slate-700">#{item.id.slice(-6)}</td>
+                    <td className="font-semibold text-slate-900">{item.title}</td>
+                    <td>
+                      <span className="category-tag-badge">{item.category}</span>
+                    </td>
+                    <td>{item.location}</td>
+                    <td>
+                      <span className={`priority-indicator ${item.priorityType}`}>
+                        {item.priority}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`status-tag-badge ${item.statusType}`}>
+                        {item.status}
+                      </span>
+                    </td>
+                    <td>{item.assignedTo}</td>
+                    <td>{item.date}</td>
+                    <td>
+                      <Link to={`/track-report/${item.id}`} className="table-action-link" title="Track issue details">
+                        <FiEye /> View
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
+        </div>
+
+        <div className="table-footer-pagination">
+          <span>Showing {filteredIssues.length} of {issues.length} total reports</span>
+          <Link to="/admin/manage-issues" className="view-all-link">
+            Manage All Issues & Assignments <FiArrowRight />
+          </Link>
         </div>
       </div>
     </div>

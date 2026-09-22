@@ -1,6 +1,5 @@
-// File path: src/routes/AppRoutes.jsx
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from '../context/AuthContext'; // Note the '../' to go up from routes/ to src/
 
 import ProtectedRoute from './ProtectedRoute'; // Same folder
@@ -28,6 +27,7 @@ import IssueDetail from '../pages/Citizen/IssueDetails/IssueDetails';
 import TrackReport from '../pages/Citizen/TrackReport/TrackReport';
 import MyReports from '../pages/Citizen/MyReports/MyReports';
 import Profile from '../pages/Citizen/Profile/Profile';
+import Leaderboard from '../pages/Leaderboard/Leaderboard';
 
 // Admin Pages
 import AdminDashboard from '../pages/Admin/AdminDashboard/AdminDashboard';
@@ -59,7 +59,7 @@ const AppRoutes = () => {
         <Routes>
           {/* Public Web App Routes */}
           <Route element={<CitizenLayout />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/contact" element={<Contact />} />
           </Route>
 
@@ -77,6 +77,7 @@ const AppRoutes = () => {
               <Route path="/issues/:id" element={<TrackReport />} />
               <Route path="/track-report/:id" element={<TrackReport />} />
               <Route path="/my-reports" element={<MyReports />} />
+              <Route path="/leaderboard" element={<Navigate to="/dashboard" replace />} />
               <Route path="/profile" element={<Profile />} />
             </Route>
           </Route>
@@ -97,7 +98,7 @@ const AppRoutes = () => {
           {/* Protected Ward Officer Routes */}
           <Route element={<ProtectedRoute allowedRole="officer" />}>
             <Route element={<OfficerLayout />}>
-              <Route path="/ward-dashboard" element={<OfficerDashboard />} />
+              <Route path="/ward-dashboard" element={<WardDashboard />} />
               <Route path="/officer/dashboard" element={<OfficerDashboard />} />
               <Route path="/officer/verify-issues" element={<VerifyIssues />} />
               <Route path="/officer/assigned-issues" element={<AssignedIssues />} />

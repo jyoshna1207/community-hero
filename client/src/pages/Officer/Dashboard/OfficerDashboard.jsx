@@ -429,75 +429,43 @@ export default function OfficerDashboard() {
               }
 
               return (
-                <div key={issue.id || issue._id} className="horizontal-issue-card">
-                  <div className="issue-img-wrapper">
+                <div key={issue.id || issue._id} className="officer-issue-card">
+                  <div className="officer-card-img">
                     <img src={issue.image} alt={issue.title} />
                   </div>
 
-                  <div className="issue-details-main">
-                    <div className="issue-title-row">
+                  <div className="officer-card-body">
+                    <div className="officer-card-header">
                       <h3>{issue.title}</h3>
-                      <div className="issue-badge-group">
-                        <span className={`status-pill ${statusClass}`}>
+                      <div className="officer-badge-cluster">
+                        <span className={`officer-status-pill ${statusClass}`}>
                           {statusLabel}
                         </span>
-                        <span className={`priority-pill ${(issue.priority || 'Medium').toLowerCase()}`}>
+                        <span className={`officer-priority-pill ${(issue.priority || 'Medium').toLowerCase()}`}>
                           {issue.priority} Priority
                         </span>
-                        <span className="priority-pill">
-                          {issue.category}
-                        </span>
                       </div>
                     </div>
 
-                    <div className="issue-meta-row">
-                      <span>📍 {issue.location}</span>
-                      <span className="meta-dot">•</span>
-                      <span><FiClock /> {issue.date}</span>
-                      <span className="meta-dot">•</span>
-                      <span>Reporter: <strong>{issue.reporterName}</strong></span>
-                      {issue.assignedDepartment && (
-                        <>
-                          <span className="meta-dot">•</span>
-                          <span><FiBriefcase /> {issue.assignedDepartment}</span>
-                        </>
-                      )}
+                    <div className="officer-meta-row">
+                      <span className="officer-category-badge">{issue.category}</span>
+                      <span className="meta-sep">•</span>
+                      <span>{issue.date}</span>
+                      <span className="meta-sep">•</span>
+                      <span className="officer-location-text">
+                        <FiMapPin style={{ color: '#EF4444', marginRight: '4px' }} />
+                        {issue.location}
+                      </span>
                     </div>
-
-                    {/* Resolution Progress Bar */}
-                    <div className="issue-progress-bar-row">
-                      <div className="progress-label-flex">
-                        <span>Resolution Progress</span>
-                        <span className="progress-pct">{progressPct}%</span>
-                      </div>
-                      <div className="progress-track">
-                        <div className="progress-fill" style={{ width: `${progressPct}%` }}></div>
-                      </div>
-                    </div>
-
-                    {/* Officer Remarks Preview */}
-                    {issue.officerRemarks && (
-                      <div className="officer-remarks-badge">
-                        <FiShield style={{ color: '#155EEF' }} />
-                        <span><strong>Officer Remarks:</strong> "{issue.officerRemarks}"</span>
-                      </div>
-                    )}
                   </div>
 
-                  {/* Actions */}
-                  <div className="issue-action-side">
+                  <div className="officer-card-actions">
                     <button 
                       className="btn-manage-action"
                       onClick={() => handleOpenIssue(issue)}
                     >
-                      <FiEdit3 /> Manage Issue
+                      <FiEdit3 /> Manage
                     </button>
-                    <Link 
-                      to={`/track-report/${issue.id || issue._id}`} 
-                      className="btn-track-link"
-                    >
-                      Track View →
-                    </Link>
                   </div>
                 </div>
               );
@@ -592,7 +560,7 @@ export default function OfficerDashboard() {
                       onChange={(e) => setUpdateForm({ ...updateForm, assignedDepartment: e.target.value })}
                     >
                       <option value="Roads & Infrastructure Department">Roads & Infrastructure Department</option>
-                      <option value="GVMC Sanitation & Waste Board">GVMC Sanitation & Waste Board</option>
+                      <option value="State Sanitation & Waste Board">State Sanitation & Waste Board</option>
                       <option value="Electrical Maintenance Wing">Electrical Maintenance Wing</option>
                       <option value="Water Supply & Sewerage Board">Water Supply & Sewerage Board</option>
                       <option value="Drainage & Stormwater Department">Drainage & Stormwater Department</option>
