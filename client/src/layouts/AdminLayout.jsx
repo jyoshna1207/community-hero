@@ -1,18 +1,159 @@
-import React from 'react';
-import BasePortalLayout from './BasePortalLayout';
+import React, { useState } from 'react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { 
+  FiMapPin, FiBell, FiUser, FiLogOut, FiMenu, FiX, FiExternalLink, FiSettings, FiGrid, FiUsers, FiBriefcase, FiBarChart2, FiFileText
+} from 'react-icons/fi';
+import { useAuth } from '../context/AuthContext';
+import '../components/Common/Navbar/Navbar.css';
 
 const AdminLayout = () => {
-  const navItems = [
-    { label: 'Dashboard', path: '/admin/dashboard' },
-    { label: 'Manage Users', path: '/admin/manage-users' },
-    { label: 'Manage Issues', path: '/admin/manage-issues' },
-    { label: 'Manage Departments', path: '/admin/manage-departments' },
-    { label: 'Manage Wards', path: '/admin/manage-wards' },
-    { label: 'Reports', path: '/admin/reports' },
-    { label: 'Settings', path: '/admin/settings' },
-  ];
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
 
-  return <BasePortalLayout portalTitle="Admin Portal" navItems={navItems} />;
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  const adminName = user?.name || 'Super Admin';
+  const userInitial = adminName.charAt(0).toUpperCase();
+
+  return (
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#F7F9FC' }}>
+      {/* Top Header Navbar */}
+      <header className="hero-navbar">
+        <div className="navbar-container">
+          {/* Brand Logo & Portal Title */}
+          <div className="navbar-brand" onClick={() => navigate('/admin/dashboard')}>
+            <div className="brand-logo-icon">
+              <FiSettings className="pin-icon" />
+            </div>
+            <div className="brand-title">
+              <h2>Community Hero</h2>
+              <span className="brand-tagline">Central Admin Portal</span>
+            </div>
+          </div>
+
+          {/* Navigation Links */}
+          <nav className={`navbar-links ${mobileMenuOpen ? 'mobile-active' : ''}`}>
+            <NavLink 
+              to="/admin/dashboard" 
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Dashboard
+            </NavLink>
+            <NavLink 
+              to="/admin/manage-issues" 
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Issues
+            </NavLink>
+            <NavLink 
+              to="/admin/manage-users" 
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Users
+            </NavLink>
+            <NavLink 
+              to="/admin/manage-departments" 
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Departments
+            </NavLink>
+            <NavLink 
+              to="/admin/manage-wards" 
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} 
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Wards
+            </NavLink>
+          </nav>
+
+          {/* User Actions & Profile Menu */}
+          <div className="navbar-actions">
+            {/* Notification Bell */}
+            <div className="notification-wrapper">
+              <button 
+                className="icon-btn" 
+                onClick={() => setNotificationsOpen(!notificationsOpen)} 
+                aria-label="Notifications"
+              >
+                <FiBell />
+                <span className="notification-dot"></span>
+              </button>
+              {notificationsOpen && (
+                <div className="notification-dropdown animate-fade-in">
+                  <div className="notification-header">
+                    <h4>System Alerts</h4>
+                    <span>Mark all read</span>
+                  </div>
+                  <div className="notification-list">
+                    <div className="notification-item unread">
+                      <p><strong>System:</strong> Daily database backup completed successfully.</p>
+                      <span className="time">1h ago</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Profile Menu */}
+            <div className="user-profile-menu">
+              <div 
+                className="user-avatar-badge" 
+                onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+              >
+                <span className="user-initial">{userInitial}</span>
+              </div>
+              {profileDropdownOpen && (
+                <div className="profile-dropdown animate-fade-in">
+                  <div className="dropdown-user-info">
+                    <p className="dropdown-name">{adminName}</p>
+                    <p className="dropdown-email">{user?.email || 'admin@communityhero.org'}</p>
+                    <span className="role-tag">
+                      System Administrator
+                    </span>
+                  </div>
+                  <div className="dropdown-divider"></div>
+                  
+                  <button onClick={() => { navigate('/admin/settings'); setProfileDropdownOpen(false); }}>
+                    <FiSettings /> Portal Settings
+                  </button>
+                  <button onClick={() => { navigate('/admin/reports'); setProfileDropdownOpen(false); }}>
+                    <FiBarChart2 /> Analytics Reports
+                  </button>
+                  <button className="logout-action-btn" onClick={handleLogout}>
+                    <FiLogOut /> Logout
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Hamburger Menu Button */}
+            <button 
+              className="hamburger-btn" 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+              aria-label="Toggle Navigation"
+            >
+              {mobileMenuOpen ? <FiX /> : <FiMenu />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Viewport Content */}
+      <main style={{ flex: 1, width: '100%', padding: '24px' }}>
+        <Outlet />
+      </main>
+    </div>
+  );
 };
 
 export default AdminLayout;

@@ -17,10 +17,31 @@ export default function AssignedWork() {
   const loadAssignedWorks = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/issues');
-      let issues = Array.isArray(res.data) ? res.data : [];
+      let apiIssues = [];
+      try {
+        const res = await axios.get('http://localhost:5000/api/issues');
+        if (res.data && Array.isArray(res.data)) apiIssues = res.data;
+      } catch (e) { console.error(e); }
 
-      const mapped = issues.map(item => ({
+      let localReports = [];
+      try {
+        localReports = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
+      } catch (e) { console.error(e); }
+
+      const mapById = new Map();
+      [...apiIssues, ...localReports].forEach(item => {
+        const key = item._id || item.id;
+        if (key) mapById.set(key, item);
+      });
+
+      const merged = Array.from(mapById.values());
+
+      const mapped = merged
+        .filter(item => {
+          const s = (item.status || '').toUpperCase();
+          return s === 'ASSIGNED' || s === 'REPORTED' || s === 'UNSOLVED' || s === 'UNDER REVIEW'; // Show everything pending department action
+        })
+        .map(item => ({
         id: item._id || item.id,
         _id: item._id || item.id,
         title: item.title,
@@ -28,12 +49,12 @@ export default function AssignedWork() {
         category: item.category,
         priority: item.priority || item.aiSeverity || 'High',
         ward: item.wardId || item.wardName || 'Ward 4',
-        department: item.assignedDept || 'Public Works Department',
+        department: item.assignedDepartment || item.assignedDept || 'Public Works Department',
         assignedDate: new Date(item.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
         expectedCompletion: item.expectedResolutionDate || 'In 2 Days',
         currentStatus: item.status || 'Assigned',
-        progress: item.status === 'Resolved' ? 100 : item.status === 'In Progress' ? 50 : 15,
-        image: item.image || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
+        progress: item.progress || (item.status === 'Resolved' ? 100 : item.status === 'In Progress' ? 50 : 15),
+        image: item.image || item.imageUrl || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
         location: item.location,
         locationCoords: item.locationCoords,
         aiTags: item.aiTags || [],
@@ -64,13 +85,30 @@ export default function AssignedWork() {
         remarks: `Work order accepted by ${user?.name || 'Department Supervisor'}. Field crew scheduled.`,
         updatedBy: user?.name || 'Department Officer'
       });
-      setWorks(prev => prev.map(w => (w.id === id || w._id === id) ? { ...w, currentStatus: 'In Progress', progress: 30 } : w));
-      showFeedback(`Work order #${id} accepted! Status updated to In Progress.`);
     } catch (err) {
-      console.error('Accept work error:', err);
-      showFeedback(`Order #${id} accepted locally.`);
-      setWorks(prev => prev.map(w => (w.id === id || w._id === id) ? { ...w, currentStatus: 'In Progress', progress: 30 } : w));
+      console.error('API update failed, continuing with local storage:', err);
     }
+
+    try {
+      const local = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
+      const updatedLocal = local.map(item => {
+        if (item.id === id || item._id === id) {
+          return { ...item, status: 'IN PROGRESS', progress: 30, actionTaken: `Accepted by Department. Field crew scheduled.` };
+        }
+        return item;
+      });
+      localStorage.setItem('my_submitted_reports', JSON.stringify(updatedLocal));
+    } catch (e) {
+      console.error("Local sync error:", e);
+    }
+
+    setWorks(prev => prev.map(w => (w.id === id || w._id === id) ? { ...w, currentStatus: 'IN PROGRESS', progress: 30 } : w));
+    showFeedback(`Work order #${id} accepted! Status updated to In Progress.`);
+    
+    // Remove it from assigned view as it is now technically In Progress
+    setTimeout(() => {
+      setWorks(prev => prev.filter(w => w.id !== id && w._id !== id));
+    }, 1500);
   };
 
   const handleStartWork = async (id) => {
@@ -80,13 +118,29 @@ export default function AssignedWork() {
         remarks: 'Repair equipment and field specialists deployed on site.',
         updatedBy: user?.name || 'Field Operations Lead'
       });
-      setWorks(prev => prev.map(w => (w.id === id || w._id === id) ? { ...w, currentStatus: 'In Progress', progress: 50 } : w));
-      showFeedback(`Work initiated for #${id}! Progress updated on citizen tracking timeline.`);
     } catch (err) {
-      console.error('Start work error:', err);
-      showFeedback(`Work initiated for #${id}!`);
-      setWorks(prev => prev.map(w => (w.id === id || w._id === id) ? { ...w, currentStatus: 'In Progress', progress: 50 } : w));
+      console.error('API update failed, continuing with local storage:', err);
     }
+
+    try {
+      const local = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
+      const updatedLocal = local.map(item => {
+        if (item.id === id || item._id === id) {
+          return { ...item, status: 'IN PROGRESS', progress: 50, actionTaken: 'Work Started. Specialists deployed on site.' };
+        }
+        return item;
+      });
+      localStorage.setItem('my_submitted_reports', JSON.stringify(updatedLocal));
+    } catch (e) {
+      console.error("Local sync error:", e);
+    }
+
+    setWorks(prev => prev.map(w => (w.id === id || w._id === id) ? { ...w, currentStatus: 'IN PROGRESS', progress: 50 } : w));
+    showFeedback(`Work initiated for #${id}! Progress updated on citizen tracking timeline.`);
+    
+    setTimeout(() => {
+      setWorks(prev => prev.filter(w => w.id !== id && w._id !== id));
+    }, 1500);
   };
 
   const filtered = works.filter(w => 
@@ -135,53 +189,59 @@ export default function AssignedWork() {
           <p style={{ color: '#64748b', fontSize: '0.9rem' }}>All assigned tasks are either completed or matching search criteria.</p>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+        <div className="officer-cards-list">
           {filtered.map(work => (
-            <div key={work.id} style={{ background: '#fff', borderRadius: '14px', overflow: 'hidden', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
-              <div style={{ position: 'relative', height: '170px', background: '#1e293b' }}>
-                <img src={work.image} alt={work.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                <span style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(15, 23, 42, 0.85)', color: '#fff', backdropFilter: 'blur(8px)', padding: '4px 10px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 700 }}>
-                  {work.priority} Priority
-                </span>
+            <div key={work.id} className="officer-issue-card">
+              <div className="officer-card-img">
+                <img src={work.image || `https://picsum.photos/seed/${work.id}/400/300`} alt={work.title} />
               </div>
 
-              <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#64748b', marginBottom: '6px' }}>
-                    <span>#{work.id.slice(-6)} • {work.category}</span>
-                    <span style={{ fontWeight: 700, color: '#0284c7' }}>{work.currentStatus}</span>
-                  </div>
-
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, margin: '0 0 8px', color: '#1e293b' }}>{work.title}</h3>
-                  <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '12px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                    {work.description}
-                  </p>
-
-                  <div style={{ fontSize: '0.8rem', color: '#475569', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '14px' }}>
-                    <FaMapMarkerAlt style={{ color: '#ef4444' }} /> {work.location}
+              <div className="officer-card-body">
+                <div className="officer-card-header">
+                  <h3>{work.title}</h3>
+                  <div className="officer-badge-cluster">
+                    <span className={`officer-status-pill ${(work.currentStatus || 'UNSOLVED').toLowerCase().replace(' ', '-')}`}>
+                      {work.currentStatus}
+                    </span>
+                    <span className={`officer-priority-pill ${(work.priority || 'medium').toLowerCase()}`}>
+                      {work.priority || 'Medium'} Priority
+                    </span>
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', paddingTop: '14px', borderTop: '1px solid #f1f5f9' }}>
-                  <button 
-                    onClick={() => { setSelectedWork(work); setViewModalOpen(true); }} 
-                    style={{ padding: '8px 4px', fontSize: '0.8rem', background: '#f1f5f9', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
-                  >
-                    <FaEye /> View
-                  </button>
-                  <button 
-                    onClick={() => { setSelectedWork(work); setAcceptModalOpen(true); }} 
-                    style={{ padding: '8px 4px', fontSize: '0.8rem', background: '#0284c7', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
-                  >
-                    <FaCheckCircle /> Accept
-                  </button>
-                  <button 
-                    onClick={() => handleStartWork(work.id)} 
-                    style={{ padding: '8px 4px', fontSize: '0.8rem', background: '#10b981', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
-                  >
-                    <FaPlay /> Start
-                  </button>
+                <div className="officer-meta-row">
+                  <span className="officer-category-badge">{work.category}</span>
+                  <span className="meta-sep">•</span>
+                  <span>{work.createdAt ? new Date(work.createdAt).toLocaleDateString() : 'N/A'}</span>
+                  <span className="meta-sep">•</span>
+                  <span className="officer-location-text">
+                    <FaMapMarkerAlt style={{ color: '#ef4444', marginRight: '4px' }} />
+                    {work.location}
+                  </span>
                 </div>
+              </div>
+
+              <div className="officer-card-actions" style={{ gap: '8px' }}>
+                <button 
+                  className="btn-manage-action"
+                  onClick={() => { setSelectedWork(work); setAcceptModalOpen(true); }}
+                >
+                  <FaCheckCircle /> Accept
+                </button>
+                <button 
+                  className="btn-manage-action"
+                  style={{ background: '#10b981', borderColor: '#10b981' }}
+                  onClick={() => handleStartWork(work.id)}
+                >
+                  <FaPlay /> Start
+                </button>
+                <button 
+                  className="btn-manage-action"
+                  style={{ background: '#FFFFFF', color: '#155EEF', border: '1px solid #E2E8F0' }}
+                  onClick={() => { setSelectedWork(work); setViewModalOpen(true); }}
+                >
+                  <FaEye /> View
+                </button>
               </div>
             </div>
           ))}

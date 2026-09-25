@@ -1,325 +1,238 @@
-/* ====================================================================
-   PREMIUM CENTERED HEROIC LOGIN CARD DESIGN
-   ==================================================================== */
-
-.authLayout {
+.hubLayout {
   min-height: 100vh;
-  width: 100%;
-  background: radial-gradient(circle at 50% 15%, #E0F2FE 0%, #F1F5F9 50%, #F8FAFC 100%);
+  position: relative;
+  overflow: hidden;
+  background-color: #f8fafc;
+  font-family: 'Inter', sans-serif;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 36px 16px;
-  box-sizing: border-box;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  position: relative;
+}
+
+.backgroundAnimation {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.blob1, .blob2, .blob3 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: floatBlobs 20s infinite alternate ease-in-out;
+}
+
+.blob1 {
+  width: 500px; height: 500px;
+  background: #bae6fd;
+  top: -100px; left: -100px;
+}
+.blob2 {
+  width: 400px; height: 400px;
+  background: #fef08a;
+  bottom: -50px; right: -50px;
+  animation-delay: -5s;
+}
+.blob3 {
+  width: 300px; height: 300px;
+  background: #c7d2fe;
+  top: 40%; left: 60%;
+  animation-delay: -10s;
+}
+
+@keyframes floatBlobs {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, 50px) scale(1.1); }
+  100% { transform: translate(-50px, 100px) scale(0.9); }
 }
 
 .topHeaderWrapper {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 20px;
+  position: relative;
+  z-index: 10;
+  padding: 24px 40px;
 }
 
 .topBrandHeader {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  cursor: pointer;
   text-decoration: none;
-  background: #F8FAFC;
-  padding: 6px 16px 6px 8px;
-  border-radius: 40px;
-  border: 1px solid #E2E8F0;
-  transition: all 0.2s ease;
-}
-
-.topBrandHeader:hover {
-  background: #EFF6FF;
-  border-color: #2563EB;
 }
 
 .brandShieldIcon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #FBBF24;
-  font-size: 1.2rem;
-  border: 2px solid #FFFFFF;
-  box-shadow: 0 2px 6px rgba(30, 58, 138, 0.2) !important;
-  flex-shrink: 0;
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .brandTextGroup {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
 }
 
 .brandTitle {
-  font-size: 1.3rem;
   font-weight: 800;
-  color: #1E3A8A;
-  letter-spacing: -0.3px;
-  line-height: 1.1;
+  color: #1e293b;
+  font-size: 1.2rem;
+  letter-spacing: -0.5px;
 }
 
 .brandTagline {
-  font-size: 0.65rem;
-  color: #2563EB;
-  font-weight: 700;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  background: #EFF6FF;
-  border: 1px solid #BFDBFE;
-  padding: 1px 6px;
-  border-radius: 6px;
-  margin-top: 2px;
-  display: inline-block;
-}
-
-/* Centered Card */
-.heroicCard {
-  width: 100%;
-  max-width: 460px;
-  background: #FFFFFF;
-  border: 1px solid #dbe3ec;
-  border-radius: 12px;
-  padding: 36px;
-  box-sizing: border-box;
-  box-shadow: none !important;
-}
-
-.cardHeader {
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.cardTitle {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #111827;
-  margin: 0 0 6px 0;
-  letter-spacing: -0.3px;
-}
-
-.cardSubtitle {
-  font-size: 0.9rem;
-  color: #5c6474;
-  margin: 0;
-  line-height: 1.45;
-}
-
-/* Role Selector Tabs */
-.roleSelectorBox {
-  background: #F8FAFC;
-  border: 1px solid #dbe3ec;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 24px;
-}
-
-.roleSelectorLabel {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #5c6474;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 8px;
+}
+
+.hubContent {
+  position: relative;
+  z-index: 10;
+  flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  padding: 20px 40px 80px;
 }
 
-.roleActiveBadge {
-  font-size: 0.7rem;
-  background: #FBBF24;
-  color: #453204;
-  padding: 2px 6px;
-  border-radius: 8px;
+.hubHeader {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.hubTitle {
+  font-size: 3rem;
   font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 12px;
+  letter-spacing: -1px;
 }
 
-.roleTabsGrid {
+.hubSubtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.portalGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-}
-
-.roleTabBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 10px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #5c6474;
-  background: #FFFFFF;
-  border: 1px solid #dbe3ec;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
-}
-
-.roleTabBtn:hover {
-  background: #EFF6FF;
-  color: #1E3A8A;
-  border-color: #1E3A8A;
-}
-
-.roleTabBtn.activeRole {
-  background: #1E3A8A;
-  color: #FFFFFF;
-  border-color: #1E3A8A;
-  font-weight: 700;
-}
-
-/* Form layout */
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.optionsRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: -4px;
-}
-
-.checkboxLabel {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  color: #5c6474;
-  cursor: pointer;
-
-}
-
-.checkboxLabel input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: #1E3A8A;
-  cursor: pointer;
-}
-
-.forgotLink {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #1E3A8A;
-  text-decoration: none;
-}
-
-.forgotLink:hover {
-  text-decoration: underline;
-}
-
-.eyeBtn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: #5c6474;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  transition: color 0.2s;
-}
-
-.eyeBtn:hover {
-  color: #1E3A8A;
-}
-
-.submitBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 24px;
+  max-width: 900px;
   width: 100%;
-  padding: 13px;
-  background: #1E3A8A;
-  color: #FFFFFF;
-  border: 1px solid #1E3A8A;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s;
-  box-shadow: none !important;
-  margin-top: 4px;
 }
 
-.submitBtn:hover:not(:disabled) {
-  background: #1e40af;
-}
-
-.submitBtn:disabled {
-  background: #93c5fd;
-  cursor: not-allowed;
-}
-
-/* Divider */
-.divider {
+.portalCard {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  padding: 32px;
   display: flex;
   align-items: center;
-  text-align: center;
-  margin: 22px 0 18px 0;
-  color: #5c6474;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  gap: 24px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
 }
 
-.divider::before,
-.divider::after {
+.portalCard::before {
   content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.portalCard:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+.portalCard:hover::before {
+  opacity: 1;
+}
+
+.cardIcon {
+  font-size: 2.5rem;
+  width: 70px; height: 70px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 16px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.cardInfo {
   flex: 1;
-  border-bottom: 1px solid #dbe3ec;
+  z-index: 1;
 }
 
-.divider span {
-  padding: 0 12px;
+.cardInfo h3 {
+  margin: 0 0 8px;
+  font-size: 1.3rem;
+  color: #1e293b;
 }
 
-.socialGrid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 22px;
-}
-
-.footerText {
-  text-align: center;
-  font-size: 0.88rem;
-  color: #5c6474;
+.cardInfo p {
   margin: 0;
+  color: #64748b;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
-.link {
-  color: #1E3A8A;
-  font-weight: 700;
+.cardArrow {
+  font-size: 1.5rem;
+  color: #cbd5e1;
+  transition: transform 0.3s, color 0.3s;
+  z-index: 1;
+}
+
+.portalCard:hover .cardArrow {
+  transform: translateX(5px);
+}
+
+/* Card Specific Themes */
+.citizenCard:hover { box-shadow: 0 20px 40px rgba(2, 132, 199, 0.15); border-color: #bae6fd; }
+.citizenCard .cardIcon { background: #e0f2fe; color: #0284c7; }
+.citizenCard:hover .cardArrow { color: #0284c7; }
+
+.officerCard:hover { box-shadow: 0 20px 40px rgba(217, 119, 6, 0.15); border-color: #fde68a; }
+.officerCard .cardIcon { background: #fef3c7; color: #d97706; }
+.officerCard:hover .cardArrow { color: #d97706; }
+
+.departmentCard:hover { box-shadow: 0 20px 40px rgba(79, 70, 229, 0.15); border-color: #c7d2fe; }
+.departmentCard .cardIcon { background: #e0e7ff; color: #4f46e5; }
+.departmentCard:hover .cardArrow { color: #4f46e5; }
+
+.adminCard:hover { box-shadow: 0 20px 40px rgba(220, 38, 38, 0.15); border-color: #fecaca; }
+.adminCard .cardIcon { background: #fee2e2; color: #dc2626; }
+.adminCard:hover .cardArrow { color: #dc2626; }
+
+.hubFooter {
+  margin-top: 60px;
+  text-align: center;
+  color: #64748b;
+  z-index: 10;
+}
+
+.hubFooter a {
+  color: #2563eb;
+  font-weight: 600;
   text-decoration: none;
 }
-
-.link:hover {
+.hubFooter a:hover {
   text-decoration: underline;
 }
 
-@media (max-width: 480px) {
-  .heroicCard {
-    padding: 24px 20px;
-  }
-  .roleTabsGrid {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 768px) {
+  .portalGrid { grid-template-columns: 1fr; }
+  .hubTitle { font-size: 2.2rem; }
+  .topHeaderWrapper, .hubContent { padding-left: 20px; padding-right: 20px; }
 }

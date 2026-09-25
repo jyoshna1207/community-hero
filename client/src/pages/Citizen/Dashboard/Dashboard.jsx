@@ -85,6 +85,22 @@ export default function Dashboard() {
         console.warn("Backend API not reachable for dashboard feed, using local store:", err.message);
       }
 
+      // Filter by User's Locality (Village, Mandal, Ward)
+      if (user) {
+        const userLocTokens = [
+          (user.village || '').toLowerCase(),
+          (user.mandal || '').toLowerCase(),
+          (user.wardName || '').toLowerCase()
+        ].filter(t => t);
+
+        if (userLocTokens.length > 0) {
+          combined = combined.filter(issue => {
+            const issueLoc = (issue.location || '').toLowerCase();
+            return userLocTokens.some(token => issueLoc.includes(token));
+          });
+        }
+      }
+
       // Mock fallbacks if empty
       if (combined.length === 0) {
         combined = [
@@ -93,7 +109,7 @@ export default function Dashboard() {
             title: 'Dangerous Pothole on Main Road',
             category: 'Roads',
             status: 'In Progress',
-            location: 'Main Road, Ward 04, Duvvada',
+            location: `Main Road, ${user?.wardName || 'Ward 04'}, ${user?.village || 'Duvvada'}`,
             reporterName: 'Ramesh Babu',
             date: 'Today',
             image: 'https://picsum.photos/seed/fallback1/400/300',
@@ -104,7 +120,7 @@ export default function Dashboard() {
             title: 'Streetlight Pole 14 Dark & Non-functional',
             category: 'Street Lights',
             status: 'Reported',
-            location: 'Sector 3 Park Lane, Duvvada',
+            location: `Sector 3 Park Lane, ${user?.village || 'Duvvada'}`,
             reporterName: 'Kavitha Reddy',
             date: 'Yesterday',
             image: 'https://picsum.photos/seed/fallback2/400/300',
@@ -115,7 +131,7 @@ export default function Dashboard() {
             title: 'Water Leakage Near Bus Shelter',
             category: 'Water Supply',
             status: 'Resolved',
-            location: 'Railway Colony, Visakhapatnam',
+            location: `Railway Colony, ${user?.mandal || 'Visakhapatnam'}`,
             reporterName: 'Suresh Varma',
             date: '2 Days Ago',
             image: 'https://picsum.photos/seed/fallback3/400/300',

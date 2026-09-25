@@ -17,23 +17,41 @@ export default function UpdateProgress() {
   const loadProgressWorks = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/issues');
-      let issues = Array.isArray(res.data) ? res.data : [];
+      let apiIssues = [];
+      try {
+        const res = await axios.get('http://localhost:5000/api/issues');
+        if (res.data && Array.isArray(res.data)) apiIssues = res.data;
+      } catch (e) { console.error(e); }
 
-      // Filter active in-progress or assigned issues
-      const filteredActive = issues.filter(i => {
+      let localReports = [];
+      try {
+        localReports = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
+      } catch (e) { console.error(e); }
+
+      const mapById = new Map();
+      [...apiIssues, ...localReports].forEach(item => {
+        const key = item._id || item.id;
+        if (key) mapById.set(key, item);
+      });
+
+      const merged = Array.from(mapById.values());
+
+      // Filter active in-progress issues
+      const filteredActive = merged.filter(i => {
         const s = (i.status || '').toUpperCase();
-        return s !== 'RESOLVED' && s !== 'SOLVED';
+        return s === 'IN PROGRESS';
       }).map(item => ({
         id: item._id || item.id,
         _id: item._id || item.id,
         title: item.title,
         description: item.description,
-        department: item.assignedDept || 'Public Works Department',
+        department: item.assignedDepartment || item.assignedDept || 'Public Works Department',
+        category: item.category,
         currentStatus: item.status || 'In Progress',
-        progress: item.status === 'In Progress' ? 65 : 25,
+        progress: item.progress || 50,
         location: item.location,
         priority: item.priority || 'High',
+        image: item.image || item.imageUrl || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
       }));
 
       setWorks(filteredActive);
@@ -61,13 +79,25 @@ export default function UpdateProgress() {
         remarks: remarks || `Progress milestone updated to ${val}%.`,
         updatedBy: user?.name || 'Department Supervisor'
       });
-      setWorks(prev => prev.map(w => (w.id === id || w._id === id) ? { ...w, progress: val } : w));
-      showNotification(`Milestone updated to ${val}% for #${id}!`);
     } catch (err) {
-      console.error('Update progress error:', err);
-      setWorks(prev => prev.map(w => (w.id === id || w._id === id) ? { ...w, progress: val } : w));
-      showNotification(`Progress updated to ${val}%.`);
+      console.error('API update failed, continuing with local storage:', err);
     }
+
+    try {
+      const local = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
+      const updatedLocal = local.map(item => {
+        if (item.id === id || item._id === id) {
+          return { ...item, progress: val, actionTaken: remarks || `Progress milestone updated to ${val}%.` };
+        }
+        return item;
+      });
+      localStorage.setItem('my_submitted_reports', JSON.stringify(updatedLocal));
+    } catch (e) {
+      console.error("Local sync error:", e);
+    }
+
+    setWorks(prev => prev.map(w => (w.id === id || w._id === id) ? { ...w, progress: val } : w));
+    showNotification(`Milestone updated to ${val}% for #${id}!`);
   };
 
   const handleMarkCompleted = async (id, remarks) => {
@@ -78,13 +108,31 @@ export default function UpdateProgress() {
         resolutionImage: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?auto=format&fit=crop&w=800&q=80',
         updatedBy: user?.name || 'Department Lead'
       });
-      setWorks(prev => prev.filter(w => w.id !== id && w._id !== id));
-      showNotification(`Ticket #${id} marked as Completed and Resolved! Archived in records.`);
     } catch (err) {
-      console.error('Complete work error:', err);
-      setWorks(prev => prev.filter(w => w.id !== id && w._id !== id));
-      showNotification(`Ticket #${id} marked as Completed!`);
+      console.error('API update failed, continuing with local storage:', err);
     }
+
+    try {
+      const local = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
+      const updatedLocal = local.map(item => {
+        if (item.id === id || item._id === id) {
+          return { 
+            ...item, 
+            status: 'RESOLVED', 
+            progress: 100, 
+            resolutionNote: remarks || 'Field repairs finished and verified by department supervisor.',
+            resolvedAt: new Date().toISOString()
+          };
+        }
+        return item;
+      });
+      localStorage.setItem('my_submitted_reports', JSON.stringify(updatedLocal));
+    } catch (e) {
+      console.error("Local sync error:", e);
+    }
+
+    setWorks(prev => prev.filter(w => w.id !== id && w._id !== id));
+    showNotification(`Ticket #${id} marked as Completed and Resolved! Archived in records.`);
   };
 
   const filtered = works.filter(w => 
@@ -133,40 +181,49 @@ export default function UpdateProgress() {
           <p style={{ color: '#64748b', fontSize: '0.9rem' }}>All department work orders have reached completion status.</p>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '20px' }}>
+        <div className="officer-cards-list">
           {filtered.map(work => (
-            <div key={work.id} style={{ background: '#fff', borderRadius: '14px', padding: '22px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', gap: '16px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div>
-                  <span style={{ fontSize: '0.75rem', color: '#64748b' }}>#{work.id.slice(-6)} • {work.department}</span>
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginTop: '4px', color: '#1e293b' }}>{work.title}</h3>
-                  <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '2px' }}>📍 {work.location}</div>
-                </div>
-                <span style={{ background: '#e0f2fe', color: '#0369a1', padding: '4px 10px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 700 }}>
-                  {work.currentStatus}
-                </span>
+            <div key={work.id} className="officer-issue-card">
+              <div className="officer-card-img">
+                <img src={work.image || `https://picsum.photos/seed/${work.id}/400/300`} alt={work.title} />
               </div>
 
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.825rem', marginBottom: '6px', fontWeight: 700, color: '#334155' }}>
-                  <span>Repair Milestone Progress</span>
-                  <span style={{ color: '#0284c7' }}>{work.progress}%</span>
+              <div className="officer-card-body">
+                <div className="officer-card-header">
+                  <h3>{work.title}</h3>
+                  <div className="officer-badge-cluster">
+                    <span className={`officer-status-pill ${(work.currentStatus || 'UNSOLVED').toLowerCase().replace(' ', '-')}`}>
+                      {work.currentStatus}
+                    </span>
+                    <span className={`officer-priority-pill ${(work.priority || 'medium').toLowerCase()}`}>
+                      {work.priority || 'Medium'} Priority
+                    </span>
+                  </div>
                 </div>
-                <div style={{ width: '100%', height: '9px', background: '#f1f5f9', borderRadius: '5px', overflow: 'hidden' }}>
-                  <div style={{ width: `${work.progress}%`, height: '100%', background: 'linear-gradient(90deg, #3b82f6 0%, #0284c7 100%)', borderRadius: '5px', transition: 'width 0.4s ease' }} />
+
+                <div className="officer-meta-row">
+                  <span className="officer-category-badge">{work.category || work.department}</span>
+                  <span className="meta-sep">•</span>
+                  <span>Progress: {work.progress}%</span>
+                  <span className="meta-sep">•</span>
+                  <span className="officer-location-text">
+                    <FaMapMarkerAlt style={{ color: '#ef4444', marginRight: '4px' }} />
+                    {work.location}
+                  </span>
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', paddingTop: '10px', borderTop: '1px solid #f1f5f9' }}>
+              <div className="officer-card-actions" style={{ gap: '8px' }}>
                 <button 
-                  onClick={() => { setSelectedWork(work); setProgressModalOpen(true); }} 
-                  style={{ padding: '9px', fontSize: '0.825rem', background: '#f1f5f9', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                  className="btn-manage-action"
+                  onClick={() => { setSelectedWork(work); setProgressModalOpen(true); }}
                 >
                   <FaEdit /> Update %
                 </button>
                 <button 
-                  onClick={() => { setSelectedWork(work); setCompleteModalOpen(true); }} 
-                  style={{ padding: '9px', fontSize: '0.825rem', background: '#10b981', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                  className="btn-manage-action"
+                  style={{ background: '#10b981', borderColor: '#10b981' }}
+                  onClick={() => { setSelectedWork(work); setCompleteModalOpen(true); }}
                 >
                   <FaCheckCircle /> Mark Complete
                 </button>

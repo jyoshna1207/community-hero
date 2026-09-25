@@ -13,10 +13,26 @@ export default function CompletedWork() {
   const loadCompletedWorks = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/issues');
-      let issues = Array.isArray(res.data) ? res.data : [];
+      let apiIssues = [];
+      try {
+        const res = await axios.get('http://localhost:5000/api/issues');
+        if (res.data && Array.isArray(res.data)) apiIssues = res.data;
+      } catch (e) { console.error(e); }
 
-      const resolvedOnly = issues.filter(i => {
+      let localReports = [];
+      try {
+        localReports = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
+      } catch (e) { console.error(e); }
+
+      const mapById = new Map();
+      [...apiIssues, ...localReports].forEach(item => {
+        const key = item._id || item.id;
+        if (key) mapById.set(key, item);
+      });
+
+      const merged = Array.from(mapById.values());
+
+      const resolvedOnly = merged.filter(i => {
         const s = (i.status || '').toUpperCase();
         return s === 'RESOLVED' || s === 'SOLVED';
       }).map(item => ({
@@ -27,7 +43,7 @@ export default function CompletedWork() {
         ward: item.wardId || item.wardName || 'Ward 4',
         finalStatus: 'Resolved & Verified',
         completedDate: new Date(item.updatedAt || item.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        beforeImage: item.image || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
+        beforeImage: item.image || item.imageUrl || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
         afterImage: item.resolutionImage || 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?auto=format&fit=crop&w=800&q=80',
         resolutionNote: item.resolutionNote || item.actionTaken || 'Civic repair completed and inspected.',
         location: item.location,
@@ -86,47 +102,52 @@ export default function CompletedWork() {
           <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Once department crews resolve tickets in "Update Progress", they will permanently appear here.</p>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px' }}>
+        <div className="officer-cards-list">
           {filtered.map(item => (
-            <div key={item.id} style={{ background: '#fff', borderRadius: '14px', padding: '20px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', gap: '16px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div>
-                  <span style={{ fontSize: '0.75rem', color: '#64748b' }}>#{item.id.slice(-6)} • {item.ward}</span>
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginTop: '4px', color: '#1e293b' }}>{item.title}</h3>
-                  <div style={{ fontSize: '0.8rem', color: '#64748b' }}>📍 {item.location}</div>
-                </div>
-                <span style={{ background: '#dcfce7', color: '#166534', padding: '4px 10px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <FaCheckCircle /> {item.finalStatus}
-                </span>
+            <div key={item.id} className="officer-issue-card">
+              <div className="officer-card-img">
+                <img src={item.afterImage || item.beforeImage || `https://picsum.photos/seed/${item.id}/400/300`} alt={item.title} />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                <div>
-                  <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#ef4444', marginBottom: '4px' }}>BEFORE REPAIR</div>
-                  <img src={item.beforeImage} alt="Before" style={{ width: '100%', height: '110px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #fee2e2' }} />
+              <div className="officer-card-body">
+                <div className="officer-card-header">
+                  <h3>{item.title}</h3>
+                  <div className="officer-badge-cluster">
+                    <span className={`officer-status-pill solved`}>
+                      {item.finalStatus || 'RESOLVED'}
+                    </span>
+                    <span className={`officer-priority-pill ${(item.priority || 'medium').toLowerCase()}`}>
+                      {item.priority || 'Medium'} Priority
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#10b981', marginBottom: '4px' }}>AFTER RESOLUTION</div>
-                  <img src={item.afterImage} alt="After" style={{ width: '100%', height: '110px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #d1fae5' }} />
+
+                <div className="officer-meta-row">
+                  <span className="officer-category-badge">{item.ward || item.department}</span>
+                  <span className="meta-sep">•</span>
+                  <span>{item.resolvedAt ? new Date(item.resolvedAt).toLocaleDateString() : 'N/A'}</span>
+                  <span className="meta-sep">•</span>
+                  <span className="officer-location-text">
+                    <FaMapMarkerAlt style={{ color: '#ef4444', marginRight: '4px' }} />
+                    {item.location}
+                  </span>
                 </div>
               </div>
 
-              <div style={{ background: '#f8fafc', padding: '10px 12px', borderRadius: '8px', fontSize: '0.8rem', color: '#475569' }}>
-                <strong>Resolution Note:</strong> {item.resolutionNote}
-              </div>
-
-              <div style={{ display: 'flex', gap: '10px', marginTop: 'auto' }}>
+              <div className="officer-card-actions" style={{ gap: '8px' }}>
                 <button 
-                  onClick={() => { setSelectedWork(item); setViewModalOpen(true); }} 
-                  style={{ flex: 1, padding: '8px', fontSize: '0.825rem', background: '#f1f5f9', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
-                >
-                  <FaEye /> Full Ticket
-                </button>
-                <button 
-                  onClick={() => alert(`Certificate of completion downloaded for ticket #${item.id}`)} 
-                  style={{ flex: 1, padding: '8px', fontSize: '0.825rem', background: '#0284c7', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                  className="btn-manage-action"
+                  style={{ background: '#0284c7', borderColor: '#0284c7' }}
+                  onClick={() => alert(`Certificate of completion downloaded for ticket #${item.id}`)}
                 >
                   <FaDownload /> Certificate
+                </button>
+                <button 
+                  className="btn-manage-action"
+                  style={{ background: '#FFFFFF', color: '#155EEF', border: '1px solid #E2E8F0' }}
+                  onClick={() => { setSelectedWork(item); setViewModalOpen(true); }}
+                >
+                  <FaEye /> Full Ticket
                 </button>
               </div>
             </div>

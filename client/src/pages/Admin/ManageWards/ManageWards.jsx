@@ -4,14 +4,15 @@ import { dummyWards } from '../../../services/dummyData';
 
 export default function ManageWards() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#1e293b' }}>Manage Wards</h1>
-          <p style={{ color: '#475569', fontSize: '0.9rem' }}>Monitor municipal wards, population density, assigned officers, and ward efficiency scores.</p>
+    <div className="officer-dashboard-page" style={{ padding: '0' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+          <div>
+            <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1e293b' }}>Ward Administration</h1>
+            <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Monitor municipal wards, population density, assigned officers, and ward efficiency scores.</p>
+          </div>
+          <button className="btn btn-primary" style={{ padding: '8px 16px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600 }}>+ Add New Ward</button>
         </div>
-        <button className="btn btn-primary">+ Add New Ward</button>
-      </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
         {dummyWards.map((ward, idx) => (
@@ -55,6 +56,7 @@ export default function ManageWards() {
             </div>
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

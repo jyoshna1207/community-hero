@@ -113,8 +113,10 @@ export const AuthProvider = ({ children }) => {
         password: nameOrData.password,
         role: nameOrData.role || "citizen",
         wardId: nameOrData.wardId || "WARD-04",
-        wardName: nameOrData.wardName || "Duvvada Ward 4",
+        wardName: nameOrData.wardName || "",
         municipality: nameOrData.municipality || "Visakhapatnam",
+        village: nameOrData.village || "",
+        mandal: nameOrData.mandal || "",
         phone: nameOrData.phone || "",
       };
     } else {

@@ -40,6 +40,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: "Visakhapatnam Municipal Corporation",
   },
+  village: {
+    type: String,
+    default: "",
+  },
+  mandal: {
+    type: String,
+    default: "",
+  },
   departmentName: {
     type: String,
     default: "Public Works Department",

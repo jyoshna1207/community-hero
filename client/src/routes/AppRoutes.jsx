@@ -13,6 +13,13 @@ import DepartmentLayout from '../layouts/DepartmentLayout';
 
 // Auth Pages (Go up one directory into src/, then into pages/auth/)
 import LoginPage from '../pages/auth/Loginpage'; 
+import AdminLogin from '../pages/auth/AdminLogin';
+import CitizenLogin from '../pages/auth/CitizenLogin';
+import DepartmentLogin from '../pages/auth/DepartmentLogin';
+import OfficerLogin from '../pages/auth/OfficerLogin';
+import { ForgotPasswordPage } from '../pages/auth/ForgotPasswordPage';
+import { ResetPasswordPage } from '../pages/auth/ResetPasswordPage';
+import { VerifyEmailPage } from '../pages/auth/VerifyEmailPage';
 import RegisterPage from '../pages/auth/Registerpage';
 import Unauthorized from '../pages/Unauthorized';
 import NotFound from '../pages/NotFound';
@@ -65,6 +72,13 @@ const AppRoutes = () => {
 
           <Route path="/mobile" element={<MobileAppContainer />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/login/admin" element={<AdminLogin />} />
+          <Route path="/login/citizen" element={<CitizenLogin />} />
+          <Route path="/login/department" element={<DepartmentLogin />} />
+          <Route path="/login/officer" element={<OfficerLogin />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 

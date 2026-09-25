@@ -5,7 +5,7 @@ import {
   FiCpu, FiVideo, FiActivity, FiTag, FiZap, FiClock, FiShield, FiMic, FiMicOff
 } from 'react-icons/fi';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import AddLocationPicker from '../../../components/Common/AddLocationPicker/AddLocationPicker';
@@ -232,7 +232,7 @@ export default function ReportIssue() {
     setAiError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/issues/ai-analyze', {
+      const res = await api.post('/issues/ai-analyze', {
         title: issueDetails.title || `${selectedCategory} issue`,
         description: issueDetails.description || 'Community reported issue requiring civic verification',
         image: issueDetails.photo || '',
@@ -315,32 +315,21 @@ export default function ReportIssue() {
         aiTags: newReport.aiTags,
       };
 
-      if (token) {
-        const res = await axios.post('http://localhost:5000/api/issues', payload, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (res.data && res.data._id) {
-          newReport._id = res.data._id;
-          newReport.id = res.data._id;
-        }
+      const res = await api.post('/issues', payload);
+      if (res.data && res.data._id) {
+        newReport._id = res.data._id;
+        newReport.id = res.data._id;
       }
     } catch (err) {
       console.error("Submit issue error:", err);
-    } finally {
-      try {
-        const existing = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
-        localStorage.setItem('my_submitted_reports', JSON.stringify([newReport, ...existing]));
-      } catch (e) {
-        console.error("Storage error:", e);
-      }
-
-      setSubmittedReportId(newReport.id);
+      setSubmitError(language === 'te' ? 'సమస్య సమర్పించడంలో లోపం' : language === 'hi' ? 'समस्या जमा करने में त्रुटि' : 'Failed to submit the issue.');
       setIsSubmitting(false);
-      setCurrentStep(4);
+      return;
     }
+
+    setSubmittedReportId(newReport.id);
+    setIsSubmitting(false);
+    setCurrentStep(4);
   };
 
   return (

@@ -18,8 +18,11 @@ const RegisterPage = () => {
     confirmPassword: '',
     role: 'Citizen',
     wardId: 'WARD-04',
-    wardName: 'Duvvada Ward 4',
+    wardName: '',
     municipality: 'Visakhapatnam Municipal Corporation',
+    village: '',
+    mandal: '',
+    officialIdFile: null,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -46,6 +49,12 @@ const RegisterPage = () => {
     else if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters';
     if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
     if (!termsAccepted) newErrors.terms = 'You must accept Terms & Conditions';
+
+    if (formData.role === 'Ward Officer' || formData.role === 'Department Officer') {
+      if (!formData.officialIdFile) {
+        newErrors.officialIdFile = 'Official Government ID proof is required';
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -159,6 +168,68 @@ const RegisterPage = () => {
               ))}
             </div>
           </div>
+
+          {formData.role === 'Citizen' && (
+            <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
+              <h4 style={{ margin: '0 0 12px 0', fontSize: '0.88rem', color: '#0F172A', fontWeight: 700 }}>Location Details (For localized issues)</h4>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <AuthInput
+                  label="Mandal"
+                  type="text"
+                  name="mandal"
+                  placeholder="e.g. Tuni Rural"
+                  value={formData.mandal}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                />
+                <AuthInput
+                  label="Village / Town"
+                  type="text"
+                  name="village"
+                  placeholder="e.g. Tuni"
+                  value={formData.village}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                />
+              </div>
+              <AuthInput
+                label="Ward Name / Number"
+                type="text"
+                name="wardName"
+                placeholder="e.g. Ward 4"
+                value={formData.wardName}
+                onChange={handleChange}
+                disabled={isSubmitting}
+              />
+            </div>
+          )}
+
+          {(formData.role === 'Ward Officer' || formData.role === 'Department Officer') && (
+            <div style={{ background: '#FFF1F2', border: '1px solid #FECDD3', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
+              <h4 style={{ margin: '0 0 12px 0', fontSize: '0.88rem', color: '#9F1239', fontWeight: 700 }}>🔒 Official Verification</h4>
+              <p style={{ margin: '0 0 12px 0', fontSize: '0.75rem', color: '#BE123C' }}>
+                Restricted access. Please upload a valid government employee ID proof to register.
+              </p>
+              <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827' }}>Upload Official Employee ID (PDF/Image)</label>
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  onChange={(e) => setFormData({ ...formData, officialIdFile: e.target.files[0] })}
+                  style={{
+                    padding: '10px',
+                    border: errors.officialIdFile ? '1px solid #DC2626' : '1px solid #E2E8F0',
+                    borderRadius: '8px',
+                    background: '#FFFFFF',
+                    fontSize: '0.85rem',
+                    color: '#475569'
+                  }}
+                  disabled={isSubmitting}
+                />
+                {errors.officialIdFile && <span className={styles.errorText} style={{ color: '#DC2626', fontSize: '0.78rem', fontWeight: 600 }}>{errors.officialIdFile}</span>}
+              </div>
+            </div>
+          )}
 
           {formData.role === 'Ward Officer' && (
             <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>

@@ -95,19 +95,20 @@ export default function ManageUsers() {
   });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-        <div>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1e293b' }}>Manage Registered Users</h1>
-          <p style={{ color: '#475569', fontSize: '0.9rem' }}>Control system access, user roles, ward assignments, and profile permissions.</p>
+    <div className="officer-dashboard-page" style={{ padding: '0' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+          <div>
+            <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1e293b' }}>User Administration</h1>
+            <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Manage citizens, assign roles, and administer system accounts securely.</p>
+          </div>
+          <button 
+            onClick={loadUsers} 
+            style={{ padding: '8px 16px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 600 }}
+          >
+            <FaSync className={loading ? 'animate-spin' : ''} /> Refresh Directory
+          </button>
         </div>
-        <button 
-          onClick={loadUsers} 
-          style={{ padding: '8px 16px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 600 }}
-        >
-          <FaSync className={loading ? 'animate-spin' : ''} /> Refresh Users
-        </button>
-      </div>
 
       {notification && (
         <div style={{ padding: '12px 16px', background: '#ecfdf5', border: '1.5px solid #a7f3d0', borderRadius: '10px', color: '#065f46', fontSize: '0.875rem', fontWeight: 700 }}>
@@ -227,6 +228,7 @@ export default function ManageUsers() {
         user={selectedUser} 
         onSave={handleUpdateUser} 
       />
+      </div>
     </div>
   );
 }

@@ -7,8 +7,9 @@ import {
   FiPlusCircle, FiLoader, FiAlertCircle 
 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../services/api';
 import { useLanguage } from '../../../context/LanguageContext';
+import { useAuth } from '../../../context/AuthContext';
 import './Issues.css';
 
 // Andhra Pradesh State Geographic Coordinates & Overview
@@ -74,6 +75,7 @@ const AP_DISTRICTS = [
 export default function Issues() {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
+  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState('map'); // 'map' or 'list'
   const [selectedDistrict, setSelectedDistrict] = useState('All Andhra Pradesh');
@@ -87,34 +89,11 @@ export default function Issues() {
   useEffect(() => {
     const loadRealReportedIssues = async () => {
       setLoading(true);
-      let combined = [];
 
-      // 1. Load user's locally submitted reports from localStorage
       try {
-        const local = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
-        const mappedLocal = local.map((item, idx) => ({
-          id: item.id || item._id,
-          _id: item.id || item._id,
-          title: item.title,
-          category: item.category,
-          status: item.status || 'Reported',
-          location: item.location,
-          reporterName: item.reporterName || (idx % 2 === 0 ? 'Anusha P.' : 'Rajesh Kumar'),
-          latitude: Number(item.latitude ?? item.locationCoords?.lat ?? 17.281524),
-          longitude: Number(item.longitude ?? item.locationCoords?.lng ?? 82.521632),
-          date: item.date || 'Recently Reported',
-          description: item.description
-        }));
-        combined = [...mappedLocal];
-      } catch (e) {
-        console.error("Local storage read error:", e);
-      }
-
-      // 2. Fetch real reported issues from backend database
-      try {
-        const res = await axios.get('http://localhost:5000/api/issues');
-        if (res.data && Array.isArray(res.data) && res.data.length > 0) {
-          const apiMapped = res.data.map((item, idx) => ({
+        const res = await api.get('/issues');
+        if (res.data && Array.isArray(res.data)) {
+          let apiMapped = res.data.map((item, idx) => ({
             id: item._id,
             _id: item._id,
             title: item.title,
@@ -128,16 +107,30 @@ export default function Issues() {
             description: item.description
           }));
 
-          const existingIds = new Set(combined.map(i => i.id));
-          apiMapped.forEach(i => {
-            if (!existingIds.has(i.id)) combined.push(i);
-          });
+          // Filter by User's Locality (Village, Mandal, Ward)
+          if (user) {
+            const userLocTokens = [
+              (user.village || '').toLowerCase(),
+              (user.mandal || '').toLowerCase(),
+              (user.wardName || '').toLowerCase()
+            ].filter(t => t);
+
+            if (userLocTokens.length > 0) {
+              apiMapped = apiMapped.filter(issue => {
+                const issueLoc = (issue.location || '').toLowerCase();
+                return userLocTokens.some(token => issueLoc.includes(token));
+              });
+            }
+          }
+
+          setAllIssues(apiMapped);
+        } else {
+          setAllIssues([]);
         }
       } catch (err) {
         console.error("Fetch database issues error:", err);
+        setAllIssues([]);
       }
-
-      setAllIssues(combined);
 
       // Default state: Keep full compressed Andhra Pradesh state overview (Zoom 7) with pins
       setActiveIssueCoords(AP_STATE_CENTER);

@@ -7,7 +7,7 @@ import {
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import axios from 'axios';
+import api from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './WardDashboard.css';
@@ -74,24 +74,14 @@ export default function WardDashboard() {
   const fetchIssues = async () => {
     try {
       setLoading(true);
+      const res = await api.get('/issues');
       let apiIssues = [];
-      try {
-        const res = await axios.get('http://localhost:5000/api/issues');
-        if (res.data && Array.isArray(res.data)) {
-          apiIssues = res.data;
-        }
-      } catch (err) {
-        console.error("Fetch API error:", err);
+      if (res.data && Array.isArray(res.data)) {
+        apiIssues = res.data;
       }
 
-      // Merge local submitted reports to ensure offline sync
-      let localReports = [];
-      try {
-        localReports = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
-      } catch (e) {}
-
       const mapById = new Map();
-      [...apiIssues, ...localReports].forEach(item => {
+      apiIssues.forEach(item => {
         const key = item._id || item.id;
         if (key) {
           mapById.set(key, {
@@ -221,40 +211,10 @@ export default function WardDashboard() {
     };
 
     // 1. Update API backend
-    if (token) {
-      try {
-        await axios.put(`http://localhost:5000/api/issues/${issueId}/officer-update`, payload, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-      } catch (err) {
-        console.error("API officer update error:", err);
-      }
-    }
-
-    // 2. Sync localStorage (my_submitted_reports) so Citizen Track Your Report updates live
     try {
-      const local = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
-      const updatedLocal = local.map(item => {
-        if (item.id === issueId || item._id === issueId) {
-          return {
-            ...item,
-            status: updateForm.status,
-            priority: updateForm.priority,
-            assignedDepartment: updateForm.assignedDepartment,
-            officerRemarks: updateForm.officerRemarks,
-            actionTaken: updateForm.actionTaken,
-            expectedResolutionDate: updateForm.expectedResolutionDate,
-            resolutionImage: updateForm.resolutionImage,
-            resolutionNote: updateForm.resolutionNote,
-            updatedByOfficer: officerName,
-            updatedAt: new Date().toISOString()
-          };
-        }
-        return item;
-      });
-      localStorage.setItem('my_submitted_reports', JSON.stringify(updatedLocal));
-    } catch (e) {
-      console.error("Local sync error:", e);
+      await api.put(`/issues/${issueId}/officer-update`, payload);
+    } catch (err) {
+      console.error("API officer update error:", err);
     }
 
     // 3. Update local state

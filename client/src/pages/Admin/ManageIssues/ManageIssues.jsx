@@ -20,21 +20,38 @@ export default function ManageIssues() {
   const loadIssues = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/issues');
-      const all = Array.isArray(res.data) ? res.data : [];
-      const mapped = all.map(i => ({
+      let apiIssues = [];
+      try {
+        const res = await axios.get('http://localhost:5000/api/issues');
+        if (res.data && Array.isArray(res.data)) apiIssues = res.data;
+      } catch (e) { console.error(e); }
+
+      let localReports = [];
+      try {
+        localReports = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
+      } catch (e) { console.error(e); }
+
+      const mapById = new Map();
+      [...apiIssues, ...localReports].forEach(item => {
+        const key = item._id || item.id;
+        if (key) mapById.set(key, item);
+      });
+
+      const merged = Array.from(mapById.values());
+
+      const mapped = merged.map(i => ({
         id: i._id || i.id,
         _id: i._id || i.id,
         title: i.title,
         category: i.category || 'Roads',
         priority: i.priority || i.aiSeverity || 'High',
-        location: i.location || 'Duvvada, Visakhapatnam',
-        ward: i.wardId || 'Ward 4',
-        department: i.assignedDept || 'Public Works Department',
+        location: i.location || 'Unknown Location',
+        ward: i.wardId || i.wardName || 'Unassigned',
+        department: i.assignedDepartment || i.assignedDept || 'Pending Assignment',
         status: i.status || 'Reported',
-        assignedOfficer: i.updatedByOfficer || 'Pending Assignment',
+        assignedOfficer: i.updatedByOfficer || i.updatedBy || 'Pending Assignment',
         description: i.description,
-        image: i.image,
+        image: i.image || i.imageUrl,
         date: new Date(i.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
       }));
       setIssues(mapped);
@@ -111,19 +128,20 @@ export default function ManageIssues() {
   });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-        <div>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1e293b' }}>Manage All City Issues</h1>
-          <p style={{ color: '#475569', fontSize: '0.9rem' }}>Monitor civic complaints, assign field departments, update resolution milestones, and delete records.</p>
+    <div className="officer-dashboard-page" style={{ padding: '0' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+          <div>
+            <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1e293b' }}>Global Ticket Management</h1>
+            <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Administer, re-route, and monitor all civic reports across the entire platform.</p>
+          </div>
+          <button 
+            onClick={loadIssues}
+            style={{ padding: '8px 16px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 600 }}
+          >
+            <FaSync className={loading ? 'animate-spin' : ''} /> Refresh Global Database
+          </button>
         </div>
-        <button 
-          onClick={loadIssues} 
-          style={{ padding: '8px 16px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 600 }}
-        >
-          <FaSync className={loading ? 'animate-spin' : ''} /> Refresh Data
-        </button>
-      </div>
 
       {notification && (
         <div style={{ padding: '12px 16px', background: '#ecfdf5', border: '1.5px solid #a7f3d0', borderRadius: '10px', color: '#065f46', fontSize: '0.875rem', fontWeight: 700 }}>
@@ -281,6 +299,7 @@ export default function ManageIssues() {
         onConfirm={handleDeleteIssue} 
         itemName={selectedIssue?.title} 
       />
+      </div>
     </div>
   );
 }
