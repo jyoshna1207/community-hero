@@ -204,6 +204,59 @@ export default function Dashboard() {
     navigate(`/report-issue?category=${encodeURIComponent(category)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}`);
   };
 
+  // Dynamic text translation for feed
+  const translateTitle = (title, lang) => {
+    if (!title || lang === 'en') return title;
+    const tLower = title.toLowerCase();
+    if (tLower.includes('road') || tLower.includes('pothole')) {
+      return lang === 'te' ? 'రోడ్డు గుంతల సమస్య' : 'सड़क के गड्ढे की समस्या';
+    }
+    if (tLower.includes('garbage') || tLower.includes('waste')) {
+      return lang === 'te' ? 'చెత్త సమస్య' : 'कचरे की समस्या';
+    }
+    if (tLower.includes('water') || tLower.includes('leak')) {
+      return lang === 'te' ? 'నీటి పైపు లీకేజీ' : 'पानी की पाइप लीकेज';
+    }
+    if (tLower.includes('light') || tLower.includes('street')) {
+      return lang === 'te' ? 'వీధి దీపాల సమస్య' : 'स्ट्रीट लाइट की समस्या';
+    }
+    return title;
+  };
+
+  const translateLocation = (loc, lang) => {
+    if (!loc || lang === 'en') return loc;
+    if (lang === 'te') {
+      return loc.replace(/Duvvada/gi, 'దువ్వాడ').replace(/Visakhapatnam/gi, 'విశాఖపట్నం')
+        .replace(/Andhra Pradesh/gi, 'ఆంధ్రప్రదేశ్').replace(/Kakinada/gi, 'కాకినాడ')
+        .replace(/Tuni/gi, 'తుని').replace(/Gajuwaka/gi, 'గాజువాక')
+        .replace(/Railway Colony/gi, 'రైల్వే కాలనీ').replace(/Chebrolu/gi, 'చేబ్రోలు')
+        .replace(/Gollaprolu/gi, 'గొల్లప్రోలు').replace(/Etapalem/gi, 'ఎటపాలెం')
+        .replace(/Old Gajuwaka/gi, 'పాత గాజువాక');
+    }
+    if (lang === 'hi') {
+      return loc.replace(/Duvvada/gi, 'दुव्वाडा').replace(/Visakhapatnam/gi, 'विशाखापत्तनम')
+        .replace(/Andhra Pradesh/gi, 'आंध्र प्रदेश').replace(/Kakinada/gi, 'काकीनाडा')
+        .replace(/Tuni/gi, 'तुनी').replace(/Gajuwaka/gi, 'गाजुवाका')
+        .replace(/Railway Colony/gi, 'रेलवे कॉलोनी').replace(/Chebrolu/gi, 'चेब्रोलू')
+        .replace(/Gollaprolu/gi, 'गोल्लाप्रोलू').replace(/Etapalem/gi, 'एटापलेम')
+        .replace(/Old Gajuwaka/gi, 'ओल्ड गाजुवाका');
+    }
+    return loc;
+  };
+
+  const translateCategory = (cat, lang) => {
+    if (!cat || lang === 'en') return cat;
+    if (lang === 'te') {
+      const map = { 'Roads': 'రోడ్లు', 'Garbage & Waste': 'చెత్త', 'Water Supply': 'నీటి సరఫరా', 'Street Lights': 'వీధి దీపాలు' };
+      return map[cat] || cat;
+    }
+    if (lang === 'hi') {
+      const map = { 'Roads': 'सड़कें', 'Garbage & Waste': 'कचरा', 'Water Supply': 'पानी की आपूर्ति', 'Street Lights': 'स्ट्रीट लाइट' };
+      return map[cat] || cat;
+    }
+    return cat;
+  };
+
   return (
     <div className="citizen-minimal-page">
       {/* 1. HERO BANNER WITH GREETING & PRIMARY ACTIONS (USING GLOBAL THEME) */}
@@ -372,7 +425,7 @@ export default function Dashboard() {
 
                   <div className="clean-card-content">
                     <div className="clean-card-top">
-                      <h3>{issue.title}</h3>
+                      <h3>{translateTitle(issue.title, language)}</h3>
                       <span className={`clean-status-pill ${
                         issue.status === 'Resolved' || issue.status === 'Solved' ? 'resolved' :
                         issue.status === 'In Progress' ? 'in-progress' : 'pending'
@@ -383,11 +436,11 @@ export default function Dashboard() {
                     </div>
 
                     <div className="clean-card-meta">
-                      <span className="clean-category-badge">{issue.category}</span>
+                      <span className="clean-category-badge">{translateCategory(issue.category, language)}</span>
                       <span className="meta-sep">•</span>
                       <span>{issue.date}</span>
                       <span className="meta-sep">•</span>
-                      <span className="meta-location-text">{issue.location}</span>
+                      <span className="meta-location-text">{translateLocation(issue.location, language)}</span>
                     </div>
                   </div>
 

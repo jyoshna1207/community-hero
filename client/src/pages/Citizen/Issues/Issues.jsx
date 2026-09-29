@@ -107,22 +107,6 @@ export default function Issues() {
             description: item.description
           }));
 
-          // Filter by User's Locality (Village, Mandal, Ward)
-          if (user) {
-            const userLocTokens = [
-              (user.village || '').toLowerCase(),
-              (user.mandal || '').toLowerCase(),
-              (user.wardName || '').toLowerCase()
-            ].filter(t => t);
-
-            if (userLocTokens.length > 0) {
-              apiMapped = apiMapped.filter(issue => {
-                const issueLoc = (issue.location || '').toLowerCase();
-                return userLocTokens.some(token => issueLoc.includes(token));
-              });
-            }
-          }
-
           setAllIssues(apiMapped);
         } else {
           setAllIssues([]);
@@ -251,15 +235,6 @@ export default function Issues() {
         <div className="explore-loading-card">
           <FiLoader className="spin-icon text-blue" />
           <p>Loading Andhra Pradesh state issues map...</p>
-        </div>
-      ) : filteredIssues.length === 0 ? (
-        <div className="no-issues-empty-state">
-          <FiAlertCircle className="empty-icon" style={{ fontSize: '2.5rem', color: '#64748B' }} />
-          <h3>No Reported Issues Found in {selectedDistrict}</h3>
-          <p>There are no reported issues in this filter yet. Be the first hero to report an issue!</p>
-          <button className="btn-primary-report" onClick={() => navigate('/report-issue')}>
-            <FiPlusCircle /> Report An Issue Now
-          </button>
         </div>
       ) : viewMode === 'map' ? (
         /* MAP VIEW (LEAFLET + ANDHRA PRADESH COMPRESSED VIEW WITH PINS) */

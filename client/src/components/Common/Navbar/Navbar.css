@@ -165,14 +165,14 @@
 
 .notification-dropdown, .profile-dropdown {
   position: absolute;
-  top: 50px;
+  top: 55px;
   right: 0;
-  width: 300px;
+  width: 280px;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
-  padding: 14px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
+  padding: 8px;
   z-index: 1100;
 }
 
@@ -181,7 +181,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  padding-bottom: 8px;
+  padding: 4px 8px 12px 8px;
   border-bottom: 1px solid #E2E8F0;
 }
 
@@ -198,18 +198,21 @@
 }
 
 .notification-item {
-  padding: 8px 10px;
+  padding: 10px 12px;
   border-radius: 8px;
-  margin-bottom: 6px;
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
+  margin-bottom: 4px;
+  background: #FFFFFF;
+  border: none;
   font-size: 0.825rem;
-  color: #0F172A;
+  color: #334155;
+}
+.notification-item:hover {
+  background: #F8FAFC;
 }
 
 .notification-item.unread {
   border-left: 3px solid #155EEF;
-  background: #EAF2FE;
+  background: #F0F4FF;
 }
 
 .notification-item .time {
@@ -221,55 +224,61 @@
 
 .profile-dropdown button {
   width: 100%;
-  padding: 8px 10px;
+  padding: 10px 14px;
   background: transparent;
   border: none;
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #0F172A;
-  border-radius: 6px;
-  font-size: 0.85rem;
+  justify-content: flex-start;
+  gap: 12px;
+  color: #334155;
+  border-radius: 8px;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .profile-dropdown button:hover {
-  background: #F1F5F9;
+  background: #F8FAFC;
+  color: #0F172A;
 }
 
 .dropdown-user-info {
-  padding: 6px 8px;
+  padding: 12px 14px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .dropdown-name {
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   color: #0F172A;
+  margin: 0 0 4px 0;
 }
 
 .dropdown-email {
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   color: #64748B;
+  margin: 0 0 12px 0;
 }
 
 .role-tag {
-  background: #EAF2FE;
-  color: #155EEF;
-  padding: 2px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 800;
   display: inline-block;
-  margin-top: 4px;
+  margin-top: 0;
   text-transform: uppercase;
-  border: 1px solid #BFDBFE;
+  letter-spacing: 0.5px;
 }
 
 .dropdown-divider {
   height: 1px;
-  background: #E2E8F0;
-  margin: 6px 0;
+  background: #F1F5F9;
+  margin: 4px 0;
 }
 
 .logout-action-btn {

@@ -84,7 +84,7 @@ export default function Sidebar() {
         <FiPlusCircle /> Report Issue
       </NavLink>
       <NavLink to="/issues" className={({isActive}) => isActive ? 'sidebar-link active' : 'sidebar-link'}>
-        <FiClipboard /> All Issues
+        <FiMapPin /> Explore Map
       </NavLink>
       <NavLink to="/my-reports" className={({isActive}) => isActive ? 'sidebar-link active' : 'sidebar-link'}>
         <FiCheckCircle /> My Reports
