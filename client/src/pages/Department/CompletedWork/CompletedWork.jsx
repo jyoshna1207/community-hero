@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { FaSearch, FaEye, FaDownload, FaCheckCircle, FaCalendarCheck, FaSync } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { FaSearch, FaEye, FaDownload, FaSync, FaMapMarkerAlt } from 'react-icons/fa';
 import axios from 'axios';
 import { ViewDetailsModal } from '../../../components/Common/DepartmentModals';
+
+import '../../Officer/Dashboard/OfficerDashboard.css';
+import '../../../components/dashboards/OfficerDashboardCards/OfficerDashboardCards.css';
 
 export default function CompletedWork() {
   const [completed, setCompleted] = useState([]);
@@ -125,7 +128,7 @@ export default function CompletedWork() {
                 <div className="officer-meta-row">
                   <span className="officer-category-badge">{item.ward || item.department}</span>
                   <span className="meta-sep">•</span>
-                  <span>{item.resolvedAt ? new Date(item.resolvedAt).toLocaleDateString() : 'N/A'}</span>
+                  <span>{item.resolvedAt ? new Date(item.resolvedAt).toLocaleDateString() : item.completedDate || 'Recently'}</span>
                   <span className="meta-sep">•</span>
                   <span className="officer-location-text">
                     <FaMapMarkerAlt style={{ color: '#ef4444', marginRight: '4px' }} />

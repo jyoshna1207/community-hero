@@ -127,7 +127,10 @@ const AppRoutes = () => {
               <Route path="/department/dashboard" element={<DepartmentDashboard />} />
               <Route path="/department/assigned-work" element={<AssignedWork />} />
               <Route path="/department/update-progress" element={<UpdateProgress />} />
+              <Route path="/department/updated-works" element={<Navigate to="/department/update-progress" replace />} />
+              <Route path="/department/updated-work" element={<Navigate to="/department/update-progress" replace />} />
               <Route path="/department/completed-work" element={<CompletedWork />} />
+              <Route path="/department/completed-works" element={<Navigate to="/department/completed-work" replace />} />
             </Route>
           </Route>
 

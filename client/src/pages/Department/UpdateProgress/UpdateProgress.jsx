@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { FaSearch, FaEdit, FaCheckCircle, FaSync } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { FaSearch, FaEdit, FaCheckCircle, FaSync, FaMapMarkerAlt } from 'react-icons/fa';
 import axios from 'axios';
 import { useAuth } from '../../../context/AuthContext';
 import { UpdateProgressModal, MarkCompletedModal } from '../../../components/Common/DepartmentModals';
+
+import '../../Officer/Dashboard/OfficerDashboard.css';
+import '../../../components/dashboards/OfficerDashboardCards/OfficerDashboardCards.css';
 
 export default function UpdateProgress() {
   const { user } = useAuth();
