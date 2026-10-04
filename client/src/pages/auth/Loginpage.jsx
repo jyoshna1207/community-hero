@@ -83,7 +83,7 @@ const LoginPage = () => {
           </div>
 
           <div className={styles.hubFooter}>
-            <p>Don't have an account? <Link to="/register">Create a Citizen Account</Link></p>
+            <p>Don't have an account? <Link to="/register">Create Account</Link></p>
           </div>
         </div>
       </div>
