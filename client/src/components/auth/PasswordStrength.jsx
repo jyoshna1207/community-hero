@@ -17,10 +17,10 @@ export const PasswordStrength = ({ password = '' }) => {
   const getLabel = () => {
     switch (strength) {
       case 0: return { text: '', color: 'transparent' };
-      case 1: return { text: 'Weak', color: '#ef4444' };
-      case 2: return { text: 'Fair', color: '#f59e0b' };
-      case 3: return { text: 'Good', color: '#3b82f6' };
-      case 4: return { text: 'Strong', color: '#10b981' };
+      case 1: return { text: 'Weak', color: '#EF4444' };
+      case 2: return { text: 'Fair', color: '#F59E0B' };
+      case 3: return { text: 'Good', color: '#EA580C' };
+      case 4: return { text: 'Strong', color: '#10B981' };
       default: return { text: '', color: 'transparent' };
     }
   };

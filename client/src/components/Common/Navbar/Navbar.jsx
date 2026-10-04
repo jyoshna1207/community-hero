@@ -290,7 +290,7 @@ export default function Navbar() {
                     <button onClick={() => { navigate('/profile'); setProfileDropdownOpen(false); }}>
                       <FiUser /> View Profile
                     </button>
-                    <button onClick={() => { navigate('/login'); setProfileDropdownOpen(false); }} style={{ color: '#0284c7' }}>
+                    <button onClick={() => { navigate('/login'); setProfileDropdownOpen(false); }} style={{ color: '#EA580C' }}>
                       <FiUsers /> Switch Role / Account
                     </button>
                     <button className="logout-action-btn" onClick={handleLogout}>

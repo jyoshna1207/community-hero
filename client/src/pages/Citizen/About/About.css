@@ -8,12 +8,13 @@
 }
 
 .about-hero {
-  background: #1E3A8A;
+  background: linear-gradient(135deg, #FB923C 0%, #EA580C 50%, #C2410C 100%);
   color: #ffffff;
   padding: 3rem;
-  border-radius: 12px;
+  border-radius: 16px;
   text-align: center;
-  border: 1px solid #dbe3ec;
+  border: 1px solid rgba(254, 215, 170, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(234, 88, 12, 0.25);
 }
 
 .about-hero h2 {
@@ -76,11 +77,11 @@
 }
 
 .tech-tag {
-  background: #EFF6FF;
-  color: #1E3A8A;
+  background: #FFF7ED;
+  color: #C2410C;
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9rem;
-  border: 1px solid #dbe3ec;
+  border: 1px solid #FED7AA;
 }

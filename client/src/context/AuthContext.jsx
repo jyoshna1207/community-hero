@@ -173,7 +173,7 @@ export const AuthProvider = ({ children }) => {
 };
   // Register
   const register = async (nameOrData, emailArg, passwordArg, roleArg = "citizen") => {
-    let payload = {};
+    let payload;
     if (typeof nameOrData === "object" && nameOrData !== null) {
       payload = {
         name: nameOrData.name || nameOrData.fullName,

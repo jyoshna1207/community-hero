@@ -188,7 +188,9 @@ export default function Dashboard() {
     setUpvotedSet(updated);
     try {
       localStorage.setItem('my_upvoted_reports', JSON.stringify(Array.from(updated)));
-    } catch (e) {}
+    } catch (e) {
+      console.error("Failed to persist upvotes:", e);
+    }
 
     setReports(prev => prev.map(r => {
       if (r.id === issueId || r._id === issueId) {

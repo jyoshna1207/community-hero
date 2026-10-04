@@ -296,12 +296,12 @@ export default function TrackReport() {
             margin: '20px 0'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, color: '#0F172A', fontSize: '0.95rem', marginBottom: '12px' }}>
-              <FiShield style={{ color: '#155EEF' }} /> Ward Officer Live Updates
+              <FiShield style={{ color: '#EA580C' }} /> Ward Officer Live Updates
             </div>
 
             {assignedDepartment && (
               <div style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <FiBriefcase style={{ color: '#155EEF' }} /> <strong>Assigned Department:</strong> {assignedDepartment}
+                <FiBriefcase style={{ color: '#EA580C' }} /> <strong>Assigned Department:</strong> {assignedDepartment}
               </div>
             )}
 
@@ -385,7 +385,7 @@ export default function TrackReport() {
           <label className="section-micro-label">📍 LOCATION</label>
           <p className="location-address-text">{location}</p>
           
-          <div style={{ fontSize: '0.8rem', color: '#155EEF', fontFamily: 'monospace', marginBottom: '8px' }}>
+          <div style={{ fontSize: '0.8rem', color: '#EA580C', fontFamily: 'monospace', marginBottom: '8px' }}>
             Latitude: {lat.toFixed(6)} | Longitude: {lng.toFixed(6)}
           </div>
 

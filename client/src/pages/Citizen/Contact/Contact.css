@@ -56,11 +56,11 @@
 
 .c-icon {
   font-size: 1.5rem;
-  color: #1E3A8A;
-  background: #EFF6FF;
+  color: #EA580C;
+  background: #FFF7ED;
   padding: 0.75rem;
-  border-radius: 8px;
-  border: 1px solid #dbe3ec;
+  border-radius: 10px;
+  border: 1px solid #FED7AA;
 }
 
 .contact-info-item strong {

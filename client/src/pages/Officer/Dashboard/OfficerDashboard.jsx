@@ -503,7 +503,7 @@ export default function OfficerDashboard() {
                   <p style={{ margin: 0, fontSize: '0.85rem', color: '#0F172A', fontWeight: 600 }}>
                     📍 {selectedIssue.location}
                   </p>
-                  <div style={{ fontSize: '0.75rem', color: '#155EEF', fontFamily: 'monospace', marginTop: '4px' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#EA580C', fontFamily: 'monospace', marginTop: '4px' }}>
                     Lat: {Number(selectedIssue.latitude).toFixed(4)} | Lng: {Number(selectedIssue.longitude).toFixed(4)}
                   </div>
                 </div>

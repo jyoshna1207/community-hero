@@ -359,7 +359,7 @@ export default function IssueHistory() {
       {/* ── HISTORY CARDS GRID ──────────────────────────────────────────── */}
       {loading ? (
         <div className="history-empty-card">
-          <FiLoader style={{ fontSize: '2rem', color: '#155EEF' }} />
+          <FiLoader style={{ fontSize: '2rem', color: '#EA580C' }} />
           <p>Loading issue history archive…</p>
         </div>
       ) : filteredIssues.length === 0 ? (
@@ -406,7 +406,7 @@ export default function IssueHistory() {
                     <span>{issue.date}</span>
                     <span className="meta-sep">•</span>
                     <span className="officer-location-text">
-                      <FiBriefcase style={{ color: '#155EEF', marginRight: '4px' }} />
+                      <FiBriefcase style={{ color: '#EA580C', marginRight: '4px' }} />
                       {issue.assignedDept}
                     </span>
                   </div>
@@ -421,7 +421,7 @@ export default function IssueHistory() {
                   </button>
                   <button 
                     className="btn-manage-action"
-                    style={{ background: '#FFFFFF', color: '#155EEF', border: '1px solid #E2E8F0' }}
+                    style={{ background: '#FFFFFF', color: '#EA580C', border: '1px solid #FED7AA' }}
                     onClick={() => { setActiveIssue(issue); setModalMode('details'); }}
                   >
                     <FiEye /> Details
@@ -442,7 +442,7 @@ export default function IssueHistory() {
         <div className="hc-modal-backdrop" onClick={closeModal}>
           <div className="hc-modal-card wide" onClick={(e) => e.stopPropagation()}>
             <div className="hc-modal-header">
-              <h3><FiEye style={{ color: '#155EEF' }} /> Issue Details</h3>
+              <h3><FiEye style={{ color: '#EA580C' }} /> Issue Details</h3>
               <button className="btn-hc-close" onClick={closeModal}><FiX /></button>
             </div>
 
@@ -539,7 +539,7 @@ export default function IssueHistory() {
                 </div>
               )}
 
-              <p style={{ fontSize: '0.8rem', color: '#155EEF', fontFamily: 'monospace' }}>
+              <p style={{ fontSize: '0.8rem', color: '#EA580C', fontFamily: 'monospace' }}>
                 GPS: {Number(activeIssue.latitude).toFixed(6)}, {Number(activeIssue.longitude).toFixed(6)}
               </p>
             </div>
@@ -556,7 +556,7 @@ export default function IssueHistory() {
         <div className="hc-modal-backdrop" onClick={closeModal}>
           <div className="hc-modal-card" onClick={(e) => e.stopPropagation()}>
             <div className="hc-modal-header">
-              <h3><FiList style={{ color: '#155EEF' }} /> Audit Timeline</h3>
+              <h3><FiList style={{ color: '#EA580C' }} /> Audit Timeline</h3>
               <button className="btn-hc-close" onClick={closeModal}><FiX /></button>
             </div>
 

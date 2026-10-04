@@ -827,7 +827,7 @@ export default function ReportIssue() {
             <p style={{ margin: '0 0 4px 0', fontSize: '0.85rem', color: '#64748B', fontWeight: 600 }}>
               {language === 'te' ? 'నమోదైన లొకేషన్ వివరాలు:' : language === 'hi' ? 'सहेजे गए निर्देशांक:' : 'SAVED COORDINATES:'}
             </p>
-            <p style={{ margin: 0, fontSize: '0.9rem', fontFamily: 'monospace', fontWeight: 700, color: '#155EEF' }}>
+            <p style={{ margin: 0, fontSize: '0.9rem', fontFamily: 'monospace', fontWeight: 700, color: '#EA580C' }}>
               Latitude: {locationCoords.latitude?.toFixed(6)} | Longitude: {locationCoords.longitude?.toFixed(6)}
             </p>
           </div>

@@ -73,7 +73,7 @@
   line-height: 1.1;
 }
 .admin-kpi-num.text-orange { color: #F59E0B; }
-.admin-kpi-num.text-blue { color: #155EEF; }
+.admin-kpi-num.text-blue { color: #EA580C; }
 .admin-kpi-num.text-green { color: #16A34A; }
 .admin-kpi-num.text-red { color: #EF4444; }
 
@@ -113,7 +113,7 @@
 }
 
 .card-icon {
-  color: #155EEF;
+  color: #EA580C;
   font-size: 1.2rem;
 }
 
@@ -383,7 +383,7 @@
 .btn-table-action {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #155EEF;
+  color: #EA580C;
   text-decoration: none;
 }
 

@@ -1,9 +1,6 @@
-import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from '../context/AuthContext'; // Note the '../' to go up from routes/ to src/
 
-import ProtectedRoute from './ProtectedRoute'; // Same folder
-import RoleBasedRoute from './RoleBasedRoute'; // Same folder
+import ProtectedRoute from './ProtectedRoute';
 
 // Layouts (Go up one directory into src/, then into layouts/)
 import CitizenLayout from '../layouts/CitizenLayout';
@@ -25,16 +22,13 @@ import Unauthorized from '../pages/Unauthorized';
 import NotFound from '../pages/NotFound';
 
 // Public & Citizen Pages
-import Home from '../pages/Citizen/Home/Home';
 import Contact from '../pages/Citizen/Contact/Contact';
 import CitizenDashboard from '../pages/Citizen/Dashboard/Dashboard';
 import ReportIssue from '../pages/Citizen/ReportIssue/ReportIssue';
 import IssuesList from '../pages/Citizen/Issues/Issues';
-import IssueDetail from '../pages/Citizen/IssueDetails/IssueDetails';
 import TrackReport from '../pages/Citizen/TrackReport/TrackReport';
 import MyReports from '../pages/Citizen/MyReports/MyReports';
 import Profile from '../pages/Citizen/Profile/Profile';
-import Leaderboard from '../pages/Leaderboard/Leaderboard';
 
 // Admin Pages
 import AdminDashboard from '../pages/Admin/AdminDashboard/AdminDashboard';

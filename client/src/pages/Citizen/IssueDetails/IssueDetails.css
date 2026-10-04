@@ -52,8 +52,8 @@
 }
 
 .btn-share-icon:hover {
-  background: #EAF2FE;
-  color: #155EEF;
+  background: #FFF7ED;
+  color: #EA580C;
 }
 
 /* High Impact Status Banner Card (Solved / Unsolved Tracker) */
@@ -79,9 +79,9 @@
 }
 
 .status-unsolved-reported {
-  background: #EFF6FF;
-  border: 2px solid #BFDBFE;
-  color: #1E40AF;
+  background: #FFF7ED;
+  border: 2px solid #FED7AA;
+  color: #C2410C;
 }
 
 .status-banner-header {
@@ -146,7 +146,7 @@
 
 .process-progress-fill {
   height: 100%;
-  background: #155EEF;
+  background: linear-gradient(135deg, #FB923C 0%, #EA580C 100%);
   border-radius: 10px;
   transition: width 0.5s ease;
 }
@@ -183,7 +183,7 @@
   flex-shrink: 0;
 }
 
-.metric-icon.blue { background: #EAF2FE; color: #155EEF; }
+.metric-icon.blue { background: #FFF7ED; color: #EA580C; }
 .metric-icon.green { background: #F0FDF4; color: #16A34A; }
 .metric-icon.orange { background: #FFFBEB; color: #D97706; }
 
@@ -248,9 +248,9 @@
 }
 
 .status-pill.in-progress {
-  background: #EFF6FF;
-  color: #155EEF;
-  border: 1px solid #BFDBFE;
+  background: #FFFBEB;
+  color: #D97706;
+  border: 1px solid #FDE68A;
 }
 
 .status-pill.category-pill {
@@ -286,9 +286,10 @@
 }
 
 .tab-item.active {
-  background: #EAF2FE;
-  color: #155EEF;
+  background: #FFF7ED;
+  color: #EA580C;
   font-weight: 700;
+  border-bottom: 2px solid #EA580C;
 }
 
 .tab-content-card {
@@ -353,8 +354,8 @@
 }
 
 .timeline-row.active .timeline-node {
-  background: #155EEF;
-  border-color: #155EEF;
+  background: #EA580C;
+  border-color: #EA580C;
 }
 
 .active-dot {
@@ -371,7 +372,7 @@
 }
 
 .timeline-row.active .timeline-info h3 {
-  color: #155EEF;
+  color: #EA580C;
   font-size: 1.05rem;
 }
 
@@ -394,7 +395,7 @@
 .btn-affected-cta {
   width: 100%;
   padding: 14px 24px;
-  background: #155EEF;
+  background: linear-gradient(135deg, #FB923C 0%, #EA580C 100%);
   color: #FFFFFF;
   font-weight: 700;
   font-size: 0.95rem;
@@ -405,7 +406,14 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background 0.15s ease;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-affected-cta:hover {
+  background: linear-gradient(135deg, #F97316 0%, #C2410C 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(234, 88, 12, 0.35);
 }
 
 .btn-affected-cta.voted {

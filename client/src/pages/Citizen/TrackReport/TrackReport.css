@@ -38,11 +38,11 @@
 .page-title-badge {
   font-size: 0.85rem;
   font-weight: 800;
-  color: #155EEF;
-  background: #EAF2FE;
+  color: #EA580C;
+  background: #FFF7ED;
   padding: 6px 14px;
   border-radius: 20px;
-  border: 1px solid #BFDBFE;
+  border: 1px solid #FED7AA;
 }
 
 /* Main Card Wireframe Container */
@@ -89,7 +89,7 @@
 }
 
 .track-id-row .id-value {
-  color: #155EEF;
+  color: #EA580C;
   font-weight: 800;
   font-family: monospace;
 }
@@ -343,7 +343,7 @@
   font-size: 1.1rem;
 }
 
-.counter-badge .icon.blue { color: #155EEF; }
+.counter-badge .icon.blue { color: #EA580C; }
 .counter-badge .icon.red { color: #EF4444; }
 
 /* 7. Like / Liked Button */
@@ -398,7 +398,7 @@
 
 .track-report-loading-container .spin-icon {
   font-size: 2.2rem;
-  color: #155EEF;
+  color: #EA580C;
   animation: spin 0.9s linear infinite;
 }
 
@@ -420,12 +420,19 @@
 
 .btn-back-home {
   padding: 10px 20px;
-  background: #155EEF;
+  background: linear-gradient(135deg, #FB923C 0%, #EA580C 100%);
   color: #FFFFFF;
   font-weight: 700;
   border-radius: 10px;
   border: none;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-back-home:hover {
+  background: linear-gradient(135deg, #F97316 0%, #C2410C 100%);
+  transform: translateY(-1px);
 }
 
 @media (max-width: 640px) {

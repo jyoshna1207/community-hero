@@ -259,7 +259,7 @@ export default function IssueDetails() {
           📍 {location}
         </p>
 
-        <div style={{ display: 'flex', gap: '16px', fontSize: '0.85rem', color: '#155EEF', fontFamily: 'monospace', margin: '8px 0' }}>
+        <div style={{ display: 'flex', gap: '16px', fontSize: '0.85rem', color: '#EA580C', fontFamily: 'monospace', margin: '8px 0' }}>
           <span>Latitude: {lat.toFixed(6)}</span>
           <span>Longitude: {lng.toFixed(6)}</span>
         </div>
@@ -336,8 +336,8 @@ export default function IssueDetails() {
       {activeTab === 'updates' && (
         <div className="tab-content-card">
           <h2>Official Ward & District Officer Updates</h2>
-          <div className="update-item" style={{ padding: '14px', background: '#F8FAFC', borderRadius: '10px', borderLeft: '4px solid #155EEF' }}>
-            <span className="update-author" style={{ fontWeight: 700, color: '#155EEF' }}>{authorityName}</span>
+          <div className="update-item" style={{ padding: '14px', background: '#F8FAFC', borderRadius: '10px', borderLeft: '4px solid #EA580C' }}>
+            <span className="update-author" style={{ fontWeight: 700, color: '#EA580C' }}>{authorityName}</span>
             <p style={{ margin: '6px 0', fontSize: '0.9rem', color: '#0F172A' }}>
               {isSolved 
                 ? 'Work completed and verified on-site by field team.' 

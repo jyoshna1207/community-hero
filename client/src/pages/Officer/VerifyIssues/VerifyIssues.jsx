@@ -111,7 +111,7 @@ export default function VerifyIssues() {
               location: item.location || 'Duvvada, Visakhapatnam',
               latitude: item.latitude || item.locationCoords?.lat || 17.6868,
               longitude: item.longitude || item.locationCoords?.lng || 83.2185,
-              image: item.image || item.imageUrl || `https://picsum.photos/seed/${item.id || item._id || idx}/400/300`,
+              image: item.image || item.imageUrl || `https://picsum.photos/seed/${key}/400/300`,
               status: item.status || 'UNSOLVED',
               priority: item.priority || item.aiSeverity || 'High',
               reporterName: item.reporterName || item.user?.name || 'Verified Resident',
