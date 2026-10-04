@@ -1,12 +1,12 @@
 .authLayout {
   min-height: 100vh;
   width: 100%;
-  background: radial-gradient(circle at 50% 15%, #E0F2FE 0%, #F1F5F9 50%, #F8FAFC 100%);
+  background: linear-gradient(135deg, #fffdfb 0%, #fff7ed 50%, #fef3c7 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 36px 16px;
+  padding: 40px 16px;
   box-sizing: border-box;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   position: relative;
@@ -16,7 +16,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .topBrandHeader {
@@ -25,30 +25,32 @@
   gap: 12px;
   cursor: pointer;
   text-decoration: none;
-  background: #F8FAFC;
-  padding: 6px 16px 6px 8px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 6px 18px 6px 8px;
   border-radius: 40px;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #fed7aa;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.08);
   transition: all 0.2s ease;
 }
 
 .topBrandHeader:hover {
-  background: #FFFBEB;
-  border-color: #F59E0B;
+  background: #ffffff;
+  border-color: #ea580c;
+  transform: translateY(-1px);
 }
 
 .brandShieldIcon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%);
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(180deg, #fb923c 0%, #ea580c 50%, #c2410c 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #FFFFFF;
-  font-size: 1.2rem;
-  border: 2px solid #FFFFFF;
-  box-shadow: 0 2px 6px rgba(194, 65, 12, 0.2) !important;
+  color: #ffffff;
+  font-size: 1.25rem;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.3) !important;
   flex-shrink: 0;
 }
 
@@ -59,37 +61,36 @@
 }
 
 .brandTitle {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  color: #0F172A;
-  letter-spacing: -0.3px;
+  color: #0f172a;
+  letter-spacing: -0.4px;
   line-height: 1.1;
 }
 
 .brandTagline {
-  font-size: 0.65rem;
-  color: #B45309;
+  font-size: 0.68rem;
+  color: #c2410c;
   font-weight: 700;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  background: #FEF3C7;
-  border: 1px solid #FDE68A;
-  padding: 1px 6px;
-  border-radius: 6px;
-  margin-top: 2px;
-  display: inline-block;
+  margin-top: 1px;
 }
 
-/* Centered Card */
+/* Centered Heroic Card */
 .heroicCard {
   width: 100%;
-  max-width: 500px;
-  background: #FFFFFF;
-  border: 1px solid #dbe3ec;
-  border-radius: 12px;
-  padding: 36px;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1.5px solid #fed7aa;
+  border-radius: 28px;
+  padding: 38px 34px;
   box-sizing: border-box;
-  box-shadow: none !important;
+  box-shadow: 
+    inset 0 1.5px 1px #ffffff,
+    0 24px 50px -12px rgba(234, 88, 12, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .cardHeader {
@@ -98,20 +99,183 @@
 }
 
 .cardTitle {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #111827;
+  font-size: 2rem;
+  font-weight: 900;
+  color: #0f172a;
   margin: 0 0 6px 0;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.8px;
 }
 
 .cardSubtitle {
-  font-size: 0.9rem;
-  color: #5c6474;
+  font-size: 0.925rem;
+  color: #64748b;
   margin: 0;
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
+/* 4 Options List for Role Selection */
+.portalOptionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  margin-bottom: 20px;
+}
+
+.roleOptionCard {
+  background: #ffffff;
+  border: 1.5px solid #fed7aa;
+  border-radius: 18px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.roleOptionCard::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.roleOptionCard:hover {
+  transform: translateY(-2px);
+  border-color: #ea580c;
+  box-shadow: 0 12px 28px -6px rgba(234, 88, 12, 0.2);
+}
+
+.roleOptionCard:hover::before {
+  opacity: 1;
+}
+
+.cardIcon {
+  font-size: 1.85rem;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #ffedd5 0%, #fed7aa 100%);
+  border: 1px solid #fdba74;
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.12);
+  transition: transform 0.2s ease;
+}
+
+.roleOptionCard:hover .cardIcon {
+  transform: scale(1.06);
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.cardTitleRow h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.roleTag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  letter-spacing: 0.4px;
+}
+
+.cardInfo p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.825rem;
+  line-height: 1.35;
+}
+
+.cardArrow {
+  font-size: 1.15rem;
+  color: #ea580c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  transition: transform 0.2s ease, background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.roleOptionCard:hover .cardArrow {
+  transform: translateX(4px);
+  background: linear-gradient(180deg, #fb923c 0%, #ea580c 100%);
+  color: white;
+  border-color: #ea580c;
+  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.3);
+}
+
+/* Stage 2: Form Top Bar */
+.formTopBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #fed7aa;
+}
+
+.btnChangeRole {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #c2410c;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnChangeRole:hover {
+  background: #ffedd5;
+  color: #ea580c;
+}
+
+.currentRoleBadge {
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.currentRoleBadge strong {
+  color: #c2410c;
+}
+
+/* Form Styles */
 .form {
   display: flex;
   flex-direction: column;
@@ -119,72 +283,18 @@
 }
 
 .eyeBtn {
-  background: transparent;
+  background: none;
   border: none;
+  color: #94a3b8;
   cursor: pointer;
-  color: #5c6474;
-  font-size: 1.1rem;
   display: flex;
   align-items: center;
-  transition: color 0.2s;
+  padding: 0;
+  font-size: 1.1rem;
 }
 
 .eyeBtn:hover {
-  color: #1E3A8A;
-}
-
-.roleGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.roleLabel {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #111827;
-}
-
-.roleSelector {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.roleCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 10px 6px;
-  background: #F8FAFC;
-  border: 1px solid #dbe3ec;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #5c6474;
-  box-shadow: none !important;
-}
-
-.roleCard:hover {
-  background: #EFF6FF;
-  border-color: #1E3A8A;
-  color: #1E3A8A;
-}
-
-.roleCard.activeRole {
-  background: #1E3A8A;
-  border-color: #1E3A8A;
-  color: #FFFFFF;
-  font-weight: 700;
-}
-
-.roleIcon {
-  font-size: 1rem;
+  color: #ea580c;
 }
 
 .termsGroup {
@@ -195,108 +305,83 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  font-size: 0.82rem;
-  color: #5c6474;
+  font-size: 0.825rem;
+  color: #475569;
   cursor: pointer;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .checkboxLabel input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: #1E3A8A;
+  accent-color: #ea580c;
   cursor: pointer;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 
 .errorText {
   font-size: 0.78rem;
-  color: #DC2626;
+  color: #dc2626;
   font-weight: 600;
   margin-top: 4px;
   display: block;
 }
 
 .submitBtn {
+  background: linear-gradient(180deg, #fb923c 0%, #ea580c 50%, #c2410c 100%);
+  color: #ffffff;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 20px -4px rgba(234, 88, 12, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  padding: 13px;
-  background: #1E3A8A;
-  color: #FFFFFF;
-  border: 1px solid #1E3A8A;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s;
-  box-shadow: none !important;
-  margin-top: 4px;
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: #1e40af;
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 12px 24px -4px rgba(234, 88, 12, 0.5);
 }
 
 .submitBtn:disabled {
-  background: #93c5fd;
+  opacity: 0.7;
   cursor: not-allowed;
-}
-
-.divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 20px 0;
-  color: #5c6474;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid #dbe3ec;
-}
-
-.divider span {
-  padding: 0 12px;
-}
-
-.socialGrid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
 }
 
 .footerText {
   text-align: center;
-  font-size: 0.88rem;
-  color: #5c6474;
-  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-top: 24px;
+  margin-bottom: 0;
 }
 
 .link {
-  color: #1E3A8A;
+  color: #ea580c;
   font-weight: 700;
   text-decoration: none;
+  margin-left: 4px;
 }
 
 .link:hover {
   text-decoration: underline;
+  color: #c2410c;
 }
 
-@media (max-width: 540px) {
+@media (max-width: 600px) {
   .heroicCard {
-    padding: 24px 20px;
+    padding: 28px 20px;
+    border-radius: 20px;
   }
-  .roleSelector {
-    grid-template-columns: 1fr;
+  .cardTitle {
+    font-size: 1.75rem;
   }
 }
