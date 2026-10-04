@@ -7,6 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 40px 20px;
 }
 
 .backgroundAnimation {
@@ -49,49 +50,38 @@
   100% { transform: translate(-30px, 80px) scale(0.94); }
 }
 
-/* Split Main Container */
-.splitWrapper {
+/* Center Container */
+.centerContainer {
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 1320px;
+  max-width: 540px;
   margin: 0 auto;
-  padding: 40px 32px;
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 48px;
-  align-items: center;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   LEFT SIDE: ABOUT COMMUNITY HERO
-   ───────────────────────────────────────────────────────────── */
-
-.aboutSide {
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  padding-right: 12px;
+  align-items: center;
+  gap: 20px;
 }
 
+/* Brand Header */
 .topBrandHeader {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   text-decoration: none;
-  width: fit-content;
+  margin-bottom: 4px;
 }
 
 .brandShieldIcon {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   background: linear-gradient(180deg, #fb923c 0%, #ea580c 50%, #c2410c 100%);
   color: white;
-  border-radius: 14px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), 0 8px 20px rgba(234, 88, 12, 0.35);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), 0 6px 16px rgba(234, 88, 12, 0.3);
   flex-shrink: 0;
 }
 
@@ -103,191 +93,50 @@
 .brandTitle {
   font-weight: 800;
   color: #0f172a;
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   letter-spacing: -0.5px;
 }
 
 .brandTagline {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: #c2410c;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
 }
 
-.aboutHero {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.pillBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #fffbeb;
-  border: 1px solid #fde68a;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #b45309;
-  width: fit-content;
-  box-shadow: 0 2px 6px rgba(217, 119, 6, 0.08);
-}
-
-.aboutTitle {
-  font-size: 2.75rem;
-  font-weight: 900;
-  color: #0f172a;
-  line-height: 1.15;
-  letter-spacing: -1px;
-  margin: 0;
-}
-
-.gradientText {
-  background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.aboutDesc {
-  font-size: 1.05rem;
-  line-height: 1.55;
-  color: #64748b;
-  margin: 0;
-  max-width: 580px;
-}
-
-/* Feature Highlights Grid */
-.highlightsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.highlightCard {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid #fed7aa;
-  border-radius: 16px;
-  padding: 16px 18px;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.highlightCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(234, 88, 12, 0.12);
-  border-color: #f59e0b;
-}
-
-.hlIconBox {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #ffedd5 0%, #fed7aa 100%);
-  color: #ea580c;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.highlightCard h4 {
-  font-size: 0.925rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 3px 0;
-}
-
-.highlightCard p {
-  font-size: 0.8rem;
-  color: #64748b;
-  margin: 0;
-  line-height: 1.4;
-}
-
-/* Bottom Stats Bar */
-.statsBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
-  border: 1px solid #fde68a;
-  border-radius: 16px;
-  padding: 14px 24px;
-  box-shadow: inset 0 1px 1px #ffffff, 0 4px 12px rgba(217, 119, 6, 0.08);
-}
-
-.statItem {
-  display: flex;
-  flex-direction: column;
-}
-
-.statNum {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: #92400e;
-  line-height: 1.1;
-}
-
-.statLabel {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #b45309;
-}
-
-.statDivider {
-  width: 1px;
-  height: 32px;
-  background: #fcd34d;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   RIGHT SIDE: DIFFERENT LOGIN OPTIONS
-   ───────────────────────────────────────────────────────────── */
-
-.optionsSide {
-  display: flex;
-  justify-content: center;
-}
-
+/* Dedicated Portal Selection Card */
 .optionsCardContainer {
   width: 100%;
-  max-width: 520px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border: 1px solid #fed7aa;
-  border-radius: 24px;
-  padding: 36px 32px;
+  border: 1.5px solid #fed7aa;
+  border-radius: 28px;
+  padding: 38px 34px;
   box-shadow: 
     inset 0 1.5px 1px #ffffff,
-    0 20px 45px -12px rgba(234, 88, 12, 0.12),
+    0 24px 50px -12px rgba(234, 88, 12, 0.12),
     0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .optionsHeader {
   margin-bottom: 24px;
+  text-align: left;
 }
 
 .optionsTitle {
-  font-size: 1.85rem;
-  font-weight: 800;
+  font-size: 2.1rem;
+  font-weight: 900;
   color: #0f172a;
   margin: 0 0 6px 0;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.8px;
 }
 
 .optionsSubtitle {
-  font-size: 0.925rem;
+  font-size: 0.95rem;
   color: #64748b;
   margin: 0;
+  line-height: 1.4;
 }
 
 /* Vertical Portal Cards List */
@@ -300,7 +149,7 @@
 .portalCard {
   background: #ffffff;
   border: 1.5px solid #fed7aa;
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 16px 20px;
   display: flex;
   align-items: center;
@@ -364,7 +213,7 @@
 
 .cardTitleRow h3 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: #0f172a;
 }
@@ -411,7 +260,7 @@
   box-shadow: 0 4px 10px rgba(234, 88, 12, 0.3);
 }
 
-/* Subtle theme nuances per role */
+/* Subtle theme accents per role */
 .citizenCard:hover { border-color: #ea580c; }
 .officerCard:hover { border-color: #d97706; }
 .departmentCard:hover { border-color: #c2410c; }
@@ -421,7 +270,7 @@
   margin-top: 24px;
   text-align: center;
   color: #64748b;
-  font-size: 0.9rem;
+  font-size: 0.925rem;
 }
 
 .hubFooter a {
@@ -436,43 +285,12 @@
   color: #c2410c;
 }
 
-/* Responsive Breakpoints */
-@media (max-width: 1040px) {
-  .splitWrapper {
-    grid-template-columns: 1fr;
-    gap: 40px;
-    padding: 30px 20px;
-  }
-  
-  .aboutSide {
-    padding-right: 0;
-  }
-  
+@media (max-width: 600px) {
   .optionsCardContainer {
-    max-width: 100%;
+    padding: 28px 20px;
+    border-radius: 20px;
   }
-}
-
-@media (max-width: 640px) {
-  .aboutTitle {
-    font-size: 2.1rem;
-  }
-  
-  .highlightsGrid {
-    grid-template-columns: 1fr;
-  }
-  
-  .statsBar {
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
-  }
-  
-  .statDivider {
-    display: none;
-  }
-  
-  .optionsCardContainer {
-    padding: 24px 20px;
+  .optionsTitle {
+    font-size: 1.75rem;
   }
 }
