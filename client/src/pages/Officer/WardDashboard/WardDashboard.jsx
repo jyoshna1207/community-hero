@@ -22,7 +22,7 @@ L.Icon.Default.mergeOptions({
 
 // Category-based Leaflet Icons
 const getCategoryIcon = (category) => {
-  let color = '#155EEF';
+  let color = '#EA580C';
   if (category === 'Roads') color = '#EF4444';
   if (category === 'Waste Management') color = '#F59E0B';
   if (category === 'Water Supply') color = '#06B6D4';

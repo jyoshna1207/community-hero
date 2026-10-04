@@ -292,10 +292,10 @@ export default function Issues() {
                         <h4 style={{ margin: '4px 0', fontSize: '0.95rem', fontWeight: 800 }}>{issue.title}</h4>
                         <p style={{ margin: '2px 0 3px 0', fontSize: '0.78rem', color: '#334155' }}>👤 {t('reportedBy')}: <strong>{issue.reporterName}</strong></p>
                         <p style={{ margin: '2px 0 6px 0', fontSize: '0.8rem', color: '#64748B' }}>📍 {issue.location}</p>
-                        <div style={{ fontSize: '0.72rem', color: '#155EEF', fontFamily: 'monospace', marginBottom: '8px' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#EA580C', fontFamily: 'monospace', marginBottom: '8px' }}>
                           Lat: {Number(issue.latitude).toFixed(4)} | Lng: {Number(issue.longitude).toFixed(4)}
                         </div>
-                        <Link to={`/track-report/${issue.id || issue._id}`} style={{ display: 'inline-block', padding: '5px 10px', background: '#155EEF', color: '#fff', borderRadius: '6px', textDecoration: 'none', fontSize: '0.75rem', fontWeight: 700 }}>
+                        <Link to={`/track-report/${issue.id || issue._id}`} style={{ display: 'inline-block', padding: '5px 12px', background: 'linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%)', color: '#fff', borderRadius: '6px', textDecoration: 'none', fontSize: '0.75rem', fontWeight: 700, boxShadow: '0 2px 6px rgba(194, 65, 12, 0.35)' }}>
                           {t('trackDetails')}
                         </Link>
                       </div>
@@ -368,7 +368,7 @@ export default function Issues() {
               <FiAlertCircle size={48} style={{ marginBottom: '12px', color: '#94A3B8' }} />
               <h3 style={{ margin: '0 0 8px 0', color: '#0F172A', fontWeight: 700 }}>No Issues Reported Yet</h3>
               <p style={{ fontSize: '0.95rem', color: '#64748B', maxWidth: '420px', margin: '0 auto 16px auto' }}>All existing issues have been removed. Click below to submit a fresh report!</p>
-              <Link to="/report-issue" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: '#155EEF', color: '#FFFFFF', borderRadius: '10px', textDecoration: 'none', fontWeight: 600 }}>
+              <Link to="/report-issue" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: 'linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%)', color: '#FFFFFF', borderRadius: '10px', textDecoration: 'none', fontWeight: 700, boxShadow: '0 4px 12px rgba(194, 65, 12, 0.35)' }}>
                 <FiPlusCircle /> Report New Issue
               </Link>
             </div>

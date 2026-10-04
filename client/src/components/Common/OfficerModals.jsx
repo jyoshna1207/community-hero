@@ -69,7 +69,7 @@ export function AssignDepartmentModal({ isOpen, onClose, issue, onConfirm }) {
     <div className="modal-overlay">
       <div className="modal-content glass-modal">
         <div className="modal-header">
-          <h3><FaShareAlt style={{ color: '#4f46e5', marginRight: '8px' }} /> Assign to Department: {issue.id}</h3>
+          <h3><FaShareAlt style={{ color: '#EA580C', marginRight: '8px' }} /> Assign to Department: {issue.id}</h3>
           <button className="btn-close" onClick={onClose}><FaTimes /></button>
         </div>
         <p className="modal-subtitle">Route issue <strong>{issue.title}</strong> to the appropriate municipal department team.</p>
@@ -110,7 +110,7 @@ export function ViewDetailsModal({ isOpen, onClose, issue }) {
     <div className="modal-overlay">
       <div className="modal-content glass-modal" style={{ maxWidth: '600px' }}>
         <div className="modal-header">
-          <h3><FaEye style={{ color: '#3b82f6', marginRight: '8px' }} /> Issue Details: {issue.id}</h3>
+          <h3><FaEye style={{ color: '#EA580C', marginRight: '8px' }} /> Issue Details: {issue.id}</h3>
           <button className="btn-close" onClick={onClose}><FaTimes /></button>
         </div>
         <div style={{ maxHeight: '70vh', overflowY: 'auto', paddingRight: '4px' }}>

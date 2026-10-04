@@ -6,6 +6,7 @@ import { AuthInput } from '../../components/auth/AuthInput';
 import { Loader } from '../../components/auth/Loader';
 import { Toast } from '../../components/auth/Toast';
 import { SharedLoginLayout } from '../../components/auth/SharedLoginLayout';
+import { ReusableLoginForm } from '../../components/auth/ReusableLoginForm';
 import styles from './OfficerLogin.module.css';
 
 const OfficerLogin = () => {
@@ -48,38 +49,21 @@ const OfficerLogin = () => {
       illustrations={['📋', '🔍', '✅']}
       isProfessional={true}
     >
-      <button type="button" className={styles.demoFillBtn} onClick={() => {setEmail('officer@hero.com'); setPassword('password123');}}>
-        ⚡ Load Officer Credentials
-      </button>
-
-      <form onSubmit={handleLoginSubmit} className={styles.form}>
-        <AuthInput
-          label="Official Email ID"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          icon={FiMail}
-          disabled={isSubmitting}
-          placeholder="officer@hero.com"
-        />
-        <AuthInput
-          label="Secure Password"
-          type={showPassword ? 'text' : 'password'}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          icon={FiLock}
-          disabled={isSubmitting}
-          placeholder="••••••••"
-          rightElement={
-            <button type="button" className={styles.eyeBtn} onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <FiEyeOff /> : <FiEye />}
-            </button>
-          }
-        />
-        <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
-          {isSubmitting ? <Loader size="small" color="white" /> : 'Authenticate & Enter'}
-        </button>
-      </form>
+      <ReusableLoginForm 
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        isSubmitting={isSubmitting}
+        onSubmit={handleLoginSubmit}
+        demoEmail="officer@hero.com"
+        demoPassword="password123"
+        demoBtnText="Load Officer Credentials"
+        submitBtnText="Authenticate & Enter"
+        emailLabel="Official Email ID"
+        passwordLabel="Secure Password"
+        emailPlaceholder="officer@hero.com"
+      />
     </SharedLoginLayout>
   );
 };

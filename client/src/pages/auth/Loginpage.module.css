@@ -25,7 +25,7 @@
 
 .blob1 {
   width: 500px; height: 500px;
-  background: #bae6fd;
+  background: #fed7aa;
   top: -100px; left: -100px;
 }
 .blob2 {
@@ -36,7 +36,7 @@
 }
 .blob3 {
   width: 300px; height: 300px;
-  background: #c7d2fe;
+  background: #ffedd5;
   top: 40%; left: 60%;
   animation-delay: -10s;
 }
@@ -62,11 +62,11 @@
 
 .brandShieldIcon {
   width: 40px; height: 40px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%);
   color: white;
   border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5), 0 4px 12px rgba(217, 119, 6, 0.35);
 }
 
 .brandTextGroup {
@@ -199,17 +199,17 @@
 }
 
 /* Card Specific Themes */
-.citizenCard:hover { box-shadow: 0 20px 40px rgba(2, 132, 199, 0.15); border-color: #bae6fd; }
-.citizenCard .cardIcon { background: #e0f2fe; color: #0284c7; }
-.citizenCard:hover .cardArrow { color: #0284c7; }
+.citizenCard:hover { box-shadow: 0 20px 40px rgba(234, 88, 12, 0.15); border-color: #fed7aa; }
+.citizenCard .cardIcon { background: #ffedd5; color: #ea580c; }
+.citizenCard:hover .cardArrow { color: #ea580c; }
 
 .officerCard:hover { box-shadow: 0 20px 40px rgba(217, 119, 6, 0.15); border-color: #fde68a; }
 .officerCard .cardIcon { background: #fef3c7; color: #d97706; }
 .officerCard:hover .cardArrow { color: #d97706; }
 
-.departmentCard:hover { box-shadow: 0 20px 40px rgba(79, 70, 229, 0.15); border-color: #c7d2fe; }
-.departmentCard .cardIcon { background: #e0e7ff; color: #4f46e5; }
-.departmentCard:hover .cardArrow { color: #4f46e5; }
+.departmentCard:hover { box-shadow: 0 20px 40px rgba(194, 65, 12, 0.15); border-color: #fdba74; }
+.departmentCard .cardIcon { background: #fff7ed; color: #c2410c; }
+.departmentCard:hover .cardArrow { color: #c2410c; }
 
 .adminCard:hover { box-shadow: 0 20px 40px rgba(220, 38, 38, 0.15); border-color: #fecaca; }
 .adminCard .cardIcon { background: #fee2e2; color: #dc2626; }
@@ -223,7 +223,7 @@
 }
 
 .hubFooter a {
-  color: #2563eb;
+  color: #EA580C;
   font-weight: 600;
   text-decoration: none;
 }

@@ -6,6 +6,7 @@ import { AuthInput } from '../../components/auth/AuthInput';
 import { Loader } from '../../components/auth/Loader';
 import { Toast } from '../../components/auth/Toast';
 import { SharedLoginLayout } from '../../components/auth/SharedLoginLayout';
+import { ReusableLoginForm } from '../../components/auth/ReusableLoginForm';
 import styles from './AdminLogin.module.css';
 
 const AdminLogin = () => {
@@ -48,38 +49,21 @@ const AdminLogin = () => {
       illustrations={['⚙️', '📊', '🛡️']}
       isProfessional={true}
     >
-      <button type="button" className={styles.demoFillBtn} onClick={() => {setEmail('admin@hero.com'); setPassword('password123');}}>
-        ⚡ Load Admin Credentials
-      </button>
-
-      <form onSubmit={handleLoginSubmit} className={styles.form}>
-        <AuthInput
-          label="Admin ID (Email)"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          icon={FiMail}
-          disabled={isSubmitting}
-          placeholder="admin@hero.com"
-        />
-        <AuthInput
-          label="Passcode"
-          type={showPassword ? 'text' : 'password'}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          icon={FiLock}
-          disabled={isSubmitting}
-          placeholder="••••••••"
-          rightElement={
-            <button type="button" className={styles.eyeBtn} onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <FiEyeOff /> : <FiEye />}
-            </button>
-          }
-        />
-        <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
-          {isSubmitting ? <Loader size="small" color="white" /> : 'Authorize Access'}
-        </button>
-      </form>
+      <ReusableLoginForm 
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        isSubmitting={isSubmitting}
+        onSubmit={handleLoginSubmit}
+        demoEmail="admin@hero.com"
+        demoPassword="password123"
+        demoBtnText="Load Admin Credentials"
+        submitBtnText="Authorize Access"
+        emailLabel="Admin ID (Email)"
+        passwordLabel="Passcode"
+        emailPlaceholder="admin@hero.com"
+      />
     </SharedLoginLayout>
   );
 };

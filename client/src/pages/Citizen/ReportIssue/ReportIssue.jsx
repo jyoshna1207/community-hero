@@ -353,7 +353,7 @@ export default function ReportIssue() {
           <div className={`step-circle ${currentStep >= 1 ? 'active' : ''}`}>
             {currentStep > 1 ? <FiCheck /> : '1'}
           </div>
-          <span style={{ fontSize: '0.72rem', color: currentStep >= 1 ? '#155EEF' : '#64748B', fontWeight: 700, marginTop: '4px', display: 'block' }}>
+          <span style={{ fontSize: '0.72rem', color: currentStep >= 1 ? '#EA580C' : '#64748B', fontWeight: 700, marginTop: '4px', display: 'block' }}>
             {t('stepCategory')}
           </span>
         </div>
@@ -363,7 +363,7 @@ export default function ReportIssue() {
           <div className={`step-circle ${currentStep >= 2 ? 'active' : ''}`}>
             {currentStep > 2 ? <FiCheck /> : '2'}
           </div>
-          <span style={{ fontSize: '0.72rem', color: currentStep >= 2 ? '#155EEF' : '#64748B', fontWeight: 700, marginTop: '4px', display: 'block' }}>
+          <span style={{ fontSize: '0.72rem', color: currentStep >= 2 ? '#EA580C' : '#64748B', fontWeight: 700, marginTop: '4px', display: 'block' }}>
             {t('stepLocation')}
           </span>
         </div>
@@ -373,7 +373,7 @@ export default function ReportIssue() {
           <div className={`step-circle ${currentStep >= 3 ? 'active' : ''}`}>
             {currentStep > 3 ? <FiCheck /> : '3'}
           </div>
-          <span style={{ fontSize: '0.72rem', color: currentStep >= 3 ? '#155EEF' : '#64748B', fontWeight: 700, marginTop: '4px', display: 'block' }}>
+          <span style={{ fontSize: '0.72rem', color: currentStep >= 3 ? '#EA580C' : '#64748B', fontWeight: 700, marginTop: '4px', display: 'block' }}>
             {t('stepEvidence')}
           </span>
         </div>
@@ -530,7 +530,7 @@ export default function ReportIssue() {
             {/* Photo Upload */}
             <div className="guided-form-group" style={{ margin: 0 }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <FiImage style={{ color: '#155EEF' }} /> {t('photoEvidenceLabel')}
+                <FiImage style={{ color: '#EA580C' }} /> {t('photoEvidenceLabel')}
               </label>
 
               {issueDetails.photo ? (
@@ -559,7 +559,7 @@ export default function ReportIssue() {
             {/* Video Upload */}
             <div className="guided-form-group" style={{ margin: 0 }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <FiVideo style={{ color: '#7C3AED' }} /> {t('videoEvidenceLabel')}
+                <FiVideo style={{ color: '#D97706' }} /> {t('videoEvidenceLabel')}
               </label>
 
               {videoPreview ? (
@@ -578,7 +578,7 @@ export default function ReportIssue() {
                     onChange={handleVideoSelect} 
                     style={{ display: 'none' }}
                   />
-                  <FiVideo className="upload-icon" style={{ color: '#7C3AED' }} />
+                  <FiVideo className="upload-icon" style={{ color: '#D97706' }} />
                   <span style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.85rem' }}>
                     {language === 'te' ? 'వీడియో క్లిప్ ఎంచుకోండి' : language === 'hi' ? 'वीडियो क्लिप चुनें' : 'Upload Video Clip'}
                   </span>
@@ -590,19 +590,20 @@ export default function ReportIssue() {
 
           {/* AI MULTIMODAL SCANNER BANNER */}
           <div style={{
-            background: 'linear-gradient(135deg, #EEF4FF 0%, #F5F3FF 100%)',
-            border: '1.5px solid #C7D2FE',
-            borderRadius: '14px',
-            padding: '16px 18px',
+            background: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)',
+            border: '1.5px solid #FDE68A',
+            borderRadius: '16px',
+            padding: '18px 20px',
             marginBottom: '24px',
+            boxShadow: 'inset 0 1px 1px #FFFFFF, 0 4px 16px rgba(217, 119, 6, 0.08)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, color: '#312E81', fontSize: '1rem' }}>
-                  <FiCpu style={{ color: '#4F46E5', fontSize: '1.2rem' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, color: '#92400E', fontSize: '1rem' }}>
+                  <FiCpu style={{ color: '#D97706', fontSize: '1.2rem' }} />
                   {language === 'te' ? 'AI మల్టీమోడల్ ఆటో-వర్గీకరణ' : language === 'hi' ? 'मल्टीमॉडल AI स्वचालित वर्गीकरण' : 'Multimodal AI Auto-Classifier'}
                 </div>
-                <p style={{ margin: '4px 0 0 0', fontSize: '0.825rem', color: '#4338CA' }}>
+                <p style={{ margin: '4px 0 0 0', fontSize: '0.825rem', color: '#B45309' }}>
                   {language === 'te' 
                     ? 'గూగుల్ జెమిని AI మీ ఫోటో మరియు సమస్యను విశ్లేషించి సరైన విభాగానికి కేటాయిస్తుంది.' 
                     : language === 'hi'
@@ -620,14 +621,14 @@ export default function ReportIssue() {
                   alignItems: 'center',
                   gap: '8px',
                   padding: '9px 18px',
-                  background: isAnalyzingAi ? '#94A3B8' : 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)',
+                  background: isAnalyzingAi ? '#94A3B8' : 'linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%)',
                   color: '#FFFFFF',
-                  fontWeight: 700,
+                  fontWeight: 750,
                   fontSize: '0.85rem',
                   borderRadius: '10px',
-                  border: 'none',
+                  border: '1px solid rgba(255, 255, 255, 0.35)',
                   cursor: isAnalyzingAi ? 'not-allowed' : 'pointer',
-                  boxShadow: '0 4px 14px rgba(79, 70, 229, 0.3)',
+                  boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.5), 0 4px 14px rgba(234, 88, 12, 0.35)',
                   transition: 'all 0.2s ease',
                 }}
               >
@@ -656,7 +657,7 @@ export default function ReportIssue() {
                 background: '#FFFFFF',
                 borderRadius: '12px',
                 padding: '16px',
-                border: '1px solid #E0E7FF',
+                border: '1px solid #FDE68A',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
@@ -666,11 +667,12 @@ export default function ReportIssue() {
                     </span>
                     <span style={{ 
                       padding: '4px 10px', 
-                      background: '#E0E7FF', 
-                      color: '#3730A3', 
+                      background: '#FEF3C7', 
+                      color: '#92400E', 
                       borderRadius: '8px', 
                       fontWeight: 700, 
-                      fontSize: '0.85rem' 
+                      fontSize: '0.85rem',
+                      border: '1px solid #FDE68A'
                     }}>
                       {aiData.category}
                     </span>
@@ -698,7 +700,7 @@ export default function ReportIssue() {
                 <div style={{ marginBottom: '12px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 700, marginBottom: '4px' }}>
                     <span style={{ color: '#475569' }}>{t('aiPriorityScore')}</span>
-                    <span style={{ color: '#4F46E5' }}>{aiData.aiPriorityScore} / 100</span>
+                    <span style={{ color: '#EA580C', fontWeight: 800 }}>{aiData.aiPriorityScore} / 100</span>
                   </div>
                   <div style={{ height: '8px', background: '#F1F5F9', borderRadius: '4px', overflow: 'hidden' }}>
                     <div style={{
@@ -713,7 +715,7 @@ export default function ReportIssue() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px', fontSize: '0.825rem', color: '#475569', marginBottom: '10px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <FiClock style={{ color: '#6366F1' }} />
+                    <FiClock style={{ color: '#EA580C' }} />
                     <span>{t('aiEstTurnaround')}: <strong>{aiData.aiEstimatedDays} {language === 'te' ? 'రోజులు' : language === 'hi' ? 'दिन' : 'Days'}</strong></span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>

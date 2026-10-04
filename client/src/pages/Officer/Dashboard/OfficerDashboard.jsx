@@ -382,6 +382,12 @@ export default function OfficerDashboard() {
             <button
               key={st}
               className={`filter-pill-btn ${statusFilter === st ? 'active' : ''}`}
+              style={statusFilter === st ? {
+                background: 'linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%)',
+                borderColor: '#EA580C',
+                color: '#FFFFFF',
+                boxShadow: '0 4px 12px rgba(234, 88, 12, 0.25)'
+              } : {}}
               onClick={() => setStatusFilter(st)}
             >
               {st === 'All' ? 'All Reports' : st}
@@ -394,14 +400,14 @@ export default function OfficerDashboard() {
       <div className="officer-reports-section">
         <div className="officer-reports-header">
           <h2>Ward Reports & Triage Queue ({filteredIssues.length})</h2>
-          <Link to="/officer/verify-issues" className="view-all-link">
+          <Link to="/officer/verify-issues" className="view-all-link" style={{ color: '#EA580C', fontWeight: 700, textDecoration: 'none' }}>
             Verify Queue →
           </Link>
         </div>
 
         {loading ? (
           <div className="dash-loading-box">
-            <FiLoader className="spin-icon text-blue" />
+            <FiLoader className="spin-icon" style={{ color: '#EA580C', fontSize: '2rem' }} />
             <p>Loading real-time ward grievance records...</p>
           </div>
         ) : filteredIssues.length === 0 ? (
@@ -422,7 +428,7 @@ export default function OfficerDashboard() {
                 statusLabel = '🟢 Solved';
               } else if (s === 'IN PROGRESS') {
                 statusClass = 'in-progress';
-                statusLabel = '🔵 In Progress';
+                statusLabel = '🟠 In Progress';
               } else if (s === 'UNDER REVIEW' || s === 'ASSIGNED') {
                 statusClass = 'under-review';
                 statusLabel = '🟡 Under Review';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaShieldAlt } from 'react-icons/fa';
-import styles from './LoginPage.module.css';
+import styles from './Loginpage.module.css';
 
 const LoginPage = () => {
   return (
@@ -14,7 +14,7 @@ const LoginPage = () => {
 
       <div className={styles.topHeaderWrapper}>
         <Link to="/" className={styles.topBrandHeader}>
-          <div className={styles.brandShieldIcon}>
+          <div className={styles.brandShieldIcon} style={{ background: 'linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%)', color: '#fff', boxShadow: '0 4px 12px rgba(217, 119, 6, 0.35)' }}>
             <FaShieldAlt style={{ fontSize: '1.2rem' }} />
           </div>
           <div className={styles.brandTextGroup}>

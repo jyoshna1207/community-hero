@@ -111,7 +111,7 @@ export default function DepartmentDashboard() {
             <span className="kpi-num">{stats.assignedIssues}</span>
             <p className="kpi-label">Assigned Work</p>
           </div>
-          <div className="kpi-trend trend-blue">
+          <div className="kpi-trend trend-orange" style={{ color: '#EA580C' }}>
             <FiBriefcase /> <span>Pending department action</span>
           </div>
         </div>
@@ -151,14 +151,14 @@ export default function DepartmentDashboard() {
       <div className="officer-reports-section">
         <div className="officer-reports-header">
           <h2>Recent Field Operations ({recentTasks.length})</h2>
-          <Link to="/department/assigned-work" className="view-all-link">
+          <Link to="/department/assigned-work" className="view-all-link" style={{ color: '#EA580C', fontWeight: 700, textDecoration: 'none' }}>
             Manage Queue <FiArrowRight />
           </Link>
         </div>
 
         {loading ? (
           <div className="dash-loading-box">
-            <FiLoader className="spin-icon text-blue" />
+            <FiLoader className="spin-icon" style={{ color: '#EA580C', fontSize: '2rem' }} />
             <p>Loading real-time field operations...</p>
           </div>
         ) : recentTasks.length === 0 ? (

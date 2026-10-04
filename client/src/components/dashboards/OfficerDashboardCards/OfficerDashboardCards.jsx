@@ -22,7 +22,7 @@ export default function OfficerDashboardCards({ metrics = {} }) {
           <span className="kpi-num">{total}</span>
           <p className="kpi-label">Total Ward Reports</p>
         </div>
-        <div className="kpi-trend trend-blue">
+        <div className="kpi-trend trend-orange" style={{ color: '#EA580C' }}>
           <FiClipboard /> <span>Citizen logged issues in ward</span>
         </div>
       </div>
@@ -33,7 +33,7 @@ export default function OfficerDashboardCards({ metrics = {} }) {
           <span className="kpi-num">{pendingVerification}</span>
           <p className="kpi-label">Pending Verification</p>
         </div>
-        <div className="kpi-trend trend-orange">
+        <div className="kpi-trend trend-orange" style={{ color: '#D97706' }}>
           <FiAlertCircle /> <span>Awaiting officer inspection</span>
         </div>
       </div>
@@ -44,7 +44,7 @@ export default function OfficerDashboardCards({ metrics = {} }) {
           <span className="kpi-num">{inProgress}</span>
           <p className="kpi-label">In Progress</p>
         </div>
-        <div className="kpi-trend trend-blue">
+        <div className="kpi-trend trend-orange" style={{ color: '#EA580C' }}>
           <FiClock /> <span>Under active repair by departments</span>
         </div>
       </div>

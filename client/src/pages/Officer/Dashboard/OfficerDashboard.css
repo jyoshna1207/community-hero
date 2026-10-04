@@ -176,9 +176,23 @@
 }
 
 .filter-pill-btn.active {
-  background: #155EEF;
-  border-color: #155EEF;
+  background: linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%);
+  border-color: #EA580C;
   color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
+}
+
+.view-all-link {
+  color: #EA580C;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.view-all-link:hover {
+  color: #C2410C;
+  text-decoration: underline;
 }
 
 .filter-select {
@@ -297,12 +311,12 @@
 
 .officer-status-pill.unsolved, .officer-status-pill.reported { background: #FEF2F2; color: #EF4444; border: 1px solid #FECACA; }
 .officer-status-pill.under-review { background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A; }
-.officer-status-pill.in-progress { background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; }
+.officer-status-pill.in-progress { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
 .officer-status-pill.solved, .officer-status-pill.resolved { background: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; }
 
 .officer-priority-pill.critical { background: #FEF2F2; color: #991B1B; border: 1px solid #FCA5A5; }
 .officer-priority-pill.high { background: #FFFBEB; color: #B45309; border: 1px solid #FCD34D; }
-.officer-priority-pill.medium { background: #EFF6FF; color: #1D4ED8; border: 1px solid #93C5FD; }
+.officer-priority-pill.medium { background: #FFF7ED; color: #C2410C; border: 1px solid #FFEDD5; }
 .officer-priority-pill.low { background: #F0FDF4; color: #15803D; border: 1px solid #86EFAC; }
 
 .officer-meta-row {

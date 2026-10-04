@@ -476,7 +476,7 @@ export default function AssignedIssues() {
       {/* ── CARDS GRID ──────────────────────────────────────────────────── */}
       {loading ? (
         <div className="assigned-empty-card">
-          <FiLoader style={{ fontSize: '2rem', color: '#155EEF' }} />
+          <FiLoader style={{ fontSize: '2rem', color: '#EA580C' }} />
           <p>Loading dispatched ward issues…</p>
         </div>
       ) : filteredIssues.length === 0 ? (
@@ -529,7 +529,7 @@ export default function AssignedIssues() {
                     <span>{issue.date}</span>
                     <span className="meta-sep">•</span>
                     <span className="officer-location-text">
-                      <FiBriefcase style={{ color: '#155EEF', marginRight: '4px' }} />
+                      <FiBriefcase style={{ color: '#EA580C', marginRight: '4px' }} />
                       {issue.assignedDept}
                     </span>
                   </div>
@@ -544,7 +544,7 @@ export default function AssignedIssues() {
                   </button>
                   <button 
                     className="btn-manage-action"
-                    style={{ background: '#FFFFFF', color: '#155EEF', border: '1px solid #E2E8F0' }}
+                    style={{ background: '#FFFFFF', color: '#EA580C', border: '1px solid #E2E8F0' }}
                     onClick={() => { setActiveIssue(issue); setModalMode('view'); }}
                   >
                     <FiEye /> Details
@@ -565,7 +565,7 @@ export default function AssignedIssues() {
         <div className="ac-modal-backdrop" onClick={closeModal}>
           <div className="ac-modal-card" onClick={(e) => e.stopPropagation()}>
             <div className="ac-modal-header">
-              <h3><FiEdit3 style={{ color: '#155EEF' }} /> Manage Issue</h3>
+              <h3><FiEdit3 style={{ color: '#EA580C' }} /> Manage Issue</h3>
               <button className="btn-ac-close" onClick={closeModal}><FiX /></button>
             </div>
 
@@ -664,7 +664,7 @@ export default function AssignedIssues() {
         <div className="ac-modal-backdrop" onClick={closeModal}>
           <div className="ac-modal-card wide" onClick={(e) => e.stopPropagation()}>
             <div className="ac-modal-header">
-              <h3><FiEye style={{ color: '#155EEF' }} /> Issue Details</h3>
+              <h3><FiEye style={{ color: '#EA580C' }} /> Issue Details</h3>
               <button className="btn-ac-close" onClick={closeModal}><FiX /></button>
             </div>
 
@@ -732,7 +732,7 @@ export default function AssignedIssues() {
                 </div>
               )}
 
-              <p style={{ fontSize: '0.8rem', color: '#155EEF', fontFamily: 'monospace' }}>
+              <p style={{ fontSize: '0.8rem', color: '#EA580C', fontFamily: 'monospace' }}>
                 GPS: {Number(activeIssue.latitude).toFixed(6)}, {Number(activeIssue.longitude).toFixed(6)}
               </p>
             </div>
@@ -755,7 +755,7 @@ export default function AssignedIssues() {
         <div className="ac-modal-backdrop" onClick={closeModal}>
           <div className="ac-modal-card" onClick={(e) => e.stopPropagation()}>
             <div className="ac-modal-header">
-              <h3><FiList style={{ color: '#155EEF' }} /> Audit Timeline</h3>
+              <h3><FiList style={{ color: '#EA580C' }} /> Audit Timeline</h3>
               <button className="btn-ac-close" onClick={closeModal}><FiX /></button>
             </div>
 
@@ -809,7 +809,7 @@ export default function AssignedIssues() {
         <div className="ac-modal-backdrop" onClick={closeModal}>
           <div className="ac-modal-card wide" onClick={(e) => e.stopPropagation()}>
             <div className="ac-modal-header">
-              <h3><FiImage style={{ color: '#155EEF' }} /> Resolution Proof</h3>
+              <h3><FiImage style={{ color: '#EA580C' }} /> Resolution Proof</h3>
               <button className="btn-ac-close" onClick={closeModal}><FiX /></button>
             </div>
 

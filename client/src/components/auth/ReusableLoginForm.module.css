@@ -1,0 +1,79 @@
+.demoFillBtn {
+  width: 100%;
+  padding: 12px 16px;
+  background: #fffbeb;
+  border: 1.5px dashed #f59e0b;
+  border-radius: 12px;
+  color: #d97706;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.demoFillBtn:hover {
+  background: #fef3c7;
+  border-color: #d97706;
+  color: #b45309;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eyeBtn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  font-size: 1.15rem;
+  transition: color 0.15s ease;
+}
+
+.eyeBtn:hover {
+  color: #64748b;
+}
+
+.submitBtn {
+  background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%);
+  color: #ffffff;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 20px -4px rgba(194, 65, 12, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #9a3412 0%, #c2410c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px -4px rgba(194, 65, 12, 0.5);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}

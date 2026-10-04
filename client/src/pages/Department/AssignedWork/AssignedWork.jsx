@@ -237,7 +237,7 @@ export default function AssignedWork() {
                 </button>
                 <button 
                   className="btn-manage-action"
-                  style={{ background: '#FFFFFF', color: '#155EEF', border: '1px solid #E2E8F0' }}
+                  style={{ background: '#FFFFFF', color: '#EA580C', border: '1px solid #fed7aa' }}
                   onClick={() => { setSelectedWork(work); setViewModalOpen(true); }}
                 >
                   <FaEye /> View

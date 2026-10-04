@@ -22,29 +22,85 @@
   animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Portal Banner styling for glassmorphism */
-.portal-purpose-banner {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 24px;
-  padding: 32px;
-  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.05);
+/* Portal Banner styling for glassmorphism matching reference screenshot */
+/* Portal Banner styling for Report Issue */
+.report-guided-page .portal-purpose-banner {
+  background: linear-gradient(140deg, #832707 0%, #9a3412 25%, #c2410c 60%, #ea580c 100%) !important;
+  border-radius: 28px !important;
+  padding: 34px 40px !important;
+  box-shadow: 
+    0 24px 48px -12px rgba(194, 65, 12, 0.38),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.45),
+    inset 0 -2px 8px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  color: #FFFFFF !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
 
-.banner-role-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+.report-guided-page .portal-purpose-banner::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 52% !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+  border-radius: 28px 28px 120% 120% / 28px 28px 45px 45px !important;
+  pointer-events: none !important;
+}
+
+.report-guided-page .portal-purpose-banner::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  top: -60px !important;
+  right: -40px !important;
+  width: 420px !important;
+  height: 420px !important;
+  background: radial-gradient(circle, rgba(254, 215, 170, 0.35) 0%, rgba(251, 146, 60, 0.12) 50%, transparent 75%) !important;
+  pointer-events: none !important;
+  filter: blur(25px) !important;
+}
+
+.report-guided-page .portal-purpose-banner h1 {
+  color: #FFFFFF !important;
+  font-size: 2.15rem !important;
+  font-weight: 850 !important;
+  font-family: var(--font-heading), sans-serif !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 0 10px 0 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+}
+
+.report-guided-page .portal-purpose-banner p {
+  color: #FED7AA !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  max-width: 680px !important;
+}
+
+.report-guided-page .banner-role-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  color: #FFFFFF !important;
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  font-size: 0.78rem !important;
+  font-weight: 750 !important;
+  margin-bottom: 14px !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5), 0 4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Step Progress Indicator */
@@ -73,11 +129,13 @@
 }
 
 .step-circle.active {
-  background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+  background: linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%);
   color: #FFFFFF;
-  border-color: transparent;
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
-  transform: scale(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.6),
+    0 8px 20px rgba(234, 88, 12, 0.4);
+  transform: scale(1.08);
 }
 
 .step-line {
@@ -90,7 +148,7 @@
 }
 
 .step-line.active {
-  background: linear-gradient(90deg, #3B82F6, #1D4ED8);
+  background: linear-gradient(90deg, #FB923C, #EA580C);
 }
 
 /* Guided Step Card */
@@ -129,27 +187,29 @@
 
 .category-item-card {
   background: #FFFFFF;
-  border: 1px solid #E2E8F0;
+  border: 1.5px solid #F1F5F9;
   border-radius: 20px;
-  padding: 20px;
+  padding: 20px 24px;
   display: flex;
   align-items: center;
   gap: 16px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 2px 10px rgba(0,0,0,0.02);
 }
 
 .category-item-card:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 12px 24px -8px rgba(0,0,0,0.08);
-  border-color: #CBD5E1;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px -6px rgba(234, 88, 12, 0.12);
+  border-color: #FDBA74;
 }
 
 .category-item-card.selected {
-  background: linear-gradient(145deg, #F0F9FF 0%, #E0F2FE 100%);
-  border-color: #3B82F6;
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+  background: linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 100%) !important;
+  border: 1.5px solid #F59E0B !important;
+  box-shadow: 
+    inset 0 1px 1px #FFFFFF,
+    0 8px 24px rgba(217, 119, 6, 0.18) !important;
   transform: translateY(-2px);
 }
 
@@ -157,26 +217,33 @@
   width: 48px;
   height: 48px;
   border-radius: 14px;
-  background: #F8FAFC;
-  color: #3B82F6;
+  background: #FFF7ED;
+  color: #EA580C;
+  border: 1px solid #FFEDD5;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
-  transition: all 0.3s ease;
+  font-size: 1.35rem;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.8), 0 2px 6px rgba(234, 88, 12, 0.08);
 }
 
 .category-item-card.selected .cat-icon-box {
-  background: #3B82F6;
-  color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.6),
+    0 4px 14px rgba(234, 88, 12, 0.35) !important;
 }
 
 .category-item-card h3 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #1E293B;
+  font-size: 1.1rem;
+  font-weight: 750;
+  color: #0F172A;
   letter-spacing: -0.01em;
+  margin: 0;
 }
 
 /* Forms */
@@ -211,14 +278,14 @@
 .guided-form-group input:focus, 
 .guided-form-group textarea:focus {
   background: #FFFFFF;
-  border-color: #3B82F6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  border-color: #EA580C;
+  box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.15);
 }
 
 /* Photo Upload Box */
 .photo-upload-box {
   padding: 32px;
-  border: 2px dashed #94A3B8;
+  border: 2px dashed #CBD5E1;
   background: rgba(248, 250, 252, 0.5);
   border-radius: 20px;
   display: flex;
@@ -231,13 +298,13 @@
 }
 
 .photo-upload-box:hover {
-  background: rgba(241, 245, 249, 0.8);
-  border-color: #3B82F6;
+  background: #FFFBEB;
+  border-color: #F59E0B;
 }
 
 .photo-upload-box .upload-icon {
   font-size: 2.2rem;
-  color: #3B82F6;
+  color: #EA580C;
 }
 
 .uploaded-photo-preview-card {
@@ -260,22 +327,27 @@
 
 .btn-guided-next {
   padding: 14px 28px;
-  background: linear-gradient(135deg, #111827 0%, #1F2937 100%);
+  background: linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%);
   color: #FFFFFF;
-  font-weight: 700;
+  font-weight: 750;
   font-size: 1rem;
   border-radius: 14px;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
   cursor: pointer;
   margin-left: auto;
-  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.2);
+  box-shadow: 
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.5),
+    inset 0 -1.5px 1px rgba(0, 0, 0, 0.2),
+    0 8px 24px -4px rgba(194, 65, 12, 0.45);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-guided-next:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(17, 24, 39, 0.3);
-  background: linear-gradient(135deg, #000000 0%, #111827 100%);
+  box-shadow: 
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.6),
+    0 12px 28px -4px rgba(194, 65, 12, 0.55);
+  background: linear-gradient(180deg, #F97316 0%, #C2410C 100%);
 }
 
 .btn-guided-back {
@@ -339,7 +411,8 @@
 
 .id-value {
   font-size: 1.1rem;
-  color: #3B82F6;
+  color: #EA580C;
+  font-weight: 750;
 }
 
 @media (max-width: 640px) {

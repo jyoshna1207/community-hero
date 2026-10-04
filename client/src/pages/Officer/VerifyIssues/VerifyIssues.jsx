@@ -429,7 +429,7 @@ export default function VerifyIssues() {
       {/* VERIFICATION CARDS LIST */}
       {loading ? (
         <div className="verify-empty-card">
-          <FiLoader className="spin-icon text-blue" style={{ fontSize: '2rem', color: '#155EEF' }} />
+          <FiLoader className="spin-icon text-blue" style={{ fontSize: '2rem', color: '#EA580C' }} />
           <p>Loading incoming ward reports...</p>
         </div>
       ) : filteredQueue.length === 0 ? (
@@ -485,7 +485,7 @@ export default function VerifyIssues() {
                 </button>
                 <button 
                   className="btn-manage-action"
-                  style={{ background: '#FFFFFF', color: '#155EEF', border: '1px solid #E2E8F0' }}
+                  style={{ background: '#FFFFFF', color: '#EA580C', border: '1px solid #E2E8F0' }}
                   onClick={() => { setActiveIssue(item); setModalMode('view'); }}
                 >
                   <FiEye />
@@ -579,7 +579,7 @@ export default function VerifyIssues() {
         <div className="v-modal-backdrop" onClick={() => setModalMode(null)}>
           <div className="v-modal-card animate-fade-in" onClick={(e) => e.stopPropagation()}>
             <div className="v-modal-header">
-              <h3><FiShare2 style={{ color: '#155EEF' }} /> Assign to Department</h3>
+              <h3><FiShare2 style={{ color: '#EA580C' }} /> Assign to Department</h3>
               <button className="btn-v-close" onClick={() => setModalMode(null)}><FiX /></button>
             </div>
 
@@ -657,7 +657,7 @@ export default function VerifyIssues() {
         <div className="v-modal-backdrop" onClick={() => setModalMode(null)}>
           <div className="v-modal-card animate-fade-in" onClick={(e) => e.stopPropagation()}>
             <div className="v-modal-header">
-              <h3><FiEye style={{ color: '#155EEF' }} /> Issue Details</h3>
+              <h3><FiEye style={{ color: '#EA580C' }} /> Issue Details</h3>
               <button className="btn-v-close" onClick={() => setModalMode(null)}><FiX /></button>
             </div>
 
@@ -676,7 +676,7 @@ export default function VerifyIssues() {
                 <div><strong>Status:</strong> {activeIssue.status}</div>
               </div>
 
-              <div style={{ fontSize: '0.8rem', color: '#155EEF', fontFamily: 'monospace' }}>
+              <div style={{ fontSize: '0.8rem', color: '#EA580C', fontFamily: 'monospace' }}>
                 GPS: Latitude {Number(activeIssue.latitude).toFixed(6)} | Longitude {Number(activeIssue.longitude).toFixed(6)}
               </div>
             </div>

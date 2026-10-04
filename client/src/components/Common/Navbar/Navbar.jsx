@@ -50,7 +50,7 @@ export default function Navbar() {
               <NavLink to="/dashboard" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
                 {t('navDashboard')}
               </NavLink>
-              <NavLink to="/report-issue" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
+              <NavLink to="/report-issue" className={({isActive}) => isActive ? 'nav-link report-nav-pill active' : 'nav-link report-nav-pill'} onClick={() => setMobileMenuOpen(false)}>
                 {t('navReportIssue')}
               </NavLink>
               <NavLink to="/issues" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
@@ -120,18 +120,19 @@ export default function Navbar() {
         {/* User Actions & Auth Buttons */}
         <div className="navbar-actions">
           {/* Multilingual Selector Pill */}
-          <div className="language-selector-pill" style={{ display: 'inline-flex', alignItems: 'center', background: '#F1F5F9', border: '1.5px solid #CBD5E1', borderRadius: '24px', padding: '3px 4px', gap: '2px' }}>
+          <div className="language-selector-pill" style={{ display: 'inline-flex', alignItems: 'center', background: 'linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%)', border: '1px solid #CBD5E1', borderRadius: '24px', padding: '3px 4px', gap: '2px', boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 6px rgba(0, 0, 0, 0.03)' }}>
             <button 
               onClick={() => setLanguage('en')}
               style={{
-                border: 'none',
-                background: language === 'en' ? '#155EEF' : 'transparent',
+                border: language === 'en' ? '1px solid rgba(255, 255, 255, 0.3)' : 'none',
+                background: language === 'en' ? 'linear-gradient(180deg, #F59E0B 0%, #D97706 100%)' : 'transparent',
                 color: language === 'en' ? '#FFFFFF' : '#475569',
-                padding: '4px 8px',
+                padding: '4px 10px',
                 borderRadius: '16px',
                 fontWeight: 700,
                 fontSize: '0.74rem',
                 cursor: 'pointer',
+                boxShadow: language === 'en' ? 'inset 0 1px 1px rgba(255, 255, 255, 0.5), 0 2px 6px rgba(217, 119, 6, 0.35)' : 'none',
                 transition: 'all 0.15s ease'
               }}
               title="Switch to English"
@@ -141,14 +142,15 @@ export default function Navbar() {
             <button 
               onClick={() => setLanguage('te')}
               style={{
-                border: 'none',
-                background: language === 'te' ? '#155EEF' : 'transparent',
+                border: language === 'te' ? '1px solid rgba(255, 255, 255, 0.3)' : 'none',
+                background: language === 'te' ? 'linear-gradient(180deg, #F59E0B 0%, #D97706 100%)' : 'transparent',
                 color: language === 'te' ? '#FFFFFF' : '#475569',
-                padding: '4px 8px',
+                padding: '4px 10px',
                 borderRadius: '16px',
                 fontWeight: 700,
                 fontSize: '0.74rem',
                 cursor: 'pointer',
+                boxShadow: language === 'te' ? 'inset 0 1px 1px rgba(255, 255, 255, 0.5), 0 2px 6px rgba(217, 119, 6, 0.35)' : 'none',
                 transition: 'all 0.15s ease'
               }}
               title="తెలుగులోకి మార్చండి (Telugu)"
@@ -158,14 +160,15 @@ export default function Navbar() {
             <button 
               onClick={() => setLanguage('hi')}
               style={{
-                border: 'none',
-                background: language === 'hi' ? '#155EEF' : 'transparent',
+                border: language === 'hi' ? '1px solid rgba(255, 255, 255, 0.3)' : 'none',
+                background: language === 'hi' ? 'linear-gradient(180deg, #F59E0B 0%, #D97706 100%)' : 'transparent',
                 color: language === 'hi' ? '#FFFFFF' : '#475569',
-                padding: '4px 8px',
+                padding: '4px 10px',
                 borderRadius: '16px',
                 fontWeight: 700,
                 fontSize: '0.74rem',
                 cursor: 'pointer',
+                boxShadow: language === 'hi' ? 'inset 0 1px 1px rgba(255, 255, 255, 0.5), 0 2px 6px rgba(217, 119, 6, 0.35)' : 'none',
                 transition: 'all 0.15s ease'
               }}
               title="हिंदी में बदलें (Hindi)"
@@ -180,7 +183,21 @@ export default function Navbar() {
               {isCitizen && (
                 <button 
                   onClick={() => navigate('/report-issue')}
-                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#155EEF', color: '#fff', padding: '8px 14px', borderRadius: '10px', fontWeight: 700, fontSize: '0.825rem', border: 'none', cursor: 'pointer' }}
+                  style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '8px', 
+                    background: 'linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%)', 
+                    color: '#fff', 
+                    padding: '9px 16px', 
+                    borderRadius: '12px', 
+                    fontWeight: 750, 
+                    fontSize: '0.84rem', 
+                    border: '1px solid rgba(255, 255, 255, 0.35)', 
+                    cursor: 'pointer',
+                    boxShadow: 'inset 0 1.5px 1px rgba(255, 255, 255, 0.5), inset 0 -1.5px 1px rgba(0, 0, 0, 0.2), 0 6px 16px -3px rgba(194, 65, 12, 0.45)',
+                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
                 >
                   <FiPlusCircle /> {t('navReportIssue')}
                 </button>
@@ -196,7 +213,7 @@ export default function Navbar() {
               {isDept && (
                 <button 
                   onClick={() => navigate('/department/update-progress')}
-                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#4F46E5', color: '#fff', padding: '8px 14px', borderRadius: '10px', fontWeight: 700, fontSize: '0.825rem', border: 'none', cursor: 'pointer' }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(180deg, #F59E0B 0%, #D97706 100%)', color: '#fff', padding: '8px 14px', borderRadius: '10px', fontWeight: 700, fontSize: '0.825rem', border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(217, 119, 6, 0.25)' }}
                 >
                   <FiBriefcase /> Update Progress
                 </button>

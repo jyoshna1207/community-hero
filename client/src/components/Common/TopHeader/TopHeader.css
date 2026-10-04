@@ -214,7 +214,7 @@
 
 .notification-icon-wrap.success { background: #dcfce7; color: #16a34a; }
 .notification-icon-wrap.alert { background: #fee2e2; color: #dc2626; }
-.notification-icon-wrap.info { background: #e0e7ff; color: #4f46e5; }
+.notification-icon-wrap.info { background: #ffedd5; color: #ea580c; }
 .notification-icon-wrap.warning { background: #fef3c7; color: #d97706; }
 
 .notification-content p {

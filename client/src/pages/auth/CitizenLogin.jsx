@@ -6,6 +6,7 @@ import { AuthInput } from '../../components/auth/AuthInput';
 import { Loader } from '../../components/auth/Loader';
 import { Toast } from '../../components/auth/Toast';
 import { SharedLoginLayout } from '../../components/auth/SharedLoginLayout';
+import { ReusableLoginForm } from '../../components/auth/ReusableLoginForm';
 import styles from './CitizenLogin.module.css';
 
 const CitizenLogin = () => {
@@ -48,38 +49,21 @@ const CitizenLogin = () => {
       illustrations={['📍', '🏠', '🌳']}
       isProfessional={false}
     >
-      <button type="button" className={styles.demoFillBtn} onClick={() => {setEmail('citizen@hero.com'); setPassword('password123');}}>
-        ⚡ Quick Fill Demo Citizen
-      </button>
-
-      <form onSubmit={handleLoginSubmit} className={styles.form}>
-        <AuthInput
-          label="Email Address"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          icon={FiMail}
-          disabled={isSubmitting}
-          placeholder="citizen@hero.com"
-        />
-        <AuthInput
-          label="Password"
-          type={showPassword ? 'text' : 'password'}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          icon={FiLock}
-          disabled={isSubmitting}
-          placeholder="••••••••"
-          rightElement={
-            <button type="button" className={styles.eyeBtn} onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <FiEyeOff /> : <FiEye />}
-            </button>
-          }
-        />
-        <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
-          {isSubmitting ? <Loader size="small" color="white" /> : 'Enter Citizen Portal'}
-        </button>
-      </form>
+      <ReusableLoginForm 
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        isSubmitting={isSubmitting}
+        onSubmit={handleLoginSubmit}
+        demoEmail="citizen@hero.com"
+        demoPassword="password123"
+        demoBtnText="Quick Fill Demo Citizen"
+        submitBtnText="Enter Citizen Portal"
+        emailLabel="Email Address"
+        passwordLabel="Password"
+        emailPlaceholder="citizen@hero.com"
+      />
     </SharedLoginLayout>
   );
 };

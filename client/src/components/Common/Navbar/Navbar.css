@@ -1,11 +1,14 @@
 /* src/components/Common/Navbar/Navbar.css */
+/* Orange-accent themed navbar matching the unified design system */
 
 .hero-navbar {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: #FFFFFF;
-  border-bottom: 1px solid #E2E8F0;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
   height: 72px;
   display: flex;
   align-items: center;
@@ -31,15 +34,25 @@
 }
 
 .brand-logo-icon {
-  width: 38px;
-  height: 38px;
-  background: #155EEF;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 40%, #d97706 100%);
   color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  font-size: 1.2rem;
+  border-radius: 13px;
+  font-size: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.7),
+    inset 0 -1.5px 1px rgba(0, 0, 0, 0.15),
+    0 6px 14px -2px rgba(217, 119, 6, 0.35);
+  transition: transform 0.2s ease;
+}
+
+.navbar-brand:hover .brand-logo-icon {
+  transform: scale(1.05);
 }
 
 .brand-title {
@@ -48,18 +61,19 @@
 }
 
 .brand-title h2 {
-  font-size: 1.15rem;
-  font-weight: 800;
+  font-size: 1.18rem;
+  font-weight: 850;
   color: #0F172A;
   line-height: 1.1;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.02em;
 }
 
 .brand-tagline {
   font-size: 0.72rem;
-  color: #64748B;
-  font-weight: 500;
+  color: #D97706;
+  font-weight: 700;
   margin-top: 1px;
+  letter-spacing: 0.02em;
 }
 
 /* Nav Links */
@@ -70,24 +84,49 @@
 }
 
 .nav-link {
-  padding: 8px 14px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  padding: 8px 16px;
+  font-size: 0.92rem;
+  font-weight: 600;
   color: #64748B;
-  border-radius: 8px;
+  border-radius: 12px;
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid transparent;
 }
 
 .nav-link:hover {
   color: #0F172A;
-  background: #F1F5F9;
+  background: #FFFBEB;
+  border-color: #FDE68A;
 }
 
-.nav-link.active {
-  color: #155EEF;
-  background: #EAF2FE;
-  font-weight: 600;
+.nav-link.active:not(.report-nav-pill) {
+  background: linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 60%, #FDE68A 100%);
+  color: #92400E;
+  font-weight: 750;
+  border-radius: 12px;
+  border: 1px solid #FCD34D;
+  box-shadow: 
+    inset 0 1.5px 1px #FFFFFF,
+    inset 0 -1px 1px rgba(217, 119, 6, 0.15),
+    0 3px 8px -1px rgba(245, 158, 11, 0.25);
+}
+
+/* Report Issue Special Sunset Pill in Top Nav - matches reference screenshot */
+.nav-link.report-nav-pill.active {
+  background: linear-gradient(135deg, #f43f5e 0%, #ea580c 45%, #ec4899 100%) !important;
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+  border: 2px solid #0F172A !important;
+  border-radius: 12px !important;
+  padding: 8px 18px !important;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.35) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.nav-link.report-nav-pill:not(.active) {
+  color: #64748B;
+  border: 1px solid transparent;
 }
 
 /* Actions */
@@ -95,6 +134,14 @@
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.navbar-actions button {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.navbar-actions button:hover {
+  transform: translateY(-1.5px) !important;
 }
 
 .auth-btn-group {
@@ -111,56 +158,85 @@
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 10px;
 }
+
 .btn-login-text:hover {
-  background: #F1F5F9;
+  background: #FEF3C7;
 }
 
 .btn-signup-primary {
   padding: 9px 18px;
-  background: #155EEF;
-  border: 1px solid #155EEF;
+  background: linear-gradient(180deg, #fef08a 0%, #f59e0b 40%, #d97706 100%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   color: #FFFFFF;
   font-size: 0.9rem;
-  font-weight: 600;
-  border-radius: 8px;
+  font-weight: 700;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background 0.15s ease;
-}
-.btn-signup-primary:hover {
-  background: #175CD3;
+  box-shadow: 
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.6),
+    0 4px 12px rgba(217, 119, 6, 0.35);
+  transition: all 0.2s ease;
 }
 
-/* User Avatar & Dropdowns */
+.btn-signup-primary:hover {
+  box-shadow: 0 6px 18px rgba(217, 119, 6, 0.45);
+  transform: translateY(-2px);
+}
+
+/* User Avatar & Dropdowns - Glossy Gel Buttons */
 .icon-btn, .user-avatar-badge {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: #F1F5F9;
-  border: 1px solid #E2E8F0;
-  color: #0F172A;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFBEB 60%, #FEF3C7 100%);
+  border: 1.5px solid #FDE68A;
+  color: #B45309;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   position: relative;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    inset 0 1.5px 1px #FFFFFF,
+    0 3px 8px rgba(217, 119, 6, 0.14);
+}
+
+.icon-btn:hover, .user-avatar-badge:hover {
+  background: linear-gradient(180deg, #FFFBEB 0%, #FEF3C7 60%, #FDE68A 100%);
+  border-color: #FBBF24;
+  transform: translateY(-1.5px);
+  box-shadow: 
+    inset 0 1.5px 1px #FFFFFF,
+    0 6px 14px rgba(217, 119, 6, 0.22);
 }
 
 .user-initial {
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: #155EEF;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #92400E;
 }
 
 .notification-dot {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 8px;
-  height: 8px;
-  background: #EF4444;
+  top: 5px;
+  right: 5px;
+  width: 9px;
+  height: 9px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   border-radius: 50%;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.4);
+}
+
+.notification-wrapper {
+  position: relative;
+}
+
+.user-profile-menu {
+  position: relative;
 }
 
 .notification-dropdown, .profile-dropdown {
@@ -171,7 +247,7 @@
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 14px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08) !important;
   padding: 8px;
   z-index: 1100;
 }
@@ -193,8 +269,9 @@
 
 .notification-header span {
   font-size: 0.75rem;
-  color: #155EEF;
+  color: #D97706;
   cursor: pointer;
+  font-weight: 600;
 }
 
 .notification-item {
@@ -206,13 +283,14 @@
   font-size: 0.825rem;
   color: #334155;
 }
+
 .notification-item:hover {
-  background: #F8FAFC;
+  background: #FEF3C7;
 }
 
 .notification-item.unread {
-  border-left: 3px solid #155EEF;
-  background: #F0F4FF;
+  border-left: 3px solid #D97706;
+  background: #FFFBEB;
 }
 
 .notification-item .time {
@@ -240,7 +318,7 @@
 }
 
 .profile-dropdown button:hover {
-  background: #F8FAFC;
+  background: #FEF3C7;
   color: #0F172A;
 }
 
@@ -273,6 +351,8 @@
   margin-top: 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  background: #FEF3C7;
+  color: #D97706;
 }
 
 .dropdown-divider {
@@ -284,6 +364,7 @@
 .logout-action-btn {
   color: #EF4444 !important;
 }
+
 .logout-action-btn:hover {
   background: #FEF2F2 !important;
 }
@@ -308,6 +389,7 @@
     flex-direction: column;
     padding: 16px;
     border-bottom: 1px solid #E2E8F0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
   }
   .navbar-links.mobile-active {
     display: flex;

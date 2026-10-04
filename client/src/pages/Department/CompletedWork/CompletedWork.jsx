@@ -137,14 +137,14 @@ export default function CompletedWork() {
               <div className="officer-card-actions" style={{ gap: '8px' }}>
                 <button 
                   className="btn-manage-action"
-                  style={{ background: '#0284c7', borderColor: '#0284c7' }}
+                  style={{ background: 'linear-gradient(180deg, #F59E0B 0%, #D97706 100%)', borderColor: '#D97706' }}
                   onClick={() => alert(`Certificate of completion downloaded for ticket #${item.id}`)}
                 >
                   <FaDownload /> Certificate
                 </button>
                 <button 
                   className="btn-manage-action"
-                  style={{ background: '#FFFFFF', color: '#155EEF', border: '1px solid #E2E8F0' }}
+                  style={{ background: '#FFFFFF', color: '#EA580C', border: '1px solid #fed7aa' }}
                   onClick={() => { setSelectedWork(item); setViewModalOpen(true); }}
                 >
                   <FaEye /> Full Ticket

@@ -97,7 +97,7 @@ export default function AdminDashboard() {
             <span className="kpi-num">{stats.total}</span>
             <p className="kpi-label">Total Platform Reports</p>
           </div>
-          <div className="kpi-trend trend-blue">
+          <div className="kpi-trend trend-orange" style={{ color: '#EA580C' }}>
             <FiActivity /> <span>All-time issues logged</span>
           </div>
         </div>
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
             <span className="kpi-num">{stats.pending}</span>
             <p className="kpi-label">Pending / Unassigned</p>
           </div>
-          <div className="kpi-trend trend-orange">
+          <div className="kpi-trend trend-orange" style={{ color: '#D97706' }}>
             <FiAlertCircle /> <span>Awaiting officer action</span>
           </div>
         </div>
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
             <span className="kpi-num">{stats.inProgress}</span>
             <p className="kpi-label">Work In Progress</p>
           </div>
-          <div className="kpi-trend trend-blue">
+          <div className="kpi-trend trend-orange" style={{ color: '#EA580C' }}>
             <FiClock /> <span>Under active repair by departments</span>
           </div>
         </div>
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
       <div className="officer-reports-section">
         <div className="officer-reports-header">
           <h2>Recent Global Reports ({issues.length})</h2>
-          <Link to="/admin/manage-issues" className="view-all-link">
+          <Link to="/admin/manage-issues" className="view-all-link" style={{ color: '#EA580C', fontWeight: 700, textDecoration: 'none' }}>
             View All Issues <FiArrowRight />
           </Link>
         </div>

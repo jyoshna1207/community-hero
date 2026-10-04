@@ -6,6 +6,7 @@ import { AuthInput } from '../../components/auth/AuthInput';
 import { Loader } from '../../components/auth/Loader';
 import { Toast } from '../../components/auth/Toast';
 import { SharedLoginLayout } from '../../components/auth/SharedLoginLayout';
+import { ReusableLoginForm } from '../../components/auth/ReusableLoginForm';
 import styles from './DepartmentLogin.module.css';
 
 const DepartmentLogin = () => {
@@ -48,38 +49,21 @@ const DepartmentLogin = () => {
       illustrations={['🚜', '🚧', '👷']}
       isProfessional={false}
     >
-      <button type="button" className={styles.demoFillBtn} onClick={() => {setEmail('dept@hero.com'); setPassword('password123');}}>
-        ⚡ Load Department Demo
-      </button>
-
-      <form onSubmit={handleLoginSubmit} className={styles.form}>
-        <AuthInput
-          label="Work Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          icon={FiMail}
-          disabled={isSubmitting}
-          placeholder="dept@hero.com"
-        />
-        <AuthInput
-          label="Password"
-          type={showPassword ? 'text' : 'password'}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          icon={FiLock}
-          disabled={isSubmitting}
-          placeholder="••••••••"
-          rightElement={
-            <button type="button" className={styles.eyeBtn} onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <FiEyeOff /> : <FiEye />}
-            </button>
-          }
-        />
-        <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
-          {isSubmitting ? <Loader size="small" color="white" /> : 'Log In to Dashboard'}
-        </button>
-      </form>
+      <ReusableLoginForm 
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        isSubmitting={isSubmitting}
+        onSubmit={handleLoginSubmit}
+        demoEmail="dept@hero.com"
+        demoPassword="password123"
+        demoBtnText="Load Department Demo"
+        submitBtnText="Log In to Dashboard"
+        emailLabel="Work Email"
+        passwordLabel="Password"
+        emailPlaceholder="dept@hero.com"
+      />
     </SharedLoginLayout>
   );
 };
