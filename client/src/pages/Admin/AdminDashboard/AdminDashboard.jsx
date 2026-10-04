@@ -81,7 +81,7 @@ export default function AdminDashboard() {
           </p>
         </div>
         <div className="officer-header-right">
-          <div className="ward-badge-tag" style={{ background: '#475569', color: '#fff', borderColor: '#475569' }}>
+          <div className="ward-badge-tag" style={{ background: '#FFF7ED', color: '#C2410C', borderColor: '#FED7AA' }}>
             <FiSettings /> Master Access
           </div>
           <div className="realtime-status-pill">
@@ -174,7 +174,7 @@ export default function AdminDashboard() {
               </div>
 
               <div className="officer-card-actions" style={{ gap: '8px' }}>
-                <Link to="/admin/manage-issues" className="btn-manage-action" style={{ background: '#f1f5f9', color: '#334155', border: '1px solid #cbd5e1' }}>
+                <Link to="/admin/manage-issues" className="btn-manage-action" style={{ background: '#FFF7ED', color: '#EA580C', border: '1.5px solid #FED7AA', fontWeight: 700 }}>
                   <FiSearch style={{ marginRight: '6px' }} /> Inspect Record
                 </Link>
               </div>

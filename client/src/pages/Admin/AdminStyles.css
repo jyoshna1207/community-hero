@@ -1,0 +1,497 @@
+/* ====================================================================
+   ADMIN PORTAL DESIGN SYSTEM - WARM SUNSET GLOSS & PREMIUM CARDS
+   ==================================================================== */
+
+.admin-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ── Top Header ── */
+.admin-top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.admin-header-title h1 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.02em;
+}
+
+.admin-header-title p {
+  color: #64748B;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: #FFF7ED;
+  border: 1px solid #FED7AA;
+  color: #C2410C;
+}
+
+.admin-refresh-btn {
+  padding: 9px 18px;
+  background: #FFFFFF;
+  border: 1.5px solid #FED7AA;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #EA580C;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.08);
+}
+
+.admin-refresh-btn:hover {
+  background: #FFF7ED;
+  border-color: #EA580C;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.16);
+}
+
+/* ── Notification Banner ── */
+.admin-toast-banner {
+  padding: 12px 18px;
+  background: #ECFDF5;
+  border: 1.5px solid #A7F3D0;
+  border-radius: 12px;
+  color: #065F46;
+  font-size: 0.88rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08);
+}
+
+/* ── Filter Card ── */
+.admin-filters-card {
+  background: #FFFFFF;
+  border: 1.5px solid #FED7AA;
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(234, 88, 12, 0.04);
+}
+
+.admin-search-wrapper {
+  display: flex;
+  align-items: center;
+  background: #FFFBF7;
+  padding: 10px 16px;
+  border-radius: 10px;
+  width: 320px;
+  max-width: 100%;
+  gap: 10px;
+  border: 1.5px solid #FED7AA;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.admin-search-wrapper:focus-within {
+  border-color: #EA580C;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
+}
+
+.admin-search-wrapper input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: 0.88rem;
+  color: #1E293B;
+  font-family: inherit;
+}
+
+.admin-filter-selects {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-select {
+  padding: 9px 14px;
+  background: #FFFBF7;
+  border-radius: 10px;
+  border: 1.5px solid #FED7AA;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.admin-select:focus {
+  border-color: #EA580C;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
+}
+
+/* ── Modern Table Card ── */
+.admin-table-card {
+  background: #FFFFFF;
+  border: 1.5px solid #FED7AA;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(234, 88, 12, 0.05), 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.admin-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+.admin-table thead th {
+  background: linear-gradient(180deg, #FFF7ED 0%, #FFEDD5 100%);
+  color: #9A3412;
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 16px 20px;
+  border-bottom: 1.5px solid #FED7AA;
+  white-space: nowrap;
+}
+
+.admin-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.admin-table tbody tr:hover {
+  background-color: #FFFBF7;
+}
+
+.admin-table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.admin-table td {
+  padding: 16px 20px;
+  vertical-align: middle;
+  color: #1E293B;
+}
+
+/* ── Table Badges ── */
+.admin-pill-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.admin-pill-status.unsolved,
+.admin-pill-status.reported {
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+}
+
+.admin-pill-status.in-progress {
+  background: #FFFBEB;
+  color: #D97706;
+  border: 1px solid #FDE68A;
+}
+
+.admin-pill-status.resolved,
+.admin-pill-status.solved {
+  background: #F0FDF4;
+  color: #16A34A;
+  border: 1px solid #BBF7D0;
+}
+
+.admin-category-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  background: #FFF7ED;
+  color: #C2410C;
+  border: 1px solid #FED7AA;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.admin-priority-badge {
+  font-weight: 800;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.admin-priority-badge.critical {
+  color: #DC2626;
+}
+
+.admin-priority-badge.high {
+  color: #EA580C;
+}
+
+.admin-priority-badge.medium {
+  color: #D97706;
+}
+
+.admin-priority-badge.low {
+  color: #64748B;
+}
+
+/* ── User Table Avatars & Role Badges ── */
+.admin-user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FB923C 0%, #EA580C 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.25);
+  border: 2px solid #FED7AA;
+}
+
+.admin-role-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.admin-role-tag.admin {
+  background: #FEF2F2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+
+.admin-role-tag.officer {
+  background: #FFFBEB;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+
+.admin-role-tag.department {
+  background: #FFF7ED;
+  color: #C2410C;
+  border: 1px solid #FED7AA;
+}
+
+.admin-role-tag.citizen {
+  background: #F0FDF4;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+}
+
+.admin-xp-tag {
+  font-weight: 800;
+  color: #EA580C;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── Micro Action Buttons ── */
+.admin-actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-btn-action {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.85rem;
+}
+
+.admin-btn-action.view {
+  background: #FFF7ED;
+  color: #EA580C;
+  border-color: #FED7AA;
+}
+
+.admin-btn-action.view:hover {
+  background: #EA580C;
+  color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.3);
+  transform: translateY(-1px);
+}
+
+.admin-btn-action.assign {
+  background: #FEF3C7;
+  color: #B45309;
+  border-color: #FDE68A;
+}
+
+.admin-btn-action.assign:hover {
+  background: #F59E0B;
+  color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+  transform: translateY(-1px);
+}
+
+.admin-btn-action.resolve {
+  background: #ECFDF5;
+  color: #059669;
+  border-color: #A7F3D0;
+}
+
+.admin-btn-action.resolve:hover {
+  background: #10B981;
+  color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+  transform: translateY(-1px);
+}
+
+.admin-btn-action.edit {
+  background: #FFFBEB;
+  color: #D97706;
+  border-color: #FDE68A;
+}
+
+.admin-btn-action.edit:hover {
+  background: #D97706;
+  color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3);
+  transform: translateY(-1px);
+}
+
+.admin-btn-action.delete {
+  background: #FEF2F2;
+  color: #DC2626;
+  border-color: #FECACA;
+}
+
+.admin-btn-action.delete:hover {
+  background: #EF4444;
+  color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+  transform: translateY(-1px);
+}
+
+/* ── Admin Grid Cards (Departments & Wards) ── */
+.admin-grid-cards {
+  display: grid;
+  grid-templateColumns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.admin-grid-card {
+  background: #FFFFFF;
+  border: 1.5px solid #FED7AA;
+  border-radius: 18px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 4px 16px rgba(234, 88, 12, 0.04);
+  transition: all 0.3s ease;
+}
+
+.admin-grid-card:hover {
+  border-color: #FDBA74;
+  box-shadow: 0 12px 28px rgba(234, 88, 12, 0.09);
+  transform: translateY(-2px);
+}
+
+.admin-card-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #FB923C 0%, #EA580C 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
+}
+
+.admin-btn-primary {
+  padding: 9px 18px;
+  background: linear-gradient(180deg, #FB923C 0%, #EA580C 50%, #C2410C 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.25);
+  transition: all 0.2s;
+}
+
+.admin-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.35);
+}
+
+.admin-btn-secondary {
+  padding: 9px 18px;
+  background: #FFFFFF;
+  color: #475569;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-btn-secondary:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}

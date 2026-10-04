@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { FaSearch, FaEye, FaUserCheck, FaTrash, FaCheckDouble, FaSync } from 'react-icons/fa';
+import { FaSearch, FaEye, FaUserCheck, FaTrash, FaCheckDouble, FaSync, FaShieldAlt } from 'react-icons/fa';
 import axios from 'axios';
 import { DeleteModal, AssignOfficerModal, ViewDetailsModal } from '../../../components/Common/Modals';
+import '../AdminStyles.css';
 
 export default function ManageIssues() {
   const [issues, setIssues] = useState([]);
@@ -128,41 +129,43 @@ export default function ManageIssues() {
   });
 
   return (
-    <div className="officer-dashboard-page" style={{ padding: '0' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-          <div>
-            <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1e293b' }}>Global Ticket Management</h1>
-            <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Administer, re-route, and monitor all civic reports across the entire platform.</p>
+    <div className="admin-page-container">
+      {/* Top Header */}
+      <div className="admin-top-header">
+        <div className="admin-header-title">
+          <h1>Global Ticket Management</h1>
+          <p>Administer, re-route, and monitor all civic reports across the municipal platform.</p>
+        </div>
+        <div className="admin-header-actions">
+          <div className="admin-pill-badge">
+            <FaShieldAlt /> Central Operations
           </div>
-          <button 
-            onClick={loadIssues}
-            style={{ padding: '8px 16px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 600 }}
-          >
+          <button onClick={loadIssues} className="admin-refresh-btn">
             <FaSync className={loading ? 'animate-spin' : ''} /> Refresh Global Database
           </button>
         </div>
+      </div>
 
       {notification && (
-        <div style={{ padding: '12px 16px', background: '#ecfdf5', border: '1.5px solid #a7f3d0', borderRadius: '10px', color: '#065f46', fontSize: '0.875rem', fontWeight: 700 }}>
+        <div className="admin-toast-banner">
           ✓ {notification}
         </div>
       )}
 
-      <div className="card" style={{ padding: '16px', display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', background: '#f8fafc', padding: '8px 16px', borderRadius: '8px', width: '300px', gap: '10px', border: '1px solid #e2e8f0' }}>
-          <FaSearch style={{ color: '#475569' }} />
+      {/* Filter Toolbar */}
+      <div className="admin-filters-card">
+        <div className="admin-search-wrapper">
+          <FaSearch style={{ color: '#EA580C' }} />
           <input 
             type="text" 
             placeholder="Search issue title, id, or place..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ border: 'none', background: 'transparent', outline: 'none', width: '100%', fontSize: '0.875rem' }} 
           />
         </div>
 
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-          <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}>
+        <div className="admin-filter-selects">
+          <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="admin-select">
             <option value="All">All Categories</option>
             <option value="Roads">Roads</option>
             <option value="Waste Management">Waste Management</option>
@@ -171,14 +174,14 @@ export default function ManageIssues() {
             <option value="Drainage">Drainage</option>
           </select>
 
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}>
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="admin-select">
             <option value="All">All Statuses</option>
             <option value="Reported">Reported / Pending</option>
             <option value="In Progress">In Progress</option>
             <option value="Resolved">Resolved</option>
           </select>
 
-          <select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}>
+          <select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)} className="admin-select">
             <option value="All">All Priorities</option>
             <option value="Critical">Critical</option>
             <option value="High">High</option>
@@ -188,92 +191,112 @@ export default function ManageIssues() {
         </div>
       </div>
 
-      <div className="table-container">
-        <table className="modern-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Priority</th>
-              <th>Location</th>
-              <th>Ward</th>
-              <th>Department</th>
-              <th>Status</th>
-              <th>Assigned Officer</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
+      {/* Table Card Container */}
+      <div className="admin-table-card">
+        <div className="admin-table-scroll">
+          <table className="admin-table">
+            <thead>
               <tr>
-                <td colSpan="9" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>Loading database issues...</td>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Location</th>
+                <th>Ward</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>Assigned Officer</th>
+                <th style={{ textAlign: 'center' }}>Actions</th>
               </tr>
-            ) : filteredIssues.length === 0 ? (
-              <tr>
-                <td colSpan="9" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>No matching reports found.</td>
-              </tr>
-            ) : (
-              filteredIssues.map(issue => (
-                <tr key={issue.id}>
-                  <td><strong>{issue.title}</strong><div style={{ fontSize: '0.75rem', color: '#64748b' }}>#{issue.id.slice(-6)}</div></td>
-                  <td>{issue.category}</td>
-                  <td>
-                    <span style={{ 
-                      fontWeight: 700, 
-                      color: (issue.priority || '').toUpperCase() === 'CRITICAL' ? '#ef4444' : (issue.priority || '').toUpperCase() === 'HIGH' ? '#f59e0b' : '#3b82f6' 
-                    }}>
-                      {issue.priority}
-                    </span>
-                  </td>
-                  <td>{issue.location}</td>
-                  <td>{issue.ward}</td>
-                  <td>{issue.department}</td>
-                  <td>
-                    <span className={`badge badge-${issue.status.toLowerCase().replace(/\s+/g, '')}`}>
-                      {issue.status}
-                    </span>
-                  </td>
-                  <td>{issue.assignedOfficer}</td>
-                  <td>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <button 
-                        className="btn btn-outline btn-icon" 
-                        title="View Full Details" 
-                        onClick={() => { setSelectedIssue(issue); setViewModalOpen(true); }}
-                      >
-                        <FaEye />
-                      </button>
-                      <button 
-                        className="btn btn-outline btn-icon" 
-                        style={{ color: '#4f46e5' }} 
-                        title="Assign Department/Officer" 
-                        onClick={() => { setSelectedIssue(issue); setAssignModalOpen(true); }}
-                      >
-                        <FaUserCheck />
-                      </button>
-                      <button 
-                        className="btn btn-outline btn-icon" 
-                        style={{ color: '#10b981' }} 
-                        title="Quick Resolve" 
-                        onClick={() => handleQuickResolve(issue.id)}
-                      >
-                        <FaCheckDouble />
-                      </button>
-                      <button 
-                        className="btn btn-outline btn-icon" 
-                        style={{ color: '#ef4444' }} 
-                        title="Delete Ticket" 
-                        onClick={() => { setSelectedIssue(issue); setDeleteModalOpen(true); }}
-                      >
-                        <FaTrash />
-                      </button>
-                    </div>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+                    <FaSync className="animate-spin" style={{ marginRight: '8px', color: '#EA580C' }} /> Loading database issues...
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : filteredIssues.length === 0 ? (
+                <tr>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+                    No matching reports found in database.
+                  </td>
+                </tr>
+              ) : (
+                filteredIssues.map(issue => {
+                  const statusNormalized = (issue.status || 'REPORTED').toLowerCase().replace(/\s+/g, '-');
+                  const priorityNormalized = (issue.priority || 'medium').toLowerCase();
+                  return (
+                    <tr key={issue.id}>
+                      <td>
+                        <strong style={{ color: '#0F172A', display: 'block' }}>{issue.title}</strong>
+                        <span style={{ fontSize: '0.75rem', color: '#94A3B8', fontFamily: 'monospace' }}>#{issue.id.slice(-6)}</span>
+                      </td>
+                      <td>
+                        <span className="admin-category-badge">{issue.category}</span>
+                      </td>
+                      <td>
+                        <span className={`admin-priority-badge ${priorityNormalized}`}>
+                          ● {issue.priority}
+                        </span>
+                      </td>
+                      <td style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={issue.location}>
+                        📍 {issue.location}
+                      </td>
+                      <td>
+                        <span style={{ fontWeight: 600, color: '#475569' }}>{issue.ward}</span>
+                      </td>
+                      <td>
+                        <span style={{ fontSize: '0.825rem', color: '#334155' }}>{issue.department}</span>
+                      </td>
+                      <td>
+                        <span className={`admin-pill-status ${statusNormalized}`}>
+                          {issue.status}
+                        </span>
+                      </td>
+                      <td>
+                        <span style={{ fontSize: '0.85rem', color: issue.assignedOfficer === 'Pending Assignment' ? '#94A3B8' : '#0F172A', fontWeight: issue.assignedOfficer === 'Pending Assignment' ? 400 : 600 }}>
+                          {issue.assignedOfficer}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="admin-actions-cell" style={{ justifyContent: 'center' }}>
+                          <button 
+                            className="admin-btn-action view" 
+                            title="View Full Details" 
+                            onClick={() => { setSelectedIssue(issue); setViewModalOpen(true); }}
+                          >
+                            <FaEye />
+                          </button>
+                          <button 
+                            className="admin-btn-action assign" 
+                            title="Assign Department/Officer" 
+                            onClick={() => { setSelectedIssue(issue); setAssignModalOpen(true); }}
+                          >
+                            <FaUserCheck />
+                          </button>
+                          <button 
+                            className="admin-btn-action resolve" 
+                            title="Quick Resolve" 
+                            onClick={() => handleQuickResolve(issue.id)}
+                          >
+                            <FaCheckDouble />
+                          </button>
+                          <button 
+                            className="admin-btn-action delete" 
+                            title="Delete Ticket" 
+                            onClick={() => { setSelectedIssue(issue); setDeleteModalOpen(true); }}
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <AssignOfficerModal 
@@ -299,7 +322,6 @@ export default function ManageIssues() {
         onConfirm={handleDeleteIssue} 
         itemName={selectedIssue?.title} 
       />
-      </div>
     </div>
   );
 }

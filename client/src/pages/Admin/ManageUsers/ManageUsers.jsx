@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { FaSearch, FaEye, FaEdit, FaTrash, FaUserSlash, FaSync, FaUserCheck } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { FaSearch, FaEdit, FaTrash, FaSync, FaShieldAlt, FaAward } from 'react-icons/fa';
 import axios from 'axios';
 import { DeleteModal, EditUserModal } from '../../../components/Common/Modals';
+import '../AdminStyles.css';
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);
@@ -95,41 +96,43 @@ export default function ManageUsers() {
   });
 
   return (
-    <div className="officer-dashboard-page" style={{ padding: '0' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-          <div>
-            <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1e293b' }}>User Administration</h1>
-            <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Manage citizens, assign roles, and administer system accounts securely.</p>
+    <div className="admin-page-container">
+      {/* Top Header */}
+      <div className="admin-top-header">
+        <div className="admin-header-title">
+          <h1>User Administration</h1>
+          <p>Manage citizens, assign roles, and administer system accounts securely.</p>
+        </div>
+        <div className="admin-header-actions">
+          <div className="admin-pill-badge">
+            <FaShieldAlt /> System Accounts
           </div>
-          <button 
-            onClick={loadUsers} 
-            style={{ padding: '8px 16px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 600 }}
-          >
+          <button onClick={loadUsers} className="admin-refresh-btn">
             <FaSync className={loading ? 'animate-spin' : ''} /> Refresh Directory
           </button>
         </div>
+      </div>
 
       {notification && (
-        <div style={{ padding: '12px 16px', background: '#ecfdf5', border: '1.5px solid #a7f3d0', borderRadius: '10px', color: '#065f46', fontSize: '0.875rem', fontWeight: 700 }}>
+        <div className="admin-toast-banner">
           ✓ {notification}
         </div>
       )}
 
-      <div className="card" style={{ padding: '16px', display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', background: '#f8fafc', padding: '8px 16px', borderRadius: '8px', width: '300px', gap: '10px', border: '1px solid #e2e8f0' }}>
-          <FaSearch style={{ color: '#475569' }} />
+      {/* Filter Toolbar */}
+      <div className="admin-filters-card">
+        <div className="admin-search-wrapper">
+          <FaSearch style={{ color: '#EA580C' }} />
           <input 
             type="text" 
             placeholder="Search name or email..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ border: 'none', background: 'transparent', outline: 'none', width: '100%', fontSize: '0.875rem' }} 
           />
         </div>
 
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-          <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} style={{ padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}>
+        <div className="admin-filter-selects">
+          <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} className="admin-select">
             <option value="All">All Roles</option>
             <option value="Citizen">Citizen</option>
             <option value="Ward Officer">Ward Officer</option>
@@ -139,80 +142,97 @@ export default function ManageUsers() {
         </div>
       </div>
 
-      <div className="table-container">
-        <table className="modern-table">
-          <thead>
-            <tr>
-              <th>Avatar</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>System Role</th>
-              <th>Ward / Jurisdiction</th>
-              <th>Department</th>
-              <th>XP Points</th>
-              <th>Created</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
+      {/* Modern Table Container */}
+      <div className="admin-table-card">
+        <div className="admin-table-scroll">
+          <table className="admin-table">
+            <thead>
               <tr>
-                <td colSpan="9" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>Loading user directory...</td>
+                <th>Avatar</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>System Role</th>
+                <th>Ward / Jurisdiction</th>
+                <th>Department</th>
+                <th>XP Points</th>
+                <th>Created</th>
+                <th style={{ textAlign: 'center' }}>Actions</th>
               </tr>
-            ) : filteredUsers.length === 0 ? (
-              <tr>
-                <td colSpan="9" style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>No users match criteria.</td>
-              </tr>
-            ) : (
-              filteredUsers.map(user => (
-                <tr key={user.id}>
-                  <td>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#4f46e5', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.9rem' }}>
-                      {user.name.charAt(0).toUpperCase()}
-                    </div>
-                  </td>
-                  <td><strong>{user.name}</strong></td>
-                  <td>{user.email}</td>
-                  <td>
-                    <span style={{
-                      padding: '4px 8px',
-                      borderRadius: '6px',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      background: user.role === 'Administrator' ? '#fee2e2' : user.role === 'Ward Officer' ? '#fef3c7' : user.role === 'Department Officer' ? '#e0f2fe' : '#f0fdf4',
-                      color: user.role === 'Administrator' ? '#991b1b' : user.role === 'Ward Officer' ? '#92400e' : user.role === 'Department Officer' ? '#0369a1' : '#166534',
-                    }}>
-                      {user.role}
-                    </span>
-                  </td>
-                  <td>{user.ward}</td>
-                  <td>{user.department}</td>
-                  <td><span style={{ fontWeight: 700, color: '#4f46e5' }}>{user.points} XP</span> (Lvl {user.level})</td>
-                  <td>{user.createdDate}</td>
-                  <td>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <button 
-                        className="btn btn-outline btn-icon" 
-                        title="Edit User" 
-                        onClick={() => { setSelectedUser(user); setEditModalOpen(true); }}
-                      >
-                        <FaEdit />
-                      </button>
-                      <button 
-                        className="btn btn-outline btn-icon" 
-                        style={{ color: '#ef4444' }} 
-                        title="Delete User" 
-                        onClick={() => { setSelectedUser(user); setDeleteModalOpen(true); }}
-                      >
-                        <FaTrash />
-                      </button>
-                    </div>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+                    <FaSync className="animate-spin" style={{ marginRight: '8px', color: '#EA580C' }} /> Loading user directory...
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+                    No users match criteria.
+                  </td>
+                </tr>
+              ) : (
+                filteredUsers.map(user => {
+                  let roleClass = 'citizen';
+                  if (user.role === 'Administrator') roleClass = 'admin';
+                  else if (user.role === 'Ward Officer') roleClass = 'officer';
+                  else if (user.role === 'Department Officer') roleClass = 'department';
+
+                  return (
+                    <tr key={user.id}>
+                      <td>
+                        <div className="admin-user-avatar">
+                          {user.name.charAt(0).toUpperCase()}
+                        </div>
+                      </td>
+                      <td>
+                        <strong style={{ color: '#0F172A', display: 'block' }}>{user.name}</strong>
+                      </td>
+                      <td style={{ color: '#475569', fontSize: '0.85rem' }}>{user.email}</td>
+                      <td>
+                        <span className={`admin-role-tag ${roleClass}`}>
+                          {user.role}
+                        </span>
+                      </td>
+                      <td>
+                        <span style={{ fontWeight: 600, color: '#334155' }}>{user.ward}</span>
+                      </td>
+                      <td>
+                        <span style={{ fontSize: '0.825rem', color: '#475569' }}>{user.department}</span>
+                      </td>
+                      <td>
+                        <span className="admin-xp-tag">
+                          <FaAward /> {user.points} XP
+                        </span>
+                        <div style={{ fontSize: '0.725rem', color: '#94A3B8', fontWeight: 600 }}>Level {user.level}</div>
+                      </td>
+                      <td style={{ fontSize: '0.825rem', color: '#64748B' }}>{user.createdDate}</td>
+                      <td>
+                        <div className="admin-actions-cell" style={{ justifyContent: 'center' }}>
+                          <button 
+                            className="admin-btn-action edit" 
+                            title="Edit User" 
+                            onClick={() => { setSelectedUser(user); setEditModalOpen(true); }}
+                          >
+                            <FaEdit />
+                          </button>
+                          <button 
+                            className="admin-btn-action delete" 
+                            title="Delete User" 
+                            onClick={() => { setSelectedUser(user); setDeleteModalOpen(true); }}
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <DeleteModal 
@@ -228,7 +248,6 @@ export default function ManageUsers() {
         user={selectedUser} 
         onSave={handleUpdateUser} 
       />
-      </div>
     </div>
   );
 }

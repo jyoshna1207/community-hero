@@ -149,7 +149,7 @@ const AdminLayout = () => {
       </header>
 
       {/* Main Viewport Content */}
-      <main style={{ flex: 1, width: '100%', padding: '24px' }}>
+      <main style={{ flex: 1, width: '100%', maxWidth: '1440px', margin: '0 auto', padding: '28px 24px', boxSizing: 'border-box' }}>
         <Outlet />
       </main>
     </div>
