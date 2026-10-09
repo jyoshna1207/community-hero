@@ -119,12 +119,13 @@ export default function ManageIssues() {
   };
 
   const filteredIssues = issues.filter(i => {
-    const matchesSearch = i.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          i.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          i.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCat = categoryFilter === 'All' || i.category.toLowerCase().includes(categoryFilter.toLowerCase());
-    const matchesStatus = statusFilter === 'All' || i.status.toLowerCase().includes(statusFilter.toLowerCase());
-    const matchesPri = priorityFilter === 'All' || i.priority.toLowerCase().includes(priorityFilter.toLowerCase());
+    const term = (searchTerm || '').toLowerCase();
+    const matchesSearch = (i.title || '').toLowerCase().includes(term) || 
+                          (i.location || '').toLowerCase().includes(term) ||
+                          String(i.id || '').toLowerCase().includes(term);
+    const matchesCat = categoryFilter === 'All' || (i.category || '').toLowerCase().includes(categoryFilter.toLowerCase());
+    const matchesStatus = statusFilter === 'All' || (i.status || '').toLowerCase().includes(statusFilter.toLowerCase());
+    const matchesPri = priorityFilter === 'All' || (i.priority || '').toLowerCase().includes(priorityFilter.toLowerCase());
     return matchesSearch && matchesCat && matchesStatus && matchesPri;
   });
 

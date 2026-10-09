@@ -18,7 +18,10 @@ export default function Profile() {
   const [formData, setFormData] = useState({
     name: user?.name || 'Medisetti Anusha',
     email: user?.email || 'anusha@communityhero.org',
-    password: ''
+    password: '',
+    mandal: user?.mandal || 'Thondangi',
+    village: user?.village || 'Pydikonda',
+    wardName: user?.wardName || 'Tuni Rural - Pydikonda'
   });
 
   const [stats, setStats] = useState({
@@ -32,7 +35,10 @@ export default function Profile() {
       setFormData({
         name: user.name || 'Medisetti Anusha',
         email: user.email || 'anusha@communityhero.org',
-        password: ''
+        password: '',
+        mandal: user.mandal || 'Thondangi',
+        village: user.village || 'Pydikonda',
+        wardName: user.wardName || 'Tuni Rural - Pydikonda'
       });
     }
   }, [user]);
@@ -86,7 +92,10 @@ export default function Profile() {
     if (updateProfile) {
       const updateData = {
         name: formData.name,
-        email: formData.email
+        email: formData.email,
+        mandal: formData.mandal,
+        village: formData.village,
+        wardName: formData.wardName
       };
       if (formData.password && formData.password.trim().length > 0) {
         updateData.password = formData.password;
@@ -129,7 +138,12 @@ export default function Profile() {
         <div className="profile-user-titles">
           <h2>{displayName}</h2>
           <p>{displayEmail}</p>
-          <span className="role-badge">{displayRole}</span>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '6px', flexWrap: 'wrap' }}>
+            <span className="role-badge">{displayRole}</span>
+            <span style={{ fontSize: '0.82rem', background: '#FEF3C7', color: '#92400E', padding: '3px 12px', borderRadius: '12px', fontWeight: 700, border: '1px solid #FDE68A' }}>
+              📍 {user?.village || formData.village || 'Pydikonda'}, {user?.mandal || formData.mandal || 'Thondangi'} Mandal
+            </span>
+          </div>
         </div>
       </div>
 
@@ -172,7 +186,7 @@ export default function Profile() {
       <div className="profile-actions-box">
         <h3>Account Settings</h3>
 
-        {/* EDIT PROFILE FORM MODAL / CARD (FULL NAME, EMAIL, PASSWORD ONLY) */}
+        {/* EDIT PROFILE FORM MODAL / CARD */}
         {isEditing ? (
           <form onSubmit={handleSaveProfile} className="edit-profile-form animate-fade-in">
             <div className="edit-form-grid">
@@ -195,6 +209,38 @@ export default function Profile() {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
                   placeholder="Enter email address"
                   required 
+                />
+              </div>
+
+              <div className="form-group">
+                <label>📍 Mandal</label>
+                <input 
+                  type="text" 
+                  value={formData.mandal} 
+                  onChange={(e) => setFormData({ ...formData, mandal: e.target.value })} 
+                  placeholder="e.g. Thondangi or Tuni Rural"
+                  required 
+                />
+              </div>
+
+              <div className="form-group">
+                <label>🏠 Village / Town</label>
+                <input 
+                  type="text" 
+                  value={formData.village} 
+                  onChange={(e) => setFormData({ ...formData, village: e.target.value })} 
+                  placeholder="e.g. Pydikonda"
+                  required 
+                />
+              </div>
+
+              <div className="form-group full-width-group">
+                <label>🏷️ Ward / Area</label>
+                <input 
+                  type="text" 
+                  value={formData.wardName} 
+                  onChange={(e) => setFormData({ ...formData, wardName: e.target.value })} 
+                  placeholder="e.g. Tuni Rural - Pydikonda"
                 />
               </div>
 

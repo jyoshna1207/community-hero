@@ -69,7 +69,7 @@ export default function MyReports() {
     loadReports();
   }, [token]);
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm(t('deleteReportConfirm'))) {
       const updated = reports.filter(r => r.id !== id && r._id !== id);
       setReports(updated);
@@ -79,6 +79,16 @@ export default function MyReports() {
         localStorage.setItem('my_submitted_reports', JSON.stringify(filteredLocal));
       } catch (e) {
         console.error("Delete local storage error:", e);
+      }
+
+      if (token && id) {
+        try {
+          await axios.delete(`http://localhost:5000/api/issues/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+        } catch (apiErr) {
+          // If already deleted or local-only, ignore
+        }
       }
     }
   };

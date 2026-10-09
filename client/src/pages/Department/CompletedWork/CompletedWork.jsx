@@ -65,11 +65,14 @@ export default function CompletedWork() {
     loadCompletedWorks();
   }, []);
 
-  const filtered = completed.filter(c => 
-    c.title.toLowerCase().includes(search.toLowerCase()) || 
-    c.id.toLowerCase().includes(search.toLowerCase()) ||
-    (c.location && c.location.toLowerCase().includes(search.toLowerCase()))
-  );
+  const filtered = completed.filter(c => {
+    const term = (search || '').toLowerCase();
+    return (
+      (c.title || '').toLowerCase().includes(term) || 
+      (String(c.id || '')).toLowerCase().includes(term) ||
+      (c.location && c.location.toLowerCase().includes(term))
+    );
+  });
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>

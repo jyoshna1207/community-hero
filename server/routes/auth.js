@@ -1,13 +1,16 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
+const JWT_SECRET = process.env.JWT_SECRET || "community_hero_secret_key_2026";
+
 // Generate JWT token helper
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id }, JWT_SECRET, {
     expiresIn: "30d",
   });
 };
@@ -18,9 +21,11 @@ const formatUserResponse = (user, token) => ({
   email: user.email,
   role: user.role || "citizen",
   wardId: user.wardId || "WARD-04",
-  wardName: user.wardName || "Duvvada Ward 4",
-  municipality: user.municipality || "Visakhapatnam Municipal Corporation",
+  wardName: user.wardName || "Tuni Rural - Pydikonda",
+  municipality: user.municipality || "Thondangi Mandal / Kakinada",
   departmentName: user.departmentName || "Public Works Department",
+  village: user.village || "",
+  mandal: user.mandal || "",
   phone: user.phone || "",
   points: user.points ?? 150,
   level: user.level ?? 1,
@@ -37,7 +42,7 @@ const formatUserResponse = (user, token) => ({
 const seedDemoUsers = async () => {
   try {
     const demoAccounts = [
-      { name: "Jyoshna Kosana", email: "citizen@hero.com", password: "password123", role: "citizen", points: 450, level: 3, title: "Gold Community Guardian" },
+      { name: "Jyoshna Kosana", email: "citizen@hero.com", password: "password123", role: "citizen", points: 450, level: 3, title: "Gold Community Guardian", village: "Pydikonda", mandal: "Thondangi", wardName: "Tuni Rural - Pydikonda", municipality: "Thondangi Mandal / Kakinada" },
       { name: "Officer Rajesh Kumar", email: "officer@hero.com", password: "password123", role: "ward_officer", wardId: "WARD-04", wardName: "Duvvada Ward 4", municipality: "Visakhapatnam", points: 720, level: 5, title: "Ward 4 Chief Inspector" },
       { name: "Public Works Lead", email: "dept@hero.com", password: "password123", role: "district_officer", points: 600, level: 4, title: "Municipal Operations Lead" },
       { name: "System Admin", email: "admin@hero.com", password: "password123", role: "admin", points: 1000, level: 10, title: "Super Municipal Admin" },
@@ -51,8 +56,10 @@ const seedDemoUsers = async () => {
         const matches = await existingUser.matchPassword("password123");
         if (!matches) {
           existingUser.password = "password123";
-          await existingUser.save();
         }
+        if (acc.village && !existingUser.village) existingUser.village = acc.village;
+        if (acc.mandal && !existingUser.mandal) existingUser.mandal = acc.mandal;
+        await existingUser.save();
       }
     }
   } catch (err) {
@@ -65,7 +72,7 @@ const seedDemoUsers = async () => {
 // @access  Public
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password, role, wardId, wardName, municipality, departmentName, phone } = req.body;
+    const { name, email, password, role, wardId, wardName, municipality, departmentName, phone, village, mandal } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Please enter all fields" });
@@ -73,7 +80,10 @@ router.post("/register", async (req, res) => {
 
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ message: "User already exists with this email" });
+      if (['citizen@hero.com', 'officer@hero.com', 'dept@hero.com', 'admin@hero.com'].includes(email.toLowerCase().trim())) {
+        return res.status(400).json({ message: "This is a pre-configured demo account. Please use Demo Login to sign in directly, or choose another email." });
+      }
+      return res.status(400).json({ message: "An account with this email already exists. Please sign in or use another email." });
     }
 
     let validRole = "citizen";
@@ -92,8 +102,10 @@ router.post("/register", async (req, res) => {
       password,
       role: validRole,
       wardId: wardId || "WARD-04",
-      wardName: wardName || "Duvvada Ward 4",
-      municipality: municipality || "Visakhapatnam",
+      wardName: wardName || (village ? `${village} Ward` : "Tuni Rural - Pydikonda"),
+      municipality: municipality || (mandal ? `${mandal} Mandal` : "Thondangi Mandal / Kakinada"),
+      village: village || "",
+      mandal: mandal || "",
       departmentName: departmentName || "Public Works Department",
       phone: phone || "",
     });
@@ -175,6 +187,11 @@ router.put("/profile", protect, async (req, res) => {
     if (req.body.name) user.name = req.body.name;
     if (req.body.email) user.email = req.body.email;
     if (req.body.password && req.body.password.trim().length > 0) user.password = req.body.password;
+    if (req.body.village !== undefined) user.village = req.body.village;
+    if (req.body.mandal !== undefined) user.mandal = req.body.mandal;
+    if (req.body.wardName !== undefined) user.wardName = req.body.wardName;
+    if (req.body.municipality !== undefined) user.municipality = req.body.municipality;
+    if (req.body.phone !== undefined) user.phone = req.body.phone;
 
     await user.save();
     res.json(formatUserResponse(user));
@@ -203,6 +220,10 @@ router.get("/users", async (req, res) => {
 // @access  Public / Admin
 router.put("/users/:id", async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     const { name, email, role, departmentName, wardName, phone } = req.body;
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -211,7 +232,18 @@ router.put("/users/:id", async (req, res) => {
 
     if (name) user.name = name;
     if (email) user.email = email;
-    if (role) user.role = role;
+    if (role) {
+      const r = (role || "").toLowerCase().trim();
+      if (r.includes("ward") || r === "officer" || r === "ward_officer") {
+        user.role = "ward_officer";
+      } else if (r.includes("district") || r.includes("dept") || r.includes("department") || r === "district_officer") {
+        user.role = "district_officer";
+      } else if (r === "admin" || r.includes("administrator")) {
+        user.role = "admin";
+      } else {
+        user.role = "citizen";
+      }
+    }
     if (departmentName) user.departmentName = departmentName;
     if (wardName) user.wardName = wardName;
     if (phone !== undefined) user.phone = phone;
@@ -229,6 +261,10 @@ router.put("/users/:id", async (req, res) => {
 // @access  Public / Admin
 router.delete("/users/:id", async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -242,4 +278,5 @@ router.delete("/users/:id", async (req, res) => {
   }
 });
 
+router.seedDemoUsers = seedDemoUsers;
 module.exports = router;

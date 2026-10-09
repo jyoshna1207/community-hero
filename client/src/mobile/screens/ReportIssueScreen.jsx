@@ -113,9 +113,20 @@ const ReportIssueScreen = ({ onSubmitSuccess, onBack }) => {
     setIsSubmitting(true);
     const newId = `CH-${Math.floor(10000 + Math.random() * 90000)}`;
 
+    const categoryMap = {
+      'Pothole & Road Hazard': 'Roads',
+      'Road Damage': 'Roads',
+      'Garbage Dump': 'Waste Management',
+      'Waste & Garbage': 'Waste Management',
+      'Water Leakage': 'Water Supply',
+      'Drainage Overflow': 'Drainage',
+      'Broken Streetlight': 'Street Lights',
+      'Public Safety Hazard': 'Public Safety',
+    };
+
     const payload = {
       title,
-      category: detectedCategory === 'Pothole & Road Hazard' ? 'Roads' : detectedCategory,
+      category: categoryMap[detectedCategory] || detectedCategory || 'Roads',
       description,
       location: address,
       latitude: coords.lat,
@@ -130,28 +141,24 @@ const ReportIssueScreen = ({ onSubmitSuccess, onBack }) => {
       aiTags: ['#MobileReport', `#${detectedCategory.replace(/\s+/g, '')}`],
     };
 
+    let finalId = newId;
     try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      const token = localStorage.getItem('token');
-      if (token) {
-        const res = await axios.post('http://localhost:5000/api/issues', payload, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        if (res.data?._id) {
-          setTicketId(res.data._id);
-        } else {
-          setTicketId(newId);
-        }
+      const token = localStorage.getItem('community_hero_token') || localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await axios.post('http://localhost:5000/api/issues', payload, { headers });
+      if (res.data?._id) {
+        finalId = res.data._id;
+        setTicketId(res.data._id);
       } else {
         setTicketId(newId);
       }
     } catch (err) {
-      console.warn("Mobile submit error:", err);
+      console.warn("Mobile submit warning (using local ticket):", err);
       setTicketId(newId);
     } finally {
       try {
         const local = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
-        localStorage.setItem('my_submitted_reports', JSON.stringify([{ id: newId, ...payload }, ...local]));
+        localStorage.setItem('my_submitted_reports', JSON.stringify([{ id: finalId, _id: finalId, ...payload }, ...local]));
       } catch (err) {
         console.error(err);
       }

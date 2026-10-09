@@ -33,7 +33,7 @@ export default function Navbar() {
     <header className="hero-navbar">
       <div className="navbar-container">
         {/* Brand Logo & Tagline */}
-        <div className="navbar-brand" onClick={() => navigate(targetDashboard)}>
+        <div className="navbar-brand" onClick={() => navigate(user ? targetDashboard : '/')} style={{ cursor: 'pointer' }}>
           <div className="brand-logo-icon">
             <FiMapPin className="pin-icon" />
           </div>
@@ -45,7 +45,26 @@ export default function Navbar() {
 
         {/* Dynamic Role-Aware Navigation Links */}
         <nav className={`navbar-links ${mobileMenuOpen ? 'mobile-active' : ''}`}>
-          {isCitizen && (
+          {/* Guest Links when not logged in */}
+          {!user && (
+            <>
+              <NavLink to="/" end className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
+                {t('navLogin')}
+              </NavLink>
+              <NavLink to="/register" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
+                Create Account
+              </NavLink>
+              <NavLink to="/home" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
+                {t('navHome') || 'Home'}
+              </NavLink>
+              <NavLink to="/issues" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
+                {t('navExploreMap')}
+              </NavLink>
+            </>
+          )}
+
+          {/* Citizen links (when logged in) */}
+          {user && isCitizen && (
             <>
               <NavLink to="/dashboard" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
                 {t('navDashboard')}
@@ -62,7 +81,8 @@ export default function Navbar() {
             </>
           )}
 
-          {isOfficer && (
+          {/* Officer links (when logged in) */}
+          {user && isOfficer && (
             <>
               <NavLink to="/ward-dashboard" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
                 Ward Overview
@@ -82,7 +102,8 @@ export default function Navbar() {
             </>
           )}
 
-          {isDept && (
+          {/* Dept links (when logged in) */}
+          {user && isDept && (
             <>
               <NavLink to="/department/dashboard" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
                 Dept Dashboard
@@ -99,7 +120,8 @@ export default function Navbar() {
             </>
           )}
 
-          {isAdmin && (
+          {/* Admin links (when logged in) */}
+          {user && isAdmin && (
             <>
               <NavLink to="/admin/dashboard" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={() => setMobileMenuOpen(false)}>
                 Admin Overview
@@ -284,6 +306,11 @@ export default function Navbar() {
                     {isDept && (
                       <button onClick={() => { navigate('/department/dashboard'); setProfileDropdownOpen(false); }}>
                         <FiShield /> Department Portal
+                      </button>
+                    )}
+                    {isCitizen && (
+                      <button onClick={() => { navigate('/dashboard'); setProfileDropdownOpen(false); }}>
+                        <FiCheckSquare /> Citizen Dashboard
                       </button>
                     )}
 

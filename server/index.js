@@ -1,3 +1,6 @@
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, ".env") });
+require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -7,14 +10,22 @@ const issueRoutes = require("./routes/issues");
 const eventRoutes = require("./routes/events");
 const leaderboardRoutes = require("./routes/leaderboard");
 
-// Connect to MongoDB
-connectDB();
+// Connect to MongoDB and seed default users
+connectDB().then(() => {
+  if (authRoutes.seedDemoUsers) {
+    authRoutes.seedDemoUsers();
+  }
+});
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
@@ -29,6 +40,11 @@ app.use("/api/leaderboard", leaderboardRoutes);
 
 // Event routes
 app.use("/api/events", eventRoutes);
+
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+});
 
 app.get("/", (req, res) => {
   res.send("Community Hero Backend API is Running!");

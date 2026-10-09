@@ -19,18 +19,20 @@ const OfficerLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    if (!email || !password) return;
+  const handleLoginSubmit = async (e, directEmail, directPassword) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const emailToUse = directEmail || email;
+    const passwordToUse = directPassword || password;
+    if (!emailToUse || !passwordToUse) return;
     
     setIsSubmitting(true);
-    const res = await login(email, password);
+    const res = await login(emailToUse, passwordToUse);
 
     if (res.success) {
-      setToast({ message: `Welcome back, Officer ${res.user.name}!`, type: 'success' });
+      setToast({ message: `Welcome back, Officer ${res.user?.name || 'Rajesh'}!`, type: 'success' });
       setTimeout(() => {
         navigate(res.redirectPath || '/ward-dashboard');
-      }, 900);
+      }, 700);
     } else {
       setToast({ message: res.error || 'Login failed.', type: 'error' });
       setIsSubmitting(false);
@@ -56,9 +58,10 @@ const OfficerLogin = () => {
         setPassword={setPassword}
         isSubmitting={isSubmitting}
         onSubmit={handleLoginSubmit}
+        onQuickDemoLogin={(em, pw) => handleLoginSubmit(null, em, pw)}
         demoEmail="officer@hero.com"
         demoPassword="password123"
-        demoBtnText="Load Officer Credentials"
+        demoBtnText="1-Click Officer Demo"
         submitBtnText="Authenticate & Enter"
         emailLabel="Official Email ID"
         passwordLabel="Secure Password"

@@ -19,18 +19,20 @@ const CitizenLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    if (!email || !password) return;
+  const handleLoginSubmit = async (e, directEmail, directPassword) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const emailToUse = directEmail || email;
+    const passwordToUse = directPassword || password;
+    if (!emailToUse || !passwordToUse) return;
     
     setIsSubmitting(true);
-    const res = await login(email, password);
+    const res = await login(emailToUse, passwordToUse);
 
     if (res.success) {
-      setToast({ message: `Welcome back, ${res.user.name}!`, type: 'success' });
+      setToast({ message: `Welcome back, ${res.user?.name || 'Citizen'}!`, type: 'success' });
       setTimeout(() => {
         navigate(res.redirectPath || '/dashboard');
-      }, 900);
+      }, 700);
     } else {
       setToast({ message: res.error || 'Login failed.', type: 'error' });
       setIsSubmitting(false);
@@ -56,9 +58,10 @@ const CitizenLogin = () => {
         setPassword={setPassword}
         isSubmitting={isSubmitting}
         onSubmit={handleLoginSubmit}
+        onQuickDemoLogin={(em, pw) => handleLoginSubmit(null, em, pw)}
         demoEmail="citizen@hero.com"
         demoPassword="password123"
-        demoBtnText="Quick Fill Demo Citizen"
+        demoBtnText="1-Click Citizen Demo"
         submitBtnText="Enter Citizen Portal"
         emailLabel="Email Address"
         passwordLabel="Password"

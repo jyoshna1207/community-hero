@@ -5,6 +5,8 @@ const LanguageContext = createContext(null);
 export const TRANSLATIONS = {
   en: {
     // Nav
+    navHome: "Home",
+    navPortals: "Portals",
     navDashboard: "Dashboard",
     navReportIssue: "Report Issue",
     navExploreMap: "Explore Map",
@@ -148,6 +150,8 @@ export const TRANSLATIONS = {
 
   te: {
     // Nav
+    navHome: "హోమ్",
+    navPortals: "పోర్టల్స్",
     navDashboard: "డాష్‌బోర్డ్",
     navReportIssue: "సమస్య నివేదించండి",
     navExploreMap: "మ్యాప్ చూడండి",
@@ -291,6 +295,8 @@ export const TRANSLATIONS = {
 
   hi: {
     // Nav
+    navHome: "होम",
+    navPortals: "पोर्टल",
     navDashboard: "डैशबोर्ड",
     navReportIssue: "समस्या दर्ज करें",
     navExploreMap: "मानचित्र देखें",

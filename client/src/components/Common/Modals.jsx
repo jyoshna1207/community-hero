@@ -23,7 +23,25 @@ export const DeleteModal = ({ isOpen, onClose, onConfirm, itemName }) => {
 };
 
 export const EditUserModal = ({ isOpen, onClose, user, onSave }) => {
+  const [name, setName] = React.useState(user?.name || '');
+  const [email, setEmail] = React.useState(user?.email || '');
+  const [role, setRole] = React.useState(user?.role || 'Citizen');
+
+  React.useEffect(() => {
+    if (user) {
+      setName(user.name || '');
+      setEmail(user.email || '');
+      setRole(user.role || 'Citizen');
+    }
+  }, [user]);
+
   if (!isOpen || !user) return null;
+
+  const handleSave = () => {
+    onSave({ name, email, role });
+    onClose();
+  };
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -34,24 +52,38 @@ export const EditUserModal = ({ isOpen, onClose, user, onSave }) => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <div>
             <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gray-700)' }}>Full Name</label>
-            <input type="text" defaultValue={user.name} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--gray-300)', marginTop: '4px' }} />
+            <input 
+              type="text" 
+              value={name} 
+              onChange={(e) => setName(e.target.value)}
+              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--gray-300)', marginTop: '4px' }} 
+            />
           </div>
           <div>
             <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gray-700)' }}>Email Address</label>
-            <input type="email" defaultValue={user.email} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--gray-300)', marginTop: '4px' }} />
+            <input 
+              type="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
+              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--gray-300)', marginTop: '4px' }} 
+            />
           </div>
           <div>
             <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gray-700)' }}>Role</label>
-            <select defaultValue={user.role} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--gray-300)', marginTop: '4px' }}>
-              <option>Citizen</option>
-              <option>Ward Officer</option>
-              <option>Department Officer</option>
-              <option>Administrator</option>
+            <select 
+              value={role} 
+              onChange={(e) => setRole(e.target.value)}
+              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--gray-300)', marginTop: '4px' }}
+            >
+              <option value="Citizen">Citizen</option>
+              <option value="Ward Officer">Ward Officer</option>
+              <option value="Department Officer">Department Officer</option>
+              <option value="Administrator">Administrator</option>
             </select>
           </div>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '16px' }}>
             <button className="btn btn-outline" onClick={onClose}>Cancel</button>
-            <button className="btn btn-primary" onClick={() => { onSave(); onClose(); }}>Save Changes</button>
+            <button className="btn btn-primary" onClick={handleSave}>Save Changes</button>
           </div>
         </div>
       </div>
@@ -60,7 +92,19 @@ export const EditUserModal = ({ isOpen, onClose, user, onSave }) => {
 };
 
 export const AssignOfficerModal = ({ isOpen, onClose, issueId, onAssign }) => {
+  const [selectedOfficer, setSelectedOfficer] = React.useState('Rohan Verma (Roads)');
+  const [note, setNote] = React.useState('');
+
   if (!isOpen) return null;
+
+  const handleConfirm = () => {
+    const officerName = selectedOfficer.split(' (')[0];
+    const deptMatch = selectedOfficer.match(/\((.*?)\)/);
+    const department = deptMatch ? `${deptMatch[1]} Department` : 'Public Works Department';
+    onAssign(issueId, officerName, department, note);
+    onClose();
+  };
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -71,20 +115,29 @@ export const AssignOfficerModal = ({ isOpen, onClose, issueId, onAssign }) => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <div>
             <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gray-700)' }}>Select Department Officer</label>
-            <select style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--gray-300)', marginTop: '4px' }}>
-              <option>Rohan Verma (Roads)</option>
-              <option>Priya Patel (Sanitation)</option>
-              <option>Manoj Kumar (Water Supply)</option>
-              <option>Suresh Menon (Drainage)</option>
+            <select 
+              value={selectedOfficer}
+              onChange={(e) => setSelectedOfficer(e.target.value)}
+              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--gray-300)', marginTop: '4px' }}
+            >
+              <option value="Rohan Verma (Roads)">Rohan Verma (Roads)</option>
+              <option value="Priya Patel (Sanitation)">Priya Patel (Sanitation)</option>
+              <option value="Manoj Kumar (Water Supply)">Manoj Kumar (Water Supply)</option>
+              <option value="Suresh Menon (Drainage)">Suresh Menon (Drainage)</option>
             </select>
           </div>
           <div>
             <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gray-700)' }}>Priority Note / Deadline</label>
-            <textarea placeholder="Optional notes for the assigned officer..." style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--gray-300)', marginTop: '4px', height: '80px' }}></textarea>
+            <textarea 
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Optional notes for the assigned officer..." 
+              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--gray-300)', marginTop: '4px', height: '80px' }}
+            ></textarea>
           </div>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '16px' }}>
             <button className="btn btn-outline" onClick={onClose}>Cancel</button>
-            <button className="btn btn-primary" onClick={() => { onAssign(); onClose(); }}>Confirm Assignment</button>
+            <button className="btn btn-primary" onClick={handleConfirm}>Confirm Assignment</button>
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const Issue = require("../models/Issue");
 const User = require("../models/User");
 const { protect } = require("../middleware/authMiddleware");
@@ -154,6 +155,36 @@ router.post("/ai-analyze", async (req, res) => {
         aiPriorityScore = 90;
         aiEstimatedDays = 1;
         aiTags = ["#WaterConservation", "#PipeBurst", "#CivicResource"];
+      } else if (text.includes("light") || text.includes("street") || text.includes("lamp") || text.includes("dark")) {
+        category = "Street Lights";
+        aiSeverity = "Medium";
+        aiPriorityScore = 72;
+        aiEstimatedDays = 2;
+        aiTags = ["#StreetLighting", "#PublicSafety", "#CivicNight"];
+      } else if (text.includes("drain") || text.includes("sewage") || text.includes("gutter") || text.includes("overflow")) {
+        category = "Drainage";
+        aiSeverity = "High";
+        aiPriorityScore = 85;
+        aiEstimatedDays = 2;
+        aiTags = ["#DrainageIssue", "#SanitationHazard", "#CivicRepair"];
+      } else if (text.includes("fire") || text.includes("danger") || text.includes("hazard") || text.includes("wire")) {
+        category = "Public Safety";
+        aiSeverity = "Critical";
+        aiPriorityScore = 95;
+        aiEstimatedDays = 1;
+        aiTags = ["#PublicSafety", "#UrgentAction", "#SafetyAlert"];
+      } else if (text.includes("park") || text.includes("tree") || text.includes("garden")) {
+        category = "Parks";
+        aiSeverity = "Low";
+        aiPriorityScore = 55;
+        aiEstimatedDays = 4;
+        aiTags = ["#ParkMaintenance", "#GreenSpaces", "#UrbanCivic"];
+      } else if (text.includes("electric") || text.includes("power") || text.includes("transformer")) {
+        category = "Electricity";
+        aiSeverity = "High";
+        aiPriorityScore = 88;
+        aiEstimatedDays = 1;
+        aiTags = ["#PowerGrid", "#ElectricalSafety", "#CivicUtility"];
       }
       return res.json({
         category,
@@ -360,6 +391,10 @@ router.get("/my-reports", protect, async (req, res) => {
 // @access  Public
 router.get("/:id", async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
     const issue = await Issue.findByIdAndUpdate(
       req.params.id,
       { $inc: { views: 1 } },
@@ -381,6 +416,10 @@ router.get("/:id", async (req, res) => {
 // @access  Private
 router.post("/:id/like", protect, async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
     const issue = await Issue.findById(req.params.id);
     if (!issue) {
       return res.status(404).json({ message: "Issue not found" });
@@ -411,6 +450,10 @@ router.post("/:id/like", protect, async (req, res) => {
 // @access  Private / Public
 router.put("/:id/officer-update", async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
     const { 
       status, priority, assignedDepartment, officerRemarks, 
       actionTaken, expectedResolutionDate, resolutionImage, 
@@ -455,6 +498,10 @@ router.put("/:id/officer-update", async (req, res) => {
 // @access  Public / Private
 router.put("/:id/status", async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
     const { status, note, updatedBy } = req.body;
     const issue = await Issue.findById(req.params.id);
     if (!issue) {
@@ -480,9 +527,34 @@ router.put("/:id/status", async (req, res) => {
   }
 });
 
+// Helper to normalize any incoming category string to valid database category
+const normalizeCategory = (cat) => {
+  if (!cat) return "Other";
+  const c = cat.trim();
+  const map = {
+    "Road Damage": "Roads",
+    "Roads": "Roads",
+    "Water Leakage": "Water Supply",
+    "Water Supply": "Water Supply",
+    "Garbage & Waste": "Waste Management",
+    "Waste Management": "Waste Management",
+    "Sanitation": "Waste Management",
+    "Streetlight": "Street Lights",
+    "Street Lights": "Street Lights",
+    "Drainage": "Drainage",
+    "Infrastructure": "Public Safety",
+    "Public Safety": "Public Safety",
+    "Electricity": "Electricity",
+    "Parks": "Parks",
+    "Other Issue": "Other",
+    "Other": "Other",
+  };
+  return map[c] || c;
+};
+
 // @desc    Create new issue (Awards +50 XP to Reporter)
 // @route   POST /api/issues
-// @access  Private
+// @access  Private / Public
 router.post("/", protect, async (req, res) => {
   try {
     const {
@@ -501,41 +573,60 @@ router.post("/", protect, async (req, res) => {
       aiTags,
     } = req.body;
 
-    if (!title || !category || !description || !location) {
-      return res.status(400).json({ message: "Please fill in all required fields" });
-    }
+    const normalizedCategory = normalizeCategory(category);
+    const cleanLocation = (location && location.trim()) ? location.trim() : "Duvvada, Visakhapatnam, Andhra Pradesh";
+    
+    // Provide sensible defaults for title and description if empty or too brief
+    const cleanTitle = (title && title.trim().length >= 3)
+      ? title.trim()
+      : `${normalizedCategory} Issue at ${cleanLocation.split(',')[0] || 'Community'}`;
 
-    const latVal = latitude !== undefined ? Number(latitude) : (locationCoords?.lat || locationCoords?.latitude || 17.6868);
-    const lngVal = longitude !== undefined ? Number(longitude) : (locationCoords?.lng || locationCoords?.longitude || 83.2185);
+    const cleanDescription = (description && description.trim().length >= 3)
+      ? description.trim()
+      : `Citizen reported ${cleanTitle} requiring municipal inspection and timely repair.`;
+
+    const latVal = latitude !== undefined && !isNaN(Number(latitude))
+      ? Number(latitude)
+      : (locationCoords?.lat || locationCoords?.latitude || 17.6868);
+      
+    const lngVal = longitude !== undefined && !isNaN(Number(longitude))
+      ? Number(longitude)
+      : (locationCoords?.lng || locationCoords?.longitude || 83.2185);
 
     const issue = await Issue.create({
-      title,
-      category,
-      description,
-      location,
+      title: cleanTitle,
+      category: normalizedCategory,
+      description: cleanDescription,
+      location: cleanLocation,
       latitude: latVal,
       longitude: lngVal,
       locationCoords: { lat: latVal, lng: lngVal },
       image: image || "https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=800&q=80",
       video: video || "",
       aiSeverity: aiSeverity || "Medium",
-      aiPriorityScore: aiPriorityScore || 75,
-      aiEstimatedDays: aiEstimatedDays || 3,
-      aiTags: aiTags || ["#CitizenReport"],
+      aiPriorityScore: aiPriorityScore ? Number(aiPriorityScore) : 75,
+      aiEstimatedDays: aiEstimatedDays ? Number(aiEstimatedDays) : 3,
+      aiTags: Array.isArray(aiTags) && aiTags.length > 0 ? aiTags : ["#CitizenReport"],
       user: req.user._id,
       timeline: [
-        { status: "Reported", note: "Issue logged by Citizen Hero (+50 XP)", updatedBy: req.user.name, date: new Date() },
+        { status: "Reported", note: "Issue logged by Citizen Hero (+50 XP)", updatedBy: req.user.name || "Citizen Hero", date: new Date() },
         { status: "Under Review", note: "Auto-forwarded to Municipal Task Force", updatedBy: "AI Router", date: new Date() },
       ],
     });
 
-    // Award +50 Hero XP to user for reporting an issue
-    await User.findByIdAndUpdate(req.user._id, {
-      $inc: { points: 50 },
-    });
+    // Award +50 Hero XP to user for reporting an issue (non-blocking)
+    try {
+      if (req.user?._id) {
+        await User.findByIdAndUpdate(req.user._id, {
+          $inc: { points: 50 },
+        });
+      }
+    } catch (xpErr) {
+      console.warn("User XP increment skipped:", xpErr.message);
+    }
 
     const populatedIssue = await Issue.findById(issue._id).populate("user", "name email points level title");
-    res.status(201).json(populatedIssue);
+    res.status(201).json(populatedIssue || issue);
   } catch (error) {
     console.error("Create Issue Error:", error);
     res.status(500).json({ message: "Server error creating issue", error: error.message });
@@ -547,6 +638,10 @@ router.post("/", protect, async (req, res) => {
 // @access  Private
 router.post("/:id/upvote", protect, async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
     const issue = await Issue.findById(req.params.id);
 
     if (!issue) {
@@ -586,6 +681,10 @@ router.post("/:id/upvote", protect, async (req, res) => {
 // @access  Private
 router.post("/:id/verify", protect, async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
     const issue = await Issue.findById(req.params.id);
 
     if (!issue) {
@@ -629,6 +728,10 @@ router.post("/:id/verify", protect, async (req, res) => {
 // @access  Public / Private
 router.put("/:id/department-progress", async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
     const { action, progress, remarks, resolutionImage, updatedBy } = req.body;
     const issue = await Issue.findById(req.params.id);
 
@@ -699,6 +802,10 @@ router.put("/:id/department-progress", async (req, res) => {
 // @access  Public / Private
 router.delete("/:id", async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
     const issue = await Issue.findById(req.params.id);
 
     if (!issue) {

@@ -19,18 +19,20 @@ const DepartmentLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    if (!email || !password) return;
+  const handleLoginSubmit = async (e, directEmail, directPassword) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const emailToUse = directEmail || email;
+    const passwordToUse = directPassword || password;
+    if (!emailToUse || !passwordToUse) return;
     
     setIsSubmitting(true);
-    const res = await login(email, password);
+    const res = await login(emailToUse, passwordToUse);
 
     if (res.success) {
-      setToast({ message: `Access granted, ${res.user.name}.`, type: 'success' });
+      setToast({ message: `Access granted, ${res.user?.name || 'Department Lead'}.`, type: 'success' });
       setTimeout(() => {
-        navigate(res.redirectPath || '/department');
-      }, 900);
+        navigate(res.redirectPath || '/department/dashboard');
+      }, 700);
     } else {
       setToast({ message: res.error || 'Login failed.', type: 'error' });
       setIsSubmitting(false);
@@ -56,9 +58,10 @@ const DepartmentLogin = () => {
         setPassword={setPassword}
         isSubmitting={isSubmitting}
         onSubmit={handleLoginSubmit}
+        onQuickDemoLogin={(em, pw) => handleLoginSubmit(null, em, pw)}
         demoEmail="dept@hero.com"
         demoPassword="password123"
-        demoBtnText="Load Department Demo"
+        demoBtnText="1-Click Department Demo"
         submitBtnText="Log In to Dashboard"
         emailLabel="Work Email"
         passwordLabel="Password"

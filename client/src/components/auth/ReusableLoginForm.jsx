@@ -11,9 +11,10 @@ export const ReusableLoginForm = ({
   setPassword,
   isSubmitting,
   onSubmit,
+  onQuickDemoLogin,
   demoEmail,
   demoPassword,
-  demoBtnText = "Load Credentials",
+  demoBtnText = "1-Click Demo Login",
   submitBtnText = "Login",
   emailLabel = "Email ID",
   passwordLabel = "Password",
@@ -23,18 +24,52 @@ export const ReusableLoginForm = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleDemoClick = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    if (onQuickDemoLogin) {
+      onQuickDemoLogin(demoEmail, demoPassword);
+    } else if (onSubmit) {
+      onSubmit(e, demoEmail, demoPassword);
+    }
+  };
+
   return (
     <>
-      <button 
-        type="button" 
-        className={customDemoClass || styles.demoFillBtn} 
-        onClick={() => {
-          setEmail(demoEmail); 
-          setPassword(demoPassword);
-        }}
-      >
-        ⚡ {demoBtnText}
-      </button>
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+        <button 
+          type="button" 
+          className={customDemoClass || styles.demoFillBtn} 
+          onClick={handleDemoClick}
+          disabled={isSubmitting}
+          style={{ flex: 1, margin: 0 }}
+        >
+          ⚡ {demoBtnText}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setEmail(demoEmail);
+            setPassword(demoPassword);
+          }}
+          disabled={isSubmitting}
+          title="Auto-fill demo credentials only"
+          style={{
+            padding: '8px 12px',
+            fontSize: '0.8rem',
+            fontWeight: 700,
+            background: '#F1F5F9',
+            border: '1px solid #CBD5E1',
+            borderRadius: '10px',
+            color: '#475569',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          Fill Form
+        </button>
+      </div>
 
       <form onSubmit={onSubmit} className={styles.form}>
         <AuthInput

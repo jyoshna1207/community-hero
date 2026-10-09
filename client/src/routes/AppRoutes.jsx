@@ -22,6 +22,7 @@ import Unauthorized from '../pages/Unauthorized';
 import NotFound from '../pages/NotFound';
 
 // Public & Citizen Pages
+import Home from '../pages/Citizen/Home/Home';
 import Contact from '../pages/Citizen/Contact/Contact';
 import CitizenDashboard from '../pages/Citizen/Dashboard/Dashboard';
 import ReportIssue from '../pages/Citizen/ReportIssue/ReportIssue';
@@ -58,9 +59,15 @@ const AppRoutes = () => {
   return (
       
         <Routes>
+          {/* Default Project Entry Point: Select Your Portal (Login Hub) as requested */}
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/create-account" element={<RegisterPage />} />
+
           {/* Public Web App Routes */}
           <Route element={<CitizenLayout />}>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/contact" element={<Contact />} />
           </Route>
 
@@ -73,7 +80,6 @@ const AppRoutes = () => {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
-          <Route path="/register" element={<RegisterPage />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 
           {/* Protected Citizen Routes */}

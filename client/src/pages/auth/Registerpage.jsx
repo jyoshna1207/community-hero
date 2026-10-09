@@ -76,6 +76,50 @@ const RegisterPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleFillDemoData = () => {
+    const randomSuffix = Math.floor(100 + Math.random() * 900);
+    const role = formData.role || 'Citizen';
+    let demoName = `Priya Sharma`;
+    let demoEmail = `priya.citizen${randomSuffix}@hero.com`;
+    let demoPhone = `9876543${randomSuffix}`;
+    let demoWardId = 'WARD-04';
+    let demoWardName = 'Duvvada Ward 4';
+    let demoDept = 'Public Works Department';
+
+    if (role === 'Ward Officer') {
+      demoName = `Officer Rajesh Rao`;
+      demoEmail = `officer.rajesh${randomSuffix}@hero.com`;
+      demoWardId = 'WARD-04';
+      demoWardName = 'Duvvada Ward 4';
+    } else if (role === 'Department Officer') {
+      demoName = `Vikram Varma`;
+      demoEmail = `dept.vikram${randomSuffix}@hero.com`;
+      demoDept = 'Public Works Department (Sanitation)';
+    } else if (role === 'Admin') {
+      demoName = `Admin Lakshmi`;
+      demoEmail = `admin.lakshmi${randomSuffix}@hero.com`;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      fullName: demoName,
+      email: demoEmail,
+      phone: demoPhone,
+      password: 'password123',
+      confirmPassword: 'password123',
+      role: role,
+      wardId: demoWardId,
+      wardName: demoWardName,
+      municipality: 'Visakhapatnam Municipal Corporation',
+      village: 'Duvvada',
+      mandal: 'Gajuwaka',
+      departmentName: demoDept,
+      officialIdFile: { name: 'official_municipal_badge.pdf', size: 2048 },
+    }));
+    setTermsAccepted(true);
+    setErrors({});
+  };
+
   const validate = () => {
     const newErrors = {};
     if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
@@ -89,7 +133,7 @@ const RegisterPage = () => {
 
     if (formData.role === 'Ward Officer' || formData.role === 'Department Officer') {
       if (!formData.officialIdFile) {
-        newErrors.officialIdFile = 'Official Government ID proof is required';
+        newErrors.officialIdFile = 'Official ID proof required (click "Fill Demo Data" to use test ID)';
       }
     }
 
@@ -108,17 +152,19 @@ const RegisterPage = () => {
       setToastMessage('Account created successfully! Redirecting...');
       setTimeout(() => {
         const userRole = (res.user?.role || formData.role || 'citizen').toLowerCase().trim();
-        if (userRole.includes('ward') || userRole === 'officer' || userRole === 'ward_officer') {
+        if (res.redirectPath) {
+          navigate(res.redirectPath);
+        } else if (userRole.includes('ward') || userRole === 'officer' || userRole === 'ward_officer') {
           navigate('/ward-dashboard');
         } else if (userRole.includes('dept') || userRole.includes('district') || userRole === 'district_officer') {
-          navigate('/department/department-dashboard');
+          navigate('/department/dashboard');
         } else if (userRole === 'admin') {
           navigate('/admin/dashboard');
         } else {
           navigate('/dashboard');
         }
         setIsSubmitting(false);
-      }, 1200);
+      }, 900);
     } else {
       setToastType('error');
       setToastMessage(res.error || 'Registration failed. Please try again.');
@@ -249,6 +295,28 @@ const RegisterPage = () => {
                 ? 'Fill in your details to start reporting and solving issues in your area'
                 : 'Complete official verification to access your municipal workspace'}
             </p>
+            <div style={{ marginTop: '14px', display: 'flex', justifyContent: 'center' }}>
+              <button
+                type="button"
+                onClick={handleFillDemoData}
+                style={{
+                  background: '#FFF7ED',
+                  border: '1.5px solid #FDBA74',
+                  color: '#C2410C',
+                  fontWeight: 700,
+                  fontSize: '0.82rem',
+                  padding: '8px 18px',
+                  borderRadius: '20px',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 2px 8px rgba(234, 88, 12, 0.1)'
+                }}
+              >
+                ⚡ Auto-Fill Demo {formData.role} Details
+              </button>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className={styles.form} noValidate>

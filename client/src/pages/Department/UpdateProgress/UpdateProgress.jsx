@@ -138,11 +138,14 @@ export default function UpdateProgress() {
     showNotification(`Ticket #${id} marked as Completed and Resolved! Archived in records.`);
   };
 
-  const filtered = works.filter(w => 
-    w.title.toLowerCase().includes(search.toLowerCase()) || 
-    w.id.toLowerCase().includes(search.toLowerCase()) ||
-    (w.location && w.location.toLowerCase().includes(search.toLowerCase()))
-  );
+  const filtered = works.filter(w => {
+    const term = (search || '').toLowerCase();
+    return (
+      (w.title || '').toLowerCase().includes(term) || 
+      (String(w.id || '')).toLowerCase().includes(term) ||
+      (w.location && w.location.toLowerCase().includes(term))
+    );
+  });
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>

@@ -89,8 +89,9 @@ export default function ManageUsers() {
   };
 
   const filteredUsers = users.filter(u => {
-    const matchesSearch = u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          u.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const term = (searchTerm || '').toLowerCase();
+    const matchesSearch = (u.name || '').toLowerCase().includes(term) || 
+                          (u.email || '').toLowerCase().includes(term);
     const matchesRole = roleFilter === 'All' || u.role === roleFilter;
     return matchesSearch && matchesRole;
   });

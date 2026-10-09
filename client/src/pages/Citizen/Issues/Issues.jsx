@@ -64,12 +64,13 @@ function MapController({ centerCoords, zoomLevel }) {
 }
 
 const AP_DISTRICTS = [
-  { name: 'All Andhra Pradesh', coords: AP_STATE_CENTER, zoom: AP_STATE_ZOOM },
+  { name: 'Thondangi & Tuni Rural (Pydikonda)', coords: { lat: 17.3210, lng: 82.5020 }, zoom: 12 },
+  { name: 'Kakinada District', coords: { lat: 17.1917, lng: 82.3150 }, zoom: 11 },
   { name: 'Visakhapatnam', coords: { lat: 17.6868, lng: 83.2185 }, zoom: 11 },
-  { name: 'Kakinada', coords: { lat: 17.1917, lng: 82.3150 }, zoom: 11 },
   { name: 'Vijayawada / Krishna', coords: { lat: 16.5062, lng: 80.6480 }, zoom: 11 },
   { name: 'Guntur / Amaravati', coords: { lat: 16.3067, lng: 80.4365 }, zoom: 11 },
   { name: 'Tirupati / Rayalaseema', coords: { lat: 13.6288, lng: 79.4192 }, zoom: 11 },
+  { name: 'All Andhra Pradesh', coords: AP_STATE_CENTER, zoom: AP_STATE_ZOOM },
 ];
 
 export default function Issues() {
@@ -78,12 +79,18 @@ export default function Issues() {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState('map'); // 'map' or 'list'
-  const [selectedDistrict, setSelectedDistrict] = useState('All Andhra Pradesh');
+
+  // Locality check for citizen
+  const userLocStr = `${user?.village || ''} ${user?.mandal || ''} ${user?.wardName || ''} ${user?.municipality || ''}`.toLowerCase();
+  const isExplicitVizag = userLocStr.includes('visakhapatnam') || userLocStr.includes('duvvada') || userLocStr.includes('gajuwaka');
+  const defaultDistrict = !isExplicitVizag ? 'Thondangi & Tuni Rural (Pydikonda)' : 'Visakhapatnam';
+
+  const [selectedDistrict, setSelectedDistrict] = useState(defaultDistrict);
 
   const [allIssues, setAllIssues] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeIssueCoords, setActiveIssueCoords] = useState(AP_STATE_CENTER);
-  const [mapZoom, setMapZoom] = useState(AP_STATE_ZOOM);
+  const [activeIssueCoords, setActiveIssueCoords] = useState(!isExplicitVizag ? { lat: 17.3210, lng: 82.5020 } : AP_STATE_CENTER);
+  const [mapZoom, setMapZoom] = useState(!isExplicitVizag ? 12 : AP_STATE_ZOOM);
   const [activeSelectedId, setActiveSelectedId] = useState(null);
 
   useEffect(() => {
@@ -107,18 +114,53 @@ export default function Issues() {
             description: item.description
           }));
 
+          // Merge locally submitted reports so they appear immediately on map & list
+          try {
+            const local = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
+            const existingIds = new Set(apiMapped.map(item => item.id || item._id));
+            local.forEach(localItem => {
+              if (localItem && !existingIds.has(localItem.id) && !existingIds.has(localItem._id)) {
+                apiMapped.unshift({
+                  id: localItem.id || localItem._id,
+                  _id: localItem._id || localItem.id,
+                  title: localItem.title,
+                  category: localItem.category,
+                  status: localItem.status || 'Reported',
+                  location: localItem.location,
+                  reporterName: localItem.reporterName || 'You',
+                  latitude: Number(localItem.latitude ?? localItem.locationCoords?.lat ?? 17.6868),
+                  longitude: Number(localItem.longitude ?? localItem.locationCoords?.lng ?? 83.2185),
+                  date: localItem.date || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                  description: localItem.description
+                });
+              }
+            });
+          } catch (localErr) {
+            console.error("Local merge error:", localErr);
+          }
+
           setAllIssues(apiMapped);
         } else {
           setAllIssues([]);
         }
       } catch (err) {
         console.error("Fetch database issues error:", err);
-        setAllIssues([]);
+        try {
+          const local = JSON.parse(localStorage.getItem('my_submitted_reports') || '[]');
+          setAllIssues(local);
+        } catch {
+          setAllIssues([]);
+        }
       }
 
-      // Default state: Keep full compressed Andhra Pradesh state overview (Zoom 7) with pins
-      setActiveIssueCoords(AP_STATE_CENTER);
-      setMapZoom(AP_STATE_ZOOM);
+      // Default state: Focus on citizen's surrounding area
+      if (!isExplicitVizag) {
+        setActiveIssueCoords({ lat: 17.3210, lng: 82.5020 });
+        setMapZoom(12);
+      } else {
+        setActiveIssueCoords(AP_STATE_CENTER);
+        setMapZoom(AP_STATE_ZOOM);
+      }
 
       setLoading(false);
     };
@@ -128,13 +170,27 @@ export default function Issues() {
 
   // Filter issues based on search term and district
   const filteredIssues = allIssues.filter(issue => {
-    const locStr = issue.location || '';
-    const matchesSearch = issue.title.toLowerCase().includes(searchTerm.toLowerCase()) || locStr.toLowerCase().includes(searchTerm.toLowerCase());
+    const locStr = (issue.location || '').toLowerCase();
+    const titleStr = (issue.title || '').toLowerCase();
+    const term = (searchTerm || '').toLowerCase();
+    const matchesSearch = titleStr.includes(term) || locStr.includes(term);
     
     let matchesDistrict = true;
-    if (selectedDistrict !== 'All Andhra Pradesh') {
+    if (selectedDistrict === 'Thondangi & Tuni Rural (Pydikonda)') {
+      // Strictly exclude Visakhapatnam / Vizag / Duvvada / Gajuwaka
+      const excludedCityKeywords = ['visakhapatnam', 'vizag', 'duvvada', 'gajuwaka', 'mvp colony', 'madhurawada', 'steel plant'];
+      const hasExcluded = excludedCityKeywords.some(kw => locStr.includes(kw) || titleStr.includes(kw));
+      if (hasExcluded) return false;
+
+      // Keep if matches surrounding area (Thondangi, Pydikonda, Tuni, Anuru, Kakinada, Chebrolu, Gollaprolu)
+      const surroundingKws = ['thondangi', 'pydikonda', 'tuni', 'anuru', 'hamsavaram', 'bendapudi', 'chebrolu', 'gollaprolu', 'kakinada'];
+      matchesDistrict = surroundingKws.some(kw => locStr.includes(kw) || titleStr.includes(kw));
+    } else if (selectedDistrict === 'Kakinada District') {
+      const dKey = 'kakinada';
+      matchesDistrict = locStr.includes(dKey) || titleStr.includes(dKey) || locStr.includes('thondangi') || locStr.includes('tuni');
+    } else if (selectedDistrict !== 'All Andhra Pradesh') {
       const dKey = selectedDistrict.split(' ')[0].toLowerCase();
-      matchesDistrict = locStr.toLowerCase().includes(dKey) || (issue.title || '').toLowerCase().includes(dKey);
+      matchesDistrict = locStr.includes(dKey) || titleStr.includes(dKey);
     }
     
     return matchesSearch && matchesDistrict;
